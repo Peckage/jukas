@@ -1,56 +1,31 @@
 export default function UniqueCardsTable() {
     const rows = [
-        {
-            name: "Ace",
-            suits: "All suits",
-            value: "1",
-            effect: "No effect. (If in your tableau, it counts as 1.)",
-        },
-        {
-            name: "2–6",
-            suits: "All suits",
-            value: "Face value",
-            effect: "No effect. (If in your tableau, it counts as shown.)",
-        },
+        { name: "Ace", suits: "All suits", value: "1", effect: "No effect. Counts as 1 in front of you." },
+        { name: "2–6", suits: "All suits", value: "Face value", effect: "No effect. Counts as shown." },
         {
             name: "7–8",
             suits: "All suits",
             value: "Face value",
             effect:
-                "When played from the deck: peek at one of your own face-down cards. If you KEEP the 7/8 in that spot (swap it in), immediately take another turn. If you don’t keep it, discard it. (From discard: no effect; must swap it into your tableau.)",
+                "From the deck: look at one of your own face-down cards, then discard the 7/8. From the discard: no effect; you must swap it into your layout.",
         },
         {
             name: "9–10",
             suits: "All suits",
             value: "Face value",
             effect:
-                "When played from the deck: choose an opponent and BLINDLY swap one of your cards with one of theirs (no peeking at either card). Then discard the 9/10. (From discard: no effect; must swap it into your tableau.)",
+                "From the deck: blindly swap one of your face-down cards with one face-down card from an opponent (no looking), then discard the 9/10. From the discard: no effect; you must swap it into your layout.",
         },
         {
             name: "Jack",
             suits: "All suits",
             value: "11",
             effect:
-                "When played from the deck: peek at ONE opponent’s face-down card; you may swap the JACK with that card. (From discard: no effect; must swap it into your tableau.)",
+                "From the deck: look at one opponent’s face-down card; you may swap that card with one of your own face-down cards, then discard the Jack. From the discard: no effect; you must swap it into your layout.",
         },
-        {
-            name: "Queen",
-            suits: "All suits",
-            value: "12",
-            effect: "No effect. (High value—bad to keep.)",
-        },
-        {
-            name: "Red King",
-            suits: "♥ ♦",
-            value: "-1",
-            effect: "No effect. (Counts as −1 if in your tableau.)",
-        },
-        {
-            name: "Black King",
-            suits: "♠ ♣",
-            value: "+13",
-            effect: "No effect. (Counts as +13 if in your tableau.)",
-        },
+        { name: "Queen", suits: "All suits", value: "12", effect: "No effect. High value—try to ditch it." },
+        { name: "Red King", suits: "♥ ♦", value: "-1", effect: "No effect. Counts as −1 in front of you." },
+        { name: "Black King", suits: "♠ ♣", value: "+13", effect: "No effect. Counts as +13 in front of you." },
     ];
 
     return (
@@ -74,18 +49,17 @@ export default function UniqueCardsTable() {
                             <span>Value</span>
                         </div>
 
-                        {/* Collapsible effect on mobile for compactness */}
                         <details className="mt-2 group">
                             <summary className="cursor-pointer select-none text-sm text-slate-200/90 hover:text-white/95">
-                                Effect (triggers only when played from the deck)
+                                Effect (deck only)
                                 <span className="ml-1 text-white/40 group-open:rotate-180 inline-block transition-transform">▾</span>
                             </summary>
                             <p className="mt-1 text-sm text-slate-400">{r.effect}</p>
                         </details>
                     </article>
                 ))}
-                <p className="px-4 py-3 text-xs text-white/50">
-                    Legend: Effects trigger only when a card is drawn/played from the deck. Taking a card from the discard never triggers effects—you must swap it into your tableau.
+                <p className="px-4 py-3 text-xs text-white/60">
+                    Effects happen only when you draw a card from the deck and play it to the discard. Taking from the discard never triggers effects; you just swap it into your layout.
                 </p>
             </div>
 
@@ -105,21 +79,17 @@ export default function UniqueCardsTable() {
                             <tr key={row.name} className={idx % 2 ? "bg-white/[.02]" : "bg-white/[.01]"}>
                                 <td className="px-4 py-3 text-slate-200 font-medium border-b border-white/10">{row.name}</td>
                                 <td className="px-4 py-3 text-slate-300 border-b border-white/10">
-                                    {row.suits === "♥ ♦" ? (
-                                        <span className="text-red-300">♥ ♦</span>
-                                    ) : row.suits === "♠ ♣" ? (
-                                        <span className="text-slate-300">♠ ♣</span>
-                                    ) : (
-                                        row.suits
-                                    )}
+                                    {row.suits === "♥ ♦" ? <span className="text-red-300">♥ ♦</span> :
+                                        row.suits === "♠ ♣" ? <span className="text-slate-300">♠ ♣</span> :
+                                            row.suits}
                                 </td>
                                 <td className="px-4 py-3 text-slate-300 border-b border-white/10">{row.value}</td>
                                 <td className="px-4 py-3 text-slate-400 border-b border-white/10">{row.effect}</td>
                             </tr>
                         ))}
                         <tr>
-                            <td colSpan={4} className="px-4 py-3 text-xs text-white/50 border-t border-white/10">
-                                Effects trigger only when a card is drawn/played from the deck. Taking from the discard never triggers effects; you must swap it into your tableau.
+                            <td colSpan={4} className="px-4 py-3 text-xs text-white/60 border-t border-white/10">
+                                Effects only happen when a card is drawn from the deck and immediately played to the discard. Discard pickups never trigger effects.
                             </td>
                         </tr>
                     </tbody>
