@@ -23,8 +23,8 @@ export default function UniqueCardsTable() {
             effect:
                 "Effect ONLY when drawn from deck: look at one opponent's face-down card; you may discard the Jack (effect used) OR swap it into your layout (becomes just point value).",
         },
-        { name: "Queen", suits: "All suits", value: "12", effect: "No effect. High value—try to ditch it." },
-        { name: "Red King", suits: "♥ ♦", value: "-1", effect: "No effect. Counts as −1 in front of you." },
+        { name: "Queen", suits: "All suits", value: "12", effect: "No effect. High value - try to ditch it." },
+        { name: "Red King", suits: "♥ ♦", value: "-1", effect: "No effect. Counts as -1 in front of you." },
         { name: "Black King", suits: "♠ ♣", value: "+13", effect: "No effect. Counts as +13 in front of you." },
     ];
 
