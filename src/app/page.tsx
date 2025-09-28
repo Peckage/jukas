@@ -39,7 +39,7 @@ export default function Home() {
           Jukas — The Card Game
         </h1>
         <p className="mt-4 max-w-2xl text-base sm:text-lg text-white/70">
-          Stay under 100 points to survive. Remember what you've seen. A fast-paced, memory-driven elimination game of risk, deduction, and sabotage.
+          Stay under 100 points to survive. Remember what you&apos;ve seen. A fast-paced, memory-driven elimination game of risk, deduction, and sabotage.
         </p>
         <div className="mt-8 flex flex-wrap items-center justify-center gap-3">
           <Link

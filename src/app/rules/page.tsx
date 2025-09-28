@@ -59,7 +59,7 @@ export default function RulesPage() {
                 <h3 className="font-semibold mb-3 text-lg">Key Concepts</h3>
                 <ul className="space-y-2 text-white/80">
                   <li>• Multiple rounds with cumulative scoring</li>
-                  <li>• Remember what you've seen</li>
+                  <li>• Remember what you&apos;ve seen</li>
                   <li>• Cards have point values and effects</li>
                   <li>• Effects only work from the deck</li>
                   <li>• Strategic swapping is crucial</li>
@@ -78,7 +78,7 @@ export default function RulesPage() {
                 <span className="flex-shrink-0 w-8 h-8 bg-[#19c37d] text-black rounded-full flex items-center justify-center font-bold text-sm">1</span>
                 <div>
                   <h3 className="font-semibold mb-2">Deal Cards</h3>
-                  <p className="text-white/80">Each player gets <strong>4 cards face-down</strong> arranged in a 2×2 grid in front of them. Don't look at these cards yet!</p>
+                  <p className="text-white/80">Each player gets <strong>4 cards face-down</strong> arranged in a 2×2 grid in front of them. Don&apos;t look at these cards yet!</p>
                 </div>
               </div>
               
@@ -158,7 +158,7 @@ export default function RulesPage() {
                 
                 <div className="bg-red-500/10 border border-red-500/30 rounded-lg p-4">
                   <h4 className="font-semibold text-red-300 mb-2">Jack: Peek and Swap</h4>
-                  <p className="text-white/80 text-sm">Look at one opponent's face-down card. You may swap the Jack with that card, or discard the Jack.</p>
+                  <p className="text-white/80 text-sm">Look at one opponent&apos;s face-down card. You may swap the Jack with that card, or discard the Jack.</p>
                 </div>
               </div>
             </div>
@@ -170,10 +170,10 @@ export default function RulesPage() {
                   <strong>Each round ends when any player thinks they have the lowest score.</strong>
                 </p>
                 <ol className="space-y-2 text-sm text-white/80">
-                  <li>1. At the start of their turn, a player may declare "Jukas!"</li>
+                  <li>1. At the start of their turn, a player may declare &quot;Jukas!&quot;</li>
                   <li>2. All other players get one final turn</li>
                   <li>3. Everyone reveals their cards and calculates their round score</li>
-                  <li>4. Add the round score to each player's total score</li>
+                  <li>4. Add the round score to each player&apos;s total score</li>
                   <li>5. Players with 100+ points are eliminated</li>
                   <li>6. Continue with new rounds until only one player remains</li>
                 </ol>
@@ -255,7 +255,7 @@ export default function RulesPage() {
                   <li>• Use 7s/8s to check your cards</li>
                   <li>• Red Kings are your best friends</li>
                   <li>• Avoid Black Kings at all costs</li>
-                  <li>• Time your "Jukas!" call carefully</li>
+                  <li>• Time your &quot;Jukas!&quot; call carefully</li>
                 </ul>
               </div>
             </div>

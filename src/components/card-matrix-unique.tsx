@@ -62,7 +62,7 @@ export default function UniqueCardsTable() {
                 ))}
                 <div className="px-5 py-4 text-sm text-white/70 bg-white/5 border-t border-white/10">
                     <p className="leading-relaxed">
-                        <strong>CRITICAL:</strong> Card effects only work when drawn from the deck and immediately discarded. Once any card enters your hand layout, it's just a point value—no effects!
+                        <strong>CRITICAL:</strong> Card effects only work when drawn from the deck and immediately discarded. Once any card enters your hand layout, it&apos;s just a point value—no effects!
                     </p>
                 </div>
             </div>
