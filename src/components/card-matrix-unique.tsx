@@ -7,21 +7,21 @@ export default function UniqueCardsTable() {
             suits: "All suits",
             value: "Face value",
             effect:
-                "From the deck: look at one of your own face-down cards, then discard the 7/8. From the discard: no effect; you must swap it into your layout.",
+                "Effect ONLY when drawn from deck: look at one of your own face-down cards. You may discard the 7/8 (effect used) OR swap it into your layout (becomes just point value).",
         },
         {
             name: "9–10",
             suits: "All suits",
             value: "Face value",
             effect:
-                "From the deck: blindly swap one of your face-down cards with one face-down card from an opponent (no looking), then discard the 9/10. From the discard: no effect; you must swap it into your layout.",
+                "Effect ONLY when drawn from deck: blindly swap one of your face-down cards with an opponent's face-down card, then discard the 9/10. If swapped into layout, just point value.",
         },
         {
             name: "Jack",
             suits: "All suits",
             value: "11",
             effect:
-                "From the deck: look at one opponent’s face-down card; you may swap that card with one of your own face-down cards, then discard the Jack. From the discard: no effect; you must swap it into your layout.",
+                "Effect ONLY when drawn from deck: look at one opponent's face-down card; you may discard the Jack (effect used) OR swap it into your layout (becomes just point value).",
         },
         { name: "Queen", suits: "All suits", value: "12", effect: "No effect. High value—try to ditch it." },
         { name: "Red King", suits: "♥ ♦", value: "-1", effect: "No effect. Counts as −1 in front of you." },
@@ -31,40 +31,44 @@ export default function UniqueCardsTable() {
     return (
         <div className="rounded-xl border border-white/10 bg-black/30 backdrop-blur-sm shadow-lg">
             {/* Mobile: card list */}
-            <div className="md:hidden divide-y divide-white/10">
+            <div className="lg:hidden divide-y divide-white/10">
                 {rows.map((r) => (
-                    <article key={r.name} className="p-4">
-                        <header className="flex items-start justify-between gap-3">
-                            <h3 className="text-base font-semibold text-slate-100">{r.name}</h3>
-                            <span className="shrink-0 rounded-md border border-white/15 bg-white/5 px-2 py-0.5 text-xs font-semibold text-slate-200">
+                    <article key={r.name} className="p-5">
+                        <header className="flex items-center justify-between gap-3 mb-3">
+                            <h3 className="text-lg font-bold text-slate-100">{r.name}</h3>
+                            <span className="shrink-0 rounded-md border border-white/15 bg-white/5 px-3 py-1 text-sm font-bold text-slate-200">
                                 {r.value}
                             </span>
                         </header>
 
-                        <div className="mt-1 flex items-center gap-2 text-xs text-slate-400">
-                            <span className="rounded-full border border-white/10 bg-white/5 px-2 py-0.5">
+                        <div className="flex items-center gap-3 text-sm text-slate-400 mb-3">
+                            <span className="rounded-full border border-white/10 bg-white/5 px-3 py-1 text-xs">
                                 {r.suits}
                             </span>
-                            <span className="text-white/30">•</span>
-                            <span>Value</span>
+                            {r.suits === "♥ ♦" && <span className="text-red-400 text-lg">♥ ♦</span>}
+                            {r.suits === "♠ ♣" && <span className="text-slate-300 text-lg">♠ ♣</span>}
                         </div>
 
-                        <details className="mt-2 group">
-                            <summary className="cursor-pointer select-none text-sm text-slate-200/90 hover:text-white/95">
-                                Effect (deck only)
-                                <span className="ml-1 text-white/40 group-open:rotate-180 inline-block transition-transform">▾</span>
+                        <details className="group">
+                            <summary className="cursor-pointer select-none text-base text-slate-200/90 hover:text-white/95 font-medium py-2">
+                                Card Effect
+                                <span className="ml-2 text-white/40 group-open:rotate-180 inline-block transition-transform">▾</span>
                             </summary>
-                            <p className="mt-1 text-sm text-slate-400">{r.effect}</p>
+                            <div className="mt-2 p-3 bg-white/5 rounded-lg border border-white/10">
+                                <p className="text-sm text-slate-300 leading-relaxed">{r.effect}</p>
+                            </div>
                         </details>
                     </article>
                 ))}
-                <p className="px-4 py-3 text-xs text-white/60">
-                    Effects happen only when you draw a card from the deck and play it to the discard. Taking from the discard never triggers effects; you just swap it into your layout.
-                </p>
+                <div className="px-5 py-4 text-sm text-white/70 bg-white/5 border-t border-white/10">
+                    <p className="leading-relaxed">
+                        <strong>CRITICAL:</strong> Card effects only work when drawn from the deck and immediately discarded. Once any card enters your hand layout, it's just a point value—no effects!
+                    </p>
+                </div>
             </div>
 
             {/* Desktop/tablet: full table */}
-            <div className="hidden md:block overflow-x-auto">
+            <div className="hidden lg:block overflow-x-auto">
                 <table className="w-full border-collapse">
                     <thead className="bg-white/5 text-left">
                         <tr>
@@ -89,7 +93,7 @@ export default function UniqueCardsTable() {
                         ))}
                         <tr>
                             <td colSpan={4} className="px-4 py-3 text-xs text-white/60 border-t border-white/10">
-                                Effects only happen when a card is drawn from the deck and immediately played to the discard. Discard pickups never trigger effects.
+                                <strong>CRITICAL:</strong> Effects only work when drawn from deck and immediately discarded. Cards in your layout are just point values—no effects!
                             </td>
                         </tr>
                     </tbody>

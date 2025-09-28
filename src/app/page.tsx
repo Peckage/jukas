@@ -1,5 +1,7 @@
 import Link from "next/link";
 import UniqueCardsTable from "@/components/card-matrix-unique";
+import ScoreKeeper from "@/components/score-keeper";
+import GameSetupGuide from "@/components/game-setup-guide";
 
 export default function Home() {
   return (
@@ -17,7 +19,17 @@ export default function Home() {
           <Link href="/" className="font-semibold tracking-wide text-white/90 hover:text-white">
             JUKAS
           </Link>
-
+          <div className="flex gap-4">
+            <Link href="#setup" className="text-white/70 hover:text-white transition">
+              Setup Guide
+            </Link>
+            <Link href="#scorekeeper" className="text-white/70 hover:text-white transition">
+              Score Keeper
+            </Link>
+            <Link href="#reference" className="text-white/70 hover:text-white transition">
+              Card Reference
+            </Link>
+          </div>
         </div>
       </nav>
 
@@ -27,27 +39,32 @@ export default function Home() {
           Jukas — The Card Game
         </h1>
         <p className="mt-4 max-w-2xl text-base sm:text-lg text-white/70">
-          Low score wins. Remember what you’ve seen. A fast-paced, memory-driven game of
-          risk, deduction, and sabotage.
+          Stay under 100 points to survive. Remember what you've seen. A fast-paced, memory-driven elimination game of risk, deduction, and sabotage.
         </p>
         <div className="mt-8 flex flex-wrap items-center justify-center gap-3">
           <Link
-            href="#reference"
+            href="#setup"
             className="rounded-lg bg-[#19c37d] px-5 py-3 font-semibold text-black hover:bg-[#15a56b] transition"
           >
-            Card Reference
+            Quick Setup
           </Link>
           <Link
             href="/rules"
             className="rounded-lg border border-white/15 bg-white/5 px-5 py-3 font-semibold text-white hover:bg-white/10 transition"
           >
-            Read Full Rules
+            Full Rules
+          </Link>
+          <Link
+            href="#reference"
+            className="rounded-lg border border-white/15 bg-white/5 px-5 py-3 font-semibold text-white hover:bg-white/10 transition"
+          >
+            Card Reference
           </Link>
         </div>
         <div className="mt-6 flex gap-2 text-xs text-white/60">
           <span className="rounded-full border border-white/15 bg-white/5 px-2 py-1">2–6 players</span>
-          <span className="rounded-full border border-white/15 bg-white/5 px-2 py-1">~15 min rounds</span>
-          <span className="rounded-full border border-white/15 bg-white/5 px-2 py-1">High replayability</span>
+          <span className="rounded-full border border-white/15 bg-white/5 px-2 py-1">~5-10 min rounds</span>
+          <span className="rounded-full border border-white/15 bg-white/5 px-2 py-1">Elimination format</span>
         </div>
       </header>
 
@@ -68,6 +85,12 @@ export default function Home() {
         </section>
       </main>
 
+      {/* Game Setup Guide */}
+      <GameSetupGuide />
+
+      {/* Score Keeper */}
+      <ScoreKeeper />
+
       {/* features */}
       <section className="border-t border-white/10 bg-black/40">
         <div className="mx-auto grid max-w-6xl gap-8 px-6 py-14 sm:grid-cols-3">
@@ -78,15 +101,15 @@ export default function Home() {
             </p>
           </div>
           <div className="rounded-xl border border-white/10 bg-white/[.04] p-6">
-            <h3 className="text-lg font-bold">Quick Rounds</h3>
+            <h3 className="text-lg font-bold">Multi-Round Format</h3>
             <p className="mt-2 text-white/70">
-              Learn in minutes, finish a round in about 15.
+              Play rounds until only one survivor remains under 100 points.
             </p>
           </div>
           <div className="rounded-xl border border-white/10 bg-white/[.04] p-6">
-            <h3 className="text-lg font-bold">Replayable</h3>
+            <h3 className="text-lg font-bold">Memory & Strategy</h3>
             <p className="mt-2 text-white/70">
-              Memory, bluffing, and luck keep every game fresh.
+              Remember cards, bluff opponents, and survive the longest.
             </p>
           </div>
         </div>
