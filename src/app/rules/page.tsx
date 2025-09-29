@@ -153,11 +153,11 @@ export default function RulesPage() {
                 <ul className="text-white/80 text-sm space-y-1 ml-4 mb-3">
                   <li>• <strong>Grab the card and play it for them immediately</strong></li>
                   <li>• Example: You see a 5 being played and you know they have a 5 - snatch it!</li>
-                  <li>• <strong>If you're right:</strong> They must draw 2 extra cards from the deck into their layout</li>
-                  <li>• <strong>If you're wrong:</strong> You must draw 2 extra cards from the deck into your layout</li>
+                  <li>• <strong>If you&apos;re right:</strong> They must draw 2 extra cards from the deck into their layout</li>
+                  <li>• <strong>If you&apos;re wrong:</strong> You must draw 2 extra cards from the deck into your layout</li>
                 </ul>
                 <p className="text-white/70 text-xs">
-                  <strong>Timing:</strong> Anytime a card is being played - doesn't matter whose turn it is. Act fast when you spot a match!
+                  <strong>Timing:</strong> Anytime a card is being played - doesn&apos;t matter whose turn it is. Act fast when you spot a match!
                 </p>
               </div>
             </div>
