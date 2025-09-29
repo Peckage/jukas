@@ -2,16 +2,16 @@ import Link from "next/link";
 
 export default function RulesPage() {
   return (
-    <div className="relative min-h-screen bg-[#0b1012] text-white font-sans">
+    <div className="relative min-h-screen bg-gradient-to-br from-slate-900 via-blue-900 to-indigo-900 text-white font-sans">
       {/* background glows */}
       <div className="pointer-events-none absolute inset-0 -z-10">
-        <div className="absolute -top-24 -right-24 h-72 w-72 rounded-full bg-[#19c37d]/20 blur-3xl" />
-        <div className="absolute top-1/3 -left-24 h-96 w-96 rounded-full bg-[#0e7c86]/25 blur-3xl" />
-        <div className="absolute bottom-0 right-1/3 h-60 w-60 rounded-full bg-white/5 blur-2xl" />
+        <div className="absolute -top-24 -right-24 h-80 w-80 rounded-full bg-emerald-400/25 blur-3xl animate-pulse" />
+        <div className="absolute top-1/3 -left-24 h-96 w-96 rounded-full bg-blue-400/20 blur-3xl" />
+        <div className="absolute bottom-0 right-1/3 h-72 w-72 rounded-full bg-purple-400/15 blur-2xl" />
       </div>
 
       {/* top nav */}
-      <nav className="sticky top-0 z-20 backdrop-blur supports-[backdrop-filter]:bg-black/30 border-b border-white/10">
+      <nav className="sticky top-0 z-20 backdrop-blur-md supports-[backdrop-filter]:bg-slate-800/80 border-b border-slate-600/50 shadow-lg">
         <div className="mx-auto flex max-w-6xl items-center justify-between px-6 py-3">
           <Link href="/" className="font-semibold tracking-wide text-white/90 hover:text-white">
             JUKAS
@@ -43,8 +43,8 @@ export default function RulesPage() {
 
         {/* Game Overview */}
         <section className="mb-12">
-          <div className="bg-white/10 rounded-xl p-8 backdrop-blur-sm">
-            <h2 className="text-2xl font-bold mb-6 text-[#19c37d]">Game Overview</h2>
+          <div className="bg-gradient-to-br from-slate-800/90 to-slate-700/90 rounded-xl p-8 backdrop-blur-sm border border-slate-600/50 shadow-lg">
+            <h2 className="text-2xl font-bold mb-6 text-emerald-400">Game Overview</h2>
             <div className="grid md:grid-cols-2 gap-6">
               <div>
                 <h3 className="font-semibold mb-3 text-lg">Quick Facts</h3>
@@ -71,8 +71,8 @@ export default function RulesPage() {
 
         {/* Setup */}
         <section className="mb-12">
-          <div className="bg-white/10 rounded-xl p-8 backdrop-blur-sm">
-            <h2 className="text-2xl font-bold mb-6 text-[#19c37d]">Setup</h2>
+          <div className="bg-gradient-to-br from-slate-800/90 to-slate-700/90 rounded-xl p-8 backdrop-blur-sm border border-slate-600/50 shadow-lg">
+            <h2 className="text-2xl font-bold mb-6 text-emerald-400">Setup</h2>
             <div className="space-y-4">
               <div className="flex items-start gap-4">
                 <span className="flex-shrink-0 w-8 h-8 bg-[#19c37d] text-black rounded-full flex items-center justify-center font-bold text-sm">1</span>
@@ -103,33 +103,62 @@ export default function RulesPage() {
 
         {/* Gameplay */}
         <section className="mb-12">
-          <div className="bg-white/10 rounded-xl p-8 backdrop-blur-sm">
-            <h2 className="text-2xl font-bold mb-6 text-[#19c37d]">How to Play</h2>
+          <div className="bg-gradient-to-br from-slate-800/90 to-slate-700/90 rounded-xl p-8 backdrop-blur-sm border border-slate-600/50 shadow-lg">
+            <h2 className="text-2xl font-bold mb-6 text-emerald-400">How to Play</h2>
             
             <div className="mb-8">
               <h3 className="text-xl font-semibold mb-4">On Your Turn</h3>
               <div className="bg-white/5 rounded-lg p-6 mb-6">
-                <p className="text-white/90 text-lg font-medium mb-4">Choose one option:</p>
-                <div className="grid md:grid-cols-2 gap-6">
-                  <div className="border border-blue-500/30 rounded-lg p-4 bg-blue-500/10">
-                    <h4 className="font-semibold mb-2 text-blue-300">Option A: Draw from Deck</h4>
-                    <ol className="space-y-2 text-sm text-white/80">
-                      <li>1. Draw the top card from the deck</li>
-                      <li>2. Look at it and use its effect (if any)</li>
-                      <li>3. Either discard it OR swap it into your layout</li>
-                      <li>4. <strong>Effect only works if you discard it!</strong></li>
-                    </ol>
-                  </div>
-                  <div className="border border-green-500/30 rounded-lg p-4 bg-green-500/10">
-                    <h4 className="font-semibold mb-2 text-green-300">Option B: Take from Discard</h4>
-                    <ol className="space-y-2 text-sm text-white/80">
-                      <li>1. Take the top discard card</li>
-                      <li>2. <strong>No effect triggers! Just point value</strong></li>
-                      <li>3. Must swap it with one of your face-down cards</li>
-                      <li>4. Discard the swapped card face-up</li>
-                    </ol>
-                  </div>
+                <p className="text-white/90 text-lg font-medium mb-4">Each turn:</p>
+                <div className="border border-blue-500/30 rounded-lg p-6 bg-blue-500/10">
+                  <h4 className="font-semibold mb-4 text-blue-300">📥 Draw and Decide</h4>
+                  <ol className="space-y-3 text-sm text-white/80">
+                    <li><strong>1. Draw the top card from the deck</strong></li>
+                    <li><strong>2. Look at the card</strong> - you now know what it is</li>
+                    <li><strong>3. Choose one:</strong>
+                      <ul className="ml-4 mt-2 space-y-1">
+                        <li>• <strong>Use its effect</strong> (if any) and discard it to the discard pile</li>
+                        <li>• <strong>OR swap it</strong> into your layout (replaces one of your face-down cards)</li>
+                      </ul>
+                    </li>
+                    <li><strong>4. Important:</strong> Card effects only work if you play them directly from the deck!</li>
+                  </ol>
                 </div>
+              </div>
+            </div>
+
+            <div className="mb-8">
+              <h3 className="text-xl font-semibold mb-4">Special Rule: Deck Card Matching</h3>
+              <div className="mb-6 p-4 bg-cyan-500/10 border border-cyan-500/30 rounded-lg">
+                <h4 className="font-semibold text-cyan-300 mb-2">📋 Memory Advantage Rule</h4>
+                <p className="text-white/80 text-sm mb-3">
+                  If the top deck card matches one of your layout cards that you remember, you may play it immediately! However:
+                </p>
+                <ul className="text-white/80 text-sm space-y-1 ml-4">
+                  <li>• <strong>Once you pick up the deck card, you must commit to playing it</strong></li>
+                  <li>• If you accidentally pick up the wrong card, you can only put it back if <strong>no one else saw it (Including yourself)</strong></li>
+                  <li>• If anyone saw the card you picked up, you must keep it and make your move</li>
+                  <li>• This applies to both using the card effect OR swapping it into your layout</li>
+                </ul>
+              </div>
+            </div>
+
+            <div className="mb-8">
+              <h3 className="text-xl font-semibold mb-4">Special Rule: Card Snatching</h3>
+              <div className="mb-6 p-4 bg-violet-500/10 border border-violet-500/30 rounded-lg">
+                <h4 className="font-semibold text-violet-300 mb-2">🧠 Knowledge Advantage Rule</h4>
+                <p className="text-white/80 text-sm mb-3">
+                  When you see a card being played that matches what you know someone has in their layout:
+                </p>
+                <ul className="text-white/80 text-sm space-y-1 ml-4 mb-3">
+                  <li>• <strong>Grab the card and play it for them immediately</strong></li>
+                  <li>• Example: You see a 5 being played and you know they have a 5 - snatch it!</li>
+                  <li>• <strong>If you're right:</strong> They must draw 2 extra cards from the deck into their layout</li>
+                  <li>• <strong>If you're wrong:</strong> You must draw 2 extra cards from the deck into your layout</li>
+                </ul>
+                <p className="text-white/70 text-xs">
+                  <strong>Timing:</strong> Anytime a card is being played - doesn't matter whose turn it is. Act fast when you spot a match!
+                </p>
               </div>
             </div>
 
@@ -170,8 +199,8 @@ export default function RulesPage() {
                   <strong>Each round ends when any player thinks they have the lowest score.</strong>
                 </p>
                 <ol className="space-y-2 text-sm text-white/80">
-                  <li>1. At the start of their turn, a player may declare &quot;Jukas!&quot;</li>
-                  <li>2. All other players get one final turn</li>
+                  <li>1. At any point during the game, a player may declare &quot;Jukas!&quot;</li>
+                  <li>2. If declared while another player is taking their turn, that player must finish their turn before resolving the declaration.</li>
                   <li>3. Everyone reveals their cards and calculates their round score</li>
                   <li>4. Add the round score to each player&apos;s total score</li>
                   <li>5. Players with 100+ points are eliminated</li>
@@ -191,8 +220,8 @@ export default function RulesPage() {
 
         {/* Scoring */}
         <section className="mb-12">
-          <div className="bg-white/10 rounded-xl p-8 backdrop-blur-sm">
-            <h2 className="text-2xl font-bold mb-6 text-[#19c37d]">Scoring</h2>
+          <div className="bg-gradient-to-br from-slate-800/90 to-slate-700/90 rounded-xl p-8 backdrop-blur-sm border border-slate-600/50 shadow-lg">
+            <h2 className="text-2xl font-bold mb-6 text-emerald-400">Scoring</h2>
             <div className="grid md:grid-cols-2 gap-6">
               <div>
                 <h3 className="font-semibold mb-4 text-lg">Card Values</h3>
@@ -237,8 +266,8 @@ export default function RulesPage() {
 
         {/* Strategy Tips */}
         <section className="mb-12">
-          <div className="bg-white/10 rounded-xl p-8 backdrop-blur-sm">
-            <h2 className="text-2xl font-bold mb-6 text-[#19c37d]">Strategy Tips</h2>
+          <div className="bg-gradient-to-br from-slate-800/90 to-slate-700/90 rounded-xl p-8 backdrop-blur-sm border border-slate-600/50 shadow-lg">
+            <h2 className="text-2xl font-bold mb-6 text-emerald-400">Strategy Tips</h2>
             <div className="grid md:grid-cols-2 gap-6">
               <div>
                 <h3 className="font-semibold mb-3 text-lg">Memory is Key</h3>
