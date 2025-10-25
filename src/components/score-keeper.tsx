@@ -89,17 +89,27 @@ export default function ScoreKeeper() {
     setCurrentRound(currentRound + 1);
   };
 
+  const previousRound = () => {
+    if (currentRound > 1) {
+      setCurrentRound(currentRound - 1);
+    }
+  };
+
   const endGame = () => {
+    if (!confirm('Are you sure you want to end this game? The results will be saved to history.')) {
+      return;
+    }
+
     const gameSession: GameSession = {
       id: Date.now().toString(),
       date: new Date().toISOString(),
       players: [...players],
       completed: true
     };
-    
+
     const updatedHistory = [gameSession, ...gameHistory];
     saveGameHistory(updatedHistory);
-    
+
     setGameActive(false);
     setPlayers([]);
     setCurrentRound(1);
@@ -122,7 +132,7 @@ export default function ScoreKeeper() {
 
   if (!gameActive) {
     return (
-      <section id="scorekeeper" className="border-t border-white/10 bg-black/40">
+      <section id="scorekeeper" className="border-t border-white/10">
         <div className="mx-auto max-w-6xl px-6 py-14">
           <div className="text-center mb-8">
             <h2 className="text-3xl font-bold mb-4">Score Keeper</h2>
@@ -130,9 +140,9 @@ export default function ScoreKeeper() {
               Track scores for your physical Jukas games across multiple rounds. Players are eliminated when they reach 100 points. Last survivor wins!
             </p>
           </div>
-          
+
           <div className="max-w-2xl mx-auto">
-            <div className="bg-white/10 rounded-xl p-8 backdrop-blur-sm">
+            <div className="bg-slate-900/70 border border-white/10 rounded-xl p-8 backdrop-blur-md shadow-xl">
               <h3 className="text-xl font-semibold mb-6">Setup New Game</h3>
               
               <div className="space-y-6">
@@ -147,13 +157,13 @@ export default function ScoreKeeper() {
                           type="text"
                           value={name}
                           onChange={(e) => updatePlayerName(index, e.target.value)}
-                          className="flex-1 px-4 py-2 bg-white/10 border border-white/20 rounded-lg text-white placeholder-white/50 focus:outline-none focus:border-[#19c37d]"
+                          className="flex-1 px-4 py-2 bg-slate-950/50 border border-white/20 rounded-lg text-white placeholder-white/40 focus:outline-none focus:border-red-700"
                           placeholder={`Player ${index + 1} name`}
                         />
                         {playerNames.length > 2 && (
                           <button
                             onClick={() => removePlayer(index)}
-                            className="px-3 py-2 bg-red-600/20 hover:bg-red-600/30 border border-red-500/30 rounded-lg text-red-400 transition"
+                            className="px-3 py-2 bg-red-900/40 hover:bg-red-900/60 border border-red-700/40 rounded-lg text-red-300 transition"
                           >
                             ✕
                           </button>
@@ -161,7 +171,7 @@ export default function ScoreKeeper() {
                       </div>
                     ))}
                   </div>
-                  
+
                   {playerNames.length < 6 && (
                     <button
                       onClick={addPlayer}
@@ -174,7 +184,7 @@ export default function ScoreKeeper() {
 
                 <button
                   onClick={startNewGame}
-                  className="w-full px-6 py-3 bg-[#19c37d] hover:bg-[#15a56b] text-black font-semibold rounded-lg transition text-lg"
+                  className="w-full px-6 py-3 bg-gradient-to-r from-orange-700 to-red-700 hover:from-orange-600 hover:to-red-600 text-white font-semibold rounded-lg transition text-lg shadow-lg shadow-orange-900/40"
                 >
                   Start Score Tracking
                 </button>
@@ -183,7 +193,7 @@ export default function ScoreKeeper() {
 
             {/* Game History */}
             {gameHistory.length > 0 && (
-              <div className="mt-8 bg-white/10 rounded-xl p-8 backdrop-blur-sm">
+              <div className="mt-8 bg-slate-900/70 border border-white/10 rounded-xl p-8 backdrop-blur-md">
                 <div className="flex justify-between items-center mb-6">
                   <h3 className="text-xl font-semibold">Game History</h3>
                   <div className="flex gap-3">
@@ -195,7 +205,7 @@ export default function ScoreKeeper() {
                     </button>
                     <button
                       onClick={clearHistory}
-                      className="px-4 py-2 bg-red-600/20 hover:bg-red-600/30 border border-red-500/30 text-red-400 rounded-lg transition text-sm"
+                      className="px-4 py-2 bg-red-900/40 hover:bg-red-900/60 border border-red-700/40 text-red-300 rounded-lg transition text-sm"
                     >
                       Clear All
                     </button>
@@ -205,10 +215,10 @@ export default function ScoreKeeper() {
                 {showHistory && (
                   <div className="space-y-4 max-h-96 overflow-y-auto">
                     {gameHistory.map((game) => (
-                      <div key={game.id} className="bg-white/10 rounded-lg p-4">
+                      <div key={game.id} className="bg-slate-950/50 border border-white/10 rounded-lg p-4">
                         <div className="flex justify-between items-center mb-3">
-                          <span className="text-sm text-gray-300">{formatDate(game.date)}</span>
-                          <span className="text-xs bg-blue-600/20 text-blue-400 px-2 py-1 rounded">
+                          <span className="text-sm text-white/70">{formatDate(game.date)}</span>
+                          <span className="text-xs bg-emerald-900/30 text-emerald-300 border border-emerald-700/30 px-2 py-1 rounded">
                             {game.players.length} players
                           </span>
                         </div>
@@ -217,10 +227,10 @@ export default function ScoreKeeper() {
                             .sort((a, b) => a.total - b.total)
                             .map((player, index) => (
                               <div key={index} className="flex justify-between text-sm">
-                                <span className={index === 0 ? 'text-yellow-400 font-semibold' : 'text-gray-300'}>
+                                <span className={index === 0 ? 'text-amber-300 font-semibold' : 'text-white/70'}>
                                   {index === 0 && '🏆 '}{player.name}
                                 </span>
-                                <span className={index === 0 ? 'text-yellow-400 font-semibold' : 'text-gray-400'}>
+                                <span className={index === 0 ? 'text-amber-300 font-semibold' : 'text-white/50'}>
                                   {player.total}
                                 </span>
                               </div>
@@ -239,33 +249,42 @@ export default function ScoreKeeper() {
   }
 
   return (
-    <section id="scorekeeper" className="border-t border-white/10 bg-black/40">
+    <section id="scorekeeper" className="border-t border-white/10">
       <div className="mx-auto max-w-6xl px-6 py-14">
         <div className="flex flex-col sm:flex-row justify-between items-center mb-8">
           <div>
             <h2 className="text-3xl font-bold mb-2">Round {currentRound}</h2>
             <p className="text-white/70">Enter scores for this round (lower is better)</p>
           </div>
-          <div className="flex gap-3 mt-4 sm:mt-0">
-            <button
-              onClick={nextRound}
-              className="px-4 py-2 bg-blue-600 hover:bg-blue-700 rounded-lg font-semibold transition"
-            >
-              Next Round
-            </button>
+          <div className="flex flex-col gap-3 mt-4 sm:mt-0">
             <button
               onClick={endGame}
-              className="px-4 py-2 bg-green-600 hover:bg-green-700 rounded-lg font-semibold transition"
+              className="px-4 py-2 bg-gradient-to-r from-orange-700 to-red-700 hover:from-orange-600 hover:to-red-600 rounded-lg font-semibold transition shadow-lg shadow-orange-900/40"
             >
               End Game
             </button>
+            <div className="flex gap-3">
+              <button
+                onClick={previousRound}
+                disabled={currentRound === 1}
+                className="px-4 py-2 bg-emerald-800 hover:bg-emerald-700 disabled:bg-slate-700 disabled:cursor-not-allowed disabled:opacity-50 rounded-lg font-semibold transition"
+              >
+                Previous
+              </button>
+              <button
+                onClick={nextRound}
+                className="px-4 py-2 bg-emerald-800 hover:bg-emerald-700 rounded-lg font-semibold transition"
+              >
+                Next
+              </button>
+            </div>
           </div>
         </div>
 
-        <div className="bg-white/10 rounded-xl backdrop-blur-sm overflow-hidden">
+        <div className="bg-slate-900/70 border border-white/10 rounded-xl backdrop-blur-md overflow-hidden shadow-xl">
           <div className="overflow-x-auto">
             <table className="w-full">
-              <thead className="bg-white/10">
+              <thead className="bg-slate-900/50">
                 <tr>
                   <th className="text-left p-4 font-semibold">Player</th>
                   {Array.from({ length: Math.max(currentRound, 1) }, (_, i) => (
@@ -273,12 +292,12 @@ export default function ScoreKeeper() {
                       R{i + 1}
                     </th>
                   ))}
-                  <th className="text-center p-4 font-semibold w-24 bg-white/10">Total</th>
+                  <th className="text-center p-4 font-semibold w-24 bg-slate-950/50">Total</th>
                 </tr>
               </thead>
               <tbody>
                 {players.map((player, playerIndex) => (
-                  <tr key={playerIndex} className={`border-t border-white/10 ${player.total >= 100 ? 'opacity-50 bg-red-500/10' : ''}`}>
+                  <tr key={playerIndex} className={`border-t border-white/10 ${player.total >= 100 ? 'opacity-50 bg-red-900/20' : ''}`}>
                     <td className="p-4 font-medium">
                       {player.name}
                       {player.total >= 100 && <span className="ml-2 text-red-400 text-xs">ELIMINATED</span>}
@@ -289,10 +308,17 @@ export default function ScoreKeeper() {
                           <span className="text-white/80">{player.rounds[roundIndex] || 0}</span>
                         ) : roundIndex === currentRound - 1 ? (
                           <input
-                            type="number"
-                            value={player.rounds[roundIndex] || ''}
-                            onChange={(e) => addRoundScore(playerIndex, parseInt(e.target.value) || 0)}
-                            className="w-16 px-2 py-1 bg-white/10 border border-white/20 rounded text-center text-white focus:outline-none focus:border-[#19c37d]"
+                            type="text"
+                            inputMode="decimal"
+                            value={player.rounds[roundIndex] ?? ''}
+                            onChange={(e) => {
+                              const value = e.target.value;
+                              // Allow empty, minus sign, and valid numbers (including negative)
+                              if (value === '' || value === '-' || /^-?\d+$/.test(value)) {
+                                addRoundScore(playerIndex, value === '' || value === '-' ? 0 : parseInt(value, 10));
+                              }
+                            }}
+                            className="w-16 px-2 py-1 bg-slate-950/50 border border-white/20 rounded text-center text-white focus:outline-none focus:border-red-700"
                             placeholder="0"
                           />
                         ) : (
@@ -300,10 +326,10 @@ export default function ScoreKeeper() {
                         )}
                       </td>
                     ))}
-                    <td className="p-4 text-center font-bold text-lg bg-white/5">
+                    <td className="p-4 text-center font-bold text-lg bg-slate-950/30">
                       <span className={
                         player.total >= 100 ? 'text-red-400' :
-                        player.total === Math.min(...players.filter(p => p.total < 100).map(p => p.total)) ? 'text-yellow-400' : 'text-white'
+                        player.total === Math.min(...players.filter(p => p.total < 100).map(p => p.total)) ? 'text-amber-400' : 'text-white'
                       }>
                         {player.total}
                       </span>
