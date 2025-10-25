@@ -2,49 +2,66 @@ import Link from "next/link";
 
 export default function RulesPage() {
   return (
-    <div className="relative min-h-screen bg-gradient-to-br from-slate-900 via-blue-900 to-indigo-900 text-white font-sans">
-      {/* background glows */}
-      <div className="pointer-events-none absolute inset-0 -z-10">
-        <div className="absolute -top-24 -right-24 h-80 w-80 rounded-full bg-emerald-400/25 blur-3xl animate-pulse" />
-        <div className="absolute top-1/3 -left-24 h-96 w-96 rounded-full bg-blue-400/20 blur-3xl" />
-        <div className="absolute bottom-0 right-1/3 h-72 w-72 rounded-full bg-purple-400/15 blur-2xl" />
+    <div className="relative min-h-screen bg-slate-950 text-white font-sans scroll-smooth">
+      {/* Single unified warm cozy background - fixed position so it stays throughout scroll */}
+      <div className="pointer-events-none fixed inset-0 -z-10">
+        {/* Base dark gradient */}
+        <div className="absolute inset-0 bg-gradient-to-br from-slate-950 via-slate-900 to-slate-950" />
+
+        {/* Warm fireplace glow - top right corner */}
+        <div className="absolute -top-40 -right-40 h-[600px] w-[600px] rounded-full bg-gradient-to-br from-orange-600/12 via-red-700/8 to-transparent blur-3xl animate-pulse" />
+
+        {/* Warm ambient side glow - left */}
+        <div className="absolute top-1/3 -left-40 h-[700px] w-[700px] rounded-full bg-gradient-to-r from-amber-700/10 via-orange-800/6 to-transparent blur-3xl" />
+
+        {/* Bottom center warm glow */}
+        <div className="absolute -bottom-40 left-1/2 -translate-x-1/2 h-[600px] w-[800px] rounded-full bg-gradient-to-t from-orange-900/10 via-red-900/6 to-transparent blur-3xl" />
+
+        {/* Soft emerald accent for balance - right side */}
+        <div className="absolute top-2/3 -right-20 h-96 w-96 rounded-full bg-emerald-900/6 blur-3xl" />
+
+        {/* Subtle texture overlay */}
+        <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_50%,rgba(255,255,255,0.008),transparent_70%)] opacity-60" />
       </div>
 
       {/* top nav */}
-      <nav className="sticky top-0 z-20 backdrop-blur-md supports-[backdrop-filter]:bg-slate-800/80 border-b border-slate-600/50 shadow-lg">
+      <nav className="fixed top-0 left-0 right-0 z-50 backdrop-blur-md supports-[backdrop-filter]:bg-slate-950/90 border-b border-orange-900/20 shadow-lg shadow-orange-900/5">
         <div className="mx-auto flex max-w-6xl items-center justify-between px-6 py-3">
-          <Link href="/" className="font-semibold tracking-wide text-white/90 hover:text-white">
+          <Link href="/" className="font-semibold tracking-wide text-white/90 hover:text-orange-200 transition">
             JUKAS
           </Link>
           <div className="flex gap-4">
-            <Link href="/#setup" className="text-white/70 hover:text-white transition">
-              Setup Guide
+            <Link href="/#home" className="text-white/70 hover:text-orange-200 transition">
+              Home
             </Link>
-            <Link href="/#scorekeeper" className="text-white/70 hover:text-white transition">
-              Score Keeper
+            <Link href="/#setup" className="text-white/70 hover:text-orange-200 transition">
+              Setup
             </Link>
-            <Link href="/#reference" className="text-white/70 hover:text-white transition">
-              Card Reference
+            <Link href="/#scorekeeper" className="text-white/70 hover:text-orange-200 transition">
+              Scorekeeper
+            </Link>
+            <Link href="/#reference" className="text-white/70 hover:text-orange-200 transition">
+              Reference
             </Link>
           </div>
         </div>
       </nav>
 
-      <div className="mx-auto max-w-4xl px-6 py-12">
+      <div className="mx-auto max-w-4xl px-6 py-20 pt-24">
         {/* Header */}
-        <div className="text-center mb-12">
-          <h1 className="text-4xl sm:text-5xl font-extrabold tracking-tight mb-4">
+        <div className="text-center mb-16">
+          <h1 className="text-4xl sm:text-6xl font-extrabold tracking-tight mb-6">
             How to Play Jukas
           </h1>
-          <p className="text-lg text-white/70 max-w-2xl mx-auto">
+          <p className="text-xl text-white/70 max-w-2xl mx-auto">
             A fast-paced memory and strategy card game played over multiple rounds. Last player under 100 points wins!
           </p>
         </div>
 
         {/* Game Overview */}
         <section className="mb-12">
-          <div className="bg-gradient-to-br from-slate-800/90 to-slate-700/90 rounded-xl p-8 backdrop-blur-sm border border-slate-600/50 shadow-lg">
-            <h2 className="text-2xl font-bold mb-6 text-emerald-400">Game Overview</h2>
+          <div className="bg-slate-900/70 rounded-2xl p-8 backdrop-blur-md border border-white/10 shadow-2xl">
+            <h2 className="text-2xl font-bold mb-6 text-orange-300">Game Overview</h2>
             <div className="grid md:grid-cols-2 gap-6">
               <div>
                 <h3 className="font-semibold mb-3 text-lg">Quick Facts</h3>
@@ -71,11 +88,11 @@ export default function RulesPage() {
 
         {/* Setup */}
         <section className="mb-12">
-          <div className="bg-gradient-to-br from-slate-800/90 to-slate-700/90 rounded-xl p-8 backdrop-blur-sm border border-slate-600/50 shadow-lg">
-            <h2 className="text-2xl font-bold mb-6 text-emerald-400">Setup</h2>
+          <div className="bg-slate-900/70 rounded-2xl p-8 backdrop-blur-md border border-white/10 shadow-2xl">
+            <h2 className="text-2xl font-bold mb-6 text-orange-300">Setup</h2>
             <div className="space-y-4">
               <div className="flex items-start gap-4">
-                <span className="flex-shrink-0 w-8 h-8 bg-[#19c37d] text-black rounded-full flex items-center justify-center font-bold text-sm">1</span>
+                <span className="flex-shrink-0 w-8 h-8 bg-gradient-to-br from-orange-600 to-red-700 text-white rounded-full flex items-center justify-center font-bold text-sm shadow-lg shadow-orange-900/40">1</span>
                 <div>
                   <h3 className="font-semibold mb-2">Deal Cards</h3>
                   <p className="text-white/80">Each player gets <strong>4 cards face-down</strong> arranged in a 2×2 grid in front of them. Don&apos;t look at these cards yet!</p>
@@ -83,7 +100,7 @@ export default function RulesPage() {
               </div>
               
               <div className="flex items-start gap-4">
-                <span className="flex-shrink-0 w-8 h-8 bg-[#19c37d] text-black rounded-full flex items-center justify-center font-bold text-sm">2</span>
+                <span className="flex-shrink-0 w-8 h-8 bg-gradient-to-br from-orange-600 to-red-700 text-white rounded-full flex items-center justify-center font-bold text-sm shadow-lg shadow-orange-900/40">2</span>
                 <div>
                   <h3 className="font-semibold mb-2">Create Draw and Discard Piles</h3>
                   <p className="text-white/80">Place remaining cards as the <strong>draw pile</strong>. Flip the top card to start the <strong>discard pile</strong>.</p>
@@ -91,7 +108,7 @@ export default function RulesPage() {
               </div>
               
               <div className="flex items-start gap-4">
-                <span className="flex-shrink-0 w-8 h-8 bg-[#19c37d] text-black rounded-full flex items-center justify-center font-bold text-sm">3</span>
+                <span className="flex-shrink-0 w-8 h-8 bg-gradient-to-br from-orange-600 to-red-700 text-white rounded-full flex items-center justify-center font-bold text-sm shadow-lg shadow-orange-900/40">3</span>
                 <div>
                   <h3 className="font-semibold mb-2">Initial Peek</h3>
                   <p className="text-white/80">Each player may look at <strong>any 2 of their 4 cards</strong>, then put them back face-down. Remember what you saw!</p>
@@ -103,8 +120,8 @@ export default function RulesPage() {
 
         {/* Gameplay */}
         <section className="mb-12">
-          <div className="bg-gradient-to-br from-slate-800/90 to-slate-700/90 rounded-xl p-8 backdrop-blur-sm border border-slate-600/50 shadow-lg">
-            <h2 className="text-2xl font-bold mb-6 text-emerald-400">How to Play</h2>
+          <div className="bg-slate-900/70 rounded-2xl p-8 backdrop-blur-md border border-white/10 shadow-2xl">
+            <h2 className="text-2xl font-bold mb-6 text-orange-300">How to Play</h2>
             
             <div className="mb-8">
               <h3 className="text-xl font-semibold mb-4">On Your Turn</h3>
@@ -220,8 +237,8 @@ export default function RulesPage() {
 
         {/* Scoring */}
         <section className="mb-12">
-          <div className="bg-gradient-to-br from-slate-800/90 to-slate-700/90 rounded-xl p-8 backdrop-blur-sm border border-slate-600/50 shadow-lg">
-            <h2 className="text-2xl font-bold mb-6 text-emerald-400">Scoring</h2>
+          <div className="bg-slate-900/70 rounded-2xl p-8 backdrop-blur-md border border-white/10 shadow-2xl">
+            <h2 className="text-2xl font-bold mb-6 text-orange-300">Scoring</h2>
             <div className="grid md:grid-cols-2 gap-6">
               <div>
                 <h3 className="font-semibold mb-4 text-lg">Card Values</h3>
@@ -266,8 +283,8 @@ export default function RulesPage() {
 
         {/* Strategy Tips */}
         <section className="mb-12">
-          <div className="bg-gradient-to-br from-slate-800/90 to-slate-700/90 rounded-xl p-8 backdrop-blur-sm border border-slate-600/50 shadow-lg">
-            <h2 className="text-2xl font-bold mb-6 text-emerald-400">Strategy Tips</h2>
+          <div className="bg-slate-900/70 rounded-2xl p-8 backdrop-blur-md border border-white/10 shadow-2xl">
+            <h2 className="text-2xl font-bold mb-6 text-orange-300">Strategy Tips</h2>
             <div className="grid md:grid-cols-2 gap-6">
               <div>
                 <h3 className="font-semibold mb-3 text-lg">Memory is Key</h3>
@@ -296,7 +313,7 @@ export default function RulesPage() {
           <div className="flex flex-wrap justify-center gap-4">
             <Link
               href="/#setup"
-              className="px-6 py-3 bg-[#19c37d] hover:bg-[#15a56b] text-black font-semibold rounded-lg transition"
+              className="px-6 py-3 bg-gradient-to-r from-orange-700 to-red-700 hover:from-orange-600 hover:to-red-600 text-white font-semibold rounded-lg transition shadow-lg shadow-orange-900/40"
             >
               View Setup Guide
             </Link>
@@ -314,7 +331,7 @@ export default function RulesPage() {
             </Link>
             <Link
               href="/"
-              className="px-6 py-3 border border-white/20 bg-white/5 hover:bg-white/10 text-white font-semibold rounded-lg transition"
+              className="px-6 py-3 border border-emerald-800/40 bg-emerald-900/20 hover:bg-emerald-900/40 text-white font-semibold rounded-lg transition"
             >
               Back to Home
             </Link>
