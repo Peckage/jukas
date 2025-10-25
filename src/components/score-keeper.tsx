@@ -309,7 +309,6 @@ export default function ScoreKeeper() {
                         ) : roundIndex === currentRound - 1 ? (
                           <input
                             type="text"
-                            inputMode="decimal"
                             value={player.rounds[roundIndex] ?? ''}
                             onChange={(e) => {
                               const value = e.target.value;
