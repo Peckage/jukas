@@ -7,6 +7,7 @@ Production-ready nginx configuration for **jukas.nl**. Drop this in your VPS and
 ## 🚀 One-Line Setup Script
 
 Copy and paste this into your VPS terminal. It will:
+
 - Create a dedicated `jukas` user
 - Clone the repo and install dependencies
 - Prompt for your desired port

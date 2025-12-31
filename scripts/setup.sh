@@ -7,12 +7,12 @@
 #
 set -e
 
-# Colors for output
+# Colors
 RED='\033[0;31m'
 GREEN='\033[0;32m'
 YELLOW='\033[1;33m'
 BLUE='\033[0;34m'
-NC='\033[0m' # No Color
+NC='\033[0m'
 
 print_banner() {
     echo -e "${BLUE}"
@@ -23,23 +23,27 @@ print_banner() {
     echo -e "${NC}"
 }
 
-log_info() {
-    echo -e "${BLUE}[INFO]${NC} $1"
+log_info() { echo -e "${BLUE}[INFO]${NC} $1"; }
+log_success() { echo -e "${GREEN}[✓]${NC} $1"; }
+log_warn() { echo -e "${YELLOW}[!]${NC} $1"; }
+log_error() { echo -e "${RED}[✗]${NC} $1"; }
+
+ask_yes_no() {
+    local prompt="$1"
+    local default="${2:-y}"
+    local answer
+    
+    if [[ "$default" == "y" ]]; then
+        read -p "$prompt [Y/n]: " answer
+        answer=${answer:-y}
+    else
+        read -p "$prompt [y/N]: " answer
+        answer=${answer:-n}
+    fi
+    
+    [[ "$answer" =~ ^[Yy]$ ]]
 }
 
-log_success() {
-    echo -e "${GREEN}[✓]${NC} $1"
-}
-
-log_warn() {
-    echo -e "${YELLOW}[!]${NC} $1"
-}
-
-log_error() {
-    echo -e "${RED}[✗]${NC} $1"
-}
-
-# Check if running as root
 check_root() {
     if [[ $EUID -ne 0 ]]; then
         log_error "This script must be run as root (use sudo)"
@@ -47,46 +51,171 @@ check_root() {
     fi
 }
 
-# Prompt for configuration
-get_config() {
+detect_existing() {
     echo ""
+    log_info "Detecting existing installations..."
+    echo ""
+    
+    # Node.js
+    if command -v node &> /dev/null; then
+        NODE_VERSION=$(node --version)
+        log_success "Node.js found: $NODE_VERSION"
+        HAS_NODE=true
+    else
+        log_warn "Node.js not found"
+        HAS_NODE=false
+    fi
+    
+    # pnpm
+    if command -v pnpm &> /dev/null; then
+        PNPM_VERSION=$(pnpm --version)
+        log_success "pnpm found: $PNPM_VERSION"
+        HAS_PNPM=true
+    else
+        log_warn "pnpm not found"
+        HAS_PNPM=false
+    fi
+    
+    # nginx
+    if command -v nginx &> /dev/null; then
+        NGINX_VERSION=$(nginx -v 2>&1 | cut -d'/' -f2)
+        log_success "nginx found: $NGINX_VERSION"
+        HAS_NGINX=true
+    else
+        log_warn "nginx not found"
+        HAS_NGINX=false
+    fi
+    
+    # certbot
+    if command -v certbot &> /dev/null; then
+        log_success "certbot found"
+        HAS_CERTBOT=true
+    else
+        log_warn "certbot not found"
+        HAS_CERTBOT=false
+    fi
+    
+    echo ""
+}
+
+get_config() {
+    echo "─────────────────────────────────────────"
     log_info "Configuration"
     echo "─────────────────────────────────────────"
+    echo ""
     
     # Port
-    read -p "Enter port to run Jukas on [default: 3000]: " PORT
+    read -p "Port to run Jukas on [3000]: " PORT
     PORT=${PORT:-3000}
     
     # Domain
-    read -p "Enter domain name [default: jukas.nl]: " DOMAIN
+    read -p "Domain name [jukas.nl]: " DOMAIN
     DOMAIN=${DOMAIN:-jukas.nl}
     
-    # Email for SSL
-    read -p "Enter email for SSL certificate: " SSL_EMAIL
-    
-    # Git repo
-    read -p "GitHub repo [default: mirkodandrea/jukas]: " REPO
+    # GitHub repo
+    read -p "GitHub repo [mirkodandrea/jukas]: " REPO
     REPO=${REPO:-mirkodandrea/jukas}
     
-    # Confirm
     echo ""
     echo "─────────────────────────────────────────"
-    echo -e "Port:    ${GREEN}$PORT${NC}"
-    echo -e "Domain:  ${GREEN}$DOMAIN${NC}"
-    echo -e "Email:   ${GREEN}$SSL_EMAIL${NC}"
-    echo -e "Repo:    ${GREEN}$REPO${NC}"
+    log_info "What do you need installed?"
     echo "─────────────────────────────────────────"
-    read -p "Continue with these settings? [Y/n]: " CONFIRM
-    CONFIRM=${CONFIRM:-Y}
+    echo ""
     
-    if [[ ! "$CONFIRM" =~ ^[Yy]$ ]]; then
+    # Ask what to install/configure
+    if [[ "$HAS_NODE" == "false" ]]; then
+        INSTALL_NODE=true
+    else
+        if ask_yes_no "Reinstall Node.js?" "n"; then
+            INSTALL_NODE=true
+        else
+            INSTALL_NODE=false
+        fi
+    fi
+    
+    if [[ "$HAS_PNPM" == "false" ]]; then
+        INSTALL_PNPM=true
+    else
+        INSTALL_PNPM=false
+    fi
+    
+    if [[ "$HAS_NGINX" == "true" ]]; then
+        if ask_yes_no "Configure nginx for Jukas?" "y"; then
+            CONFIGURE_NGINX=true
+        else
+            CONFIGURE_NGINX=false
+        fi
+        INSTALL_NGINX=false
+    else
+        if ask_yes_no "Install and configure nginx?" "y"; then
+            INSTALL_NGINX=true
+            CONFIGURE_NGINX=true
+        else
+            INSTALL_NGINX=false
+            CONFIGURE_NGINX=false
+        fi
+    fi
+    
+    if [[ "$HAS_CERTBOT" == "true" ]]; then
+        if ask_yes_no "Run certbot for SSL?" "y"; then
+            RUN_CERTBOT=true
+            read -p "Email for SSL certificate: " SSL_EMAIL
+        else
+            RUN_CERTBOT=false
+        fi
+        INSTALL_CERTBOT=false
+    else
+        if ask_yes_no "Install certbot and setup SSL?" "y"; then
+            INSTALL_CERTBOT=true
+            RUN_CERTBOT=true
+            read -p "Email for SSL certificate: " SSL_EMAIL
+        else
+            INSTALL_CERTBOT=false
+            RUN_CERTBOT=false
+        fi
+    fi
+    
+    if ask_yes_no "Create dedicated 'jukas' user?" "y"; then
+        CREATE_USER=true
+    else
+        CREATE_USER=false
+        read -p "Run as which user? [$(logname)]: " RUN_USER
+        RUN_USER=${RUN_USER:-$(logname)}
+    fi
+    
+    if ask_yes_no "Create systemd service?" "y"; then
+        CREATE_SERVICE=true
+    else
+        CREATE_SERVICE=false
+    fi
+    
+    # Summary
+    echo ""
+    echo "─────────────────────────────────────────"
+    log_info "Summary"
+    echo "─────────────────────────────────────────"
+    echo -e "Port:           ${GREEN}$PORT${NC}"
+    echo -e "Domain:         ${GREEN}$DOMAIN${NC}"
+    echo -e "Repo:           ${GREEN}$REPO${NC}"
+    [[ "$CREATE_USER" == "true" ]] && echo -e "User:           ${GREEN}jukas (new)${NC}" || echo -e "User:           ${GREEN}$RUN_USER${NC}"
+    [[ "$INSTALL_NODE" == "true" ]] && echo -e "Install Node:   ${GREEN}Yes${NC}" || echo -e "Install Node:   ${YELLOW}Skip${NC}"
+    [[ "$CONFIGURE_NGINX" == "true" ]] && echo -e "Nginx config:   ${GREEN}Yes${NC}" || echo -e "Nginx config:   ${YELLOW}Skip${NC}"
+    [[ "$RUN_CERTBOT" == "true" ]] && echo -e "SSL (certbot):  ${GREEN}Yes${NC}" || echo -e "SSL (certbot):  ${YELLOW}Skip${NC}"
+    [[ "$CREATE_SERVICE" == "true" ]] && echo -e "Systemd:        ${GREEN}Yes${NC}" || echo -e "Systemd:        ${YELLOW}Skip${NC}"
+    echo "─────────────────────────────────────────"
+    echo ""
+    
+    if ! ask_yes_no "Continue with these settings?" "y"; then
         log_warn "Setup cancelled"
         exit 0
     fi
 }
 
-# Create dedicated user
 create_user() {
+    if [[ "$CREATE_USER" != "true" ]]; then
+        return
+    fi
+    
     log_info "Creating dedicated 'jukas' user..."
     
     if id "jukas" &>/dev/null; then
@@ -95,58 +224,79 @@ create_user() {
         useradd -r -m -d /opt/jukas -s /bin/bash jukas
         log_success "Created user 'jukas' with home /opt/jukas"
     fi
+    
+    RUN_USER="jukas"
+    APP_DIR="/opt/jukas/app"
 }
 
-# Install system dependencies
 install_deps() {
-    log_info "Installing system dependencies..."
+    log_info "Installing dependencies..."
     
     apt update
-    apt install -y curl git nginx
     
-    # Install Node.js 20 LTS via NodeSource
-    if ! command -v node &> /dev/null; then
+    if [[ "$INSTALL_NODE" == "true" ]]; then
         log_info "Installing Node.js 20..."
         curl -fsSL https://deb.nodesource.com/setup_20.x | bash -
         apt install -y nodejs
     fi
     
-    # Install pnpm
-    if ! command -v pnpm &> /dev/null; then
+    if [[ "$INSTALL_PNPM" == "true" ]]; then
         log_info "Installing pnpm..."
         npm install -g pnpm
     fi
     
-    log_success "Dependencies installed"
+    if [[ "$INSTALL_NGINX" == "true" ]]; then
+        log_info "Installing nginx..."
+        apt install -y nginx
+    fi
+    
+    if [[ "$INSTALL_CERTBOT" == "true" ]]; then
+        log_info "Installing certbot..."
+        apt install -y certbot python3-certbot-nginx
+    fi
+    
+    log_success "Dependencies ready"
 }
 
-# Clone and build the app
 setup_app() {
     log_info "Setting up Jukas application..."
     
-    APP_DIR="/opt/jukas/app"
+    if [[ "$CREATE_USER" == "true" ]]; then
+        APP_DIR="/opt/jukas/app"
+    else
+        APP_DIR="/home/${RUN_USER}/jukas"
+    fi
     
     if [ -d "$APP_DIR" ]; then
         log_warn "App directory exists, pulling latest..."
         cd "$APP_DIR"
-        sudo -u jukas git pull
+        sudo -u "$RUN_USER" git pull 2>/dev/null || git pull
     else
         log_info "Cloning repository..."
-        sudo -u jukas git clone "https://github.com/${REPO}.git" "$APP_DIR"
+        if [[ "$CREATE_USER" == "true" ]]; then
+            sudo -u "$RUN_USER" git clone "https://github.com/${REPO}.git" "$APP_DIR"
+        else
+            mkdir -p "$(dirname $APP_DIR)"
+            git clone "https://github.com/${REPO}.git" "$APP_DIR"
+            chown -R "$RUN_USER:$RUN_USER" "$APP_DIR"
+        fi
         cd "$APP_DIR"
     fi
     
     log_info "Installing npm dependencies..."
-    sudo -u jukas pnpm install
+    sudo -u "$RUN_USER" pnpm install 2>/dev/null || pnpm install
     
     log_info "Building application..."
-    sudo -u jukas pnpm build
+    sudo -u "$RUN_USER" pnpm build 2>/dev/null || pnpm build
     
     log_success "Application built successfully"
 }
 
-# Create systemd service
 create_service() {
+    if [[ "$CREATE_SERVICE" != "true" ]]; then
+        return
+    fi
+    
     log_info "Creating systemd service..."
     
     cat > /etc/systemd/system/jukas.service << EOF
@@ -156,21 +306,14 @@ After=network.target
 
 [Service]
 Type=simple
-User=jukas
-Group=jukas
-WorkingDirectory=/opt/jukas/app
+User=${RUN_USER}
+WorkingDirectory=${APP_DIR}
 Environment=NODE_ENV=production
 Environment=PORT=${PORT}
-ExecStart=/usr/bin/pnpm start
+ExecStart=$(which pnpm) start
 Restart=on-failure
 RestartSec=10
-
-# Hardening
 NoNewPrivileges=true
-ProtectSystem=strict
-ProtectHome=true
-ReadWritePaths=/opt/jukas
-PrivateTmp=true
 
 [Install]
 WantedBy=multi-user.target
@@ -183,12 +326,14 @@ EOF
     log_success "Systemd service created and started"
 }
 
-# Configure nginx
 setup_nginx() {
+    if [[ "$CONFIGURE_NGINX" != "true" ]]; then
+        return
+    fi
+    
     log_info "Configuring nginx..."
     
     cat > /etc/nginx/sites-available/jukas << EOF
-# Jukas - Auto-generated config
 upstream jukas_upstream {
     server 127.0.0.1:${PORT};
     keepalive 64;
@@ -199,19 +344,15 @@ server {
     listen [::]:80;
     server_name ${DOMAIN} www.${DOMAIN};
 
-    # Gzip
     gzip on;
     gzip_vary on;
     gzip_proxied any;
     gzip_comp_level 6;
     gzip_types text/plain text/css text/xml application/json application/javascript application/rss+xml application/atom+xml image/svg+xml;
 
-    # Security headers
     add_header X-Frame-Options "SAMEORIGIN" always;
     add_header X-Content-Type-Options "nosniff" always;
-    add_header X-XSS-Protection "1; mode=block" always;
 
-    # Proxy settings
     proxy_http_version 1.1;
     proxy_set_header Upgrade \$http_upgrade;
     proxy_set_header Connection 'upgrade';
@@ -221,16 +362,14 @@ server {
     proxy_set_header X-Forwarded-Proto \$scheme;
     proxy_cache_bypass \$http_upgrade;
 
-    # Static files with long cache
     location /_next/static {
-        proxy_pass http://jukas_upstream;
+        proxy_pass http://jukas_upstream\;
         expires 1y;
         add_header Cache-Control "public, immutable";
     }
 
-    # All requests to Next.js
     location / {
-        proxy_pass http://jukas_upstream;
+        proxy_pass http://jukas_upstream\;
     }
 
     access_log /var/log/nginx/jukas.access.log;
@@ -238,27 +377,19 @@ server {
 }
 EOF
     
-    # Enable site
     ln -sf /etc/nginx/sites-available/jukas /etc/nginx/sites-enabled/
-    rm -f /etc/nginx/sites-enabled/default 2>/dev/null || true
-    
-    # Test and reload
-    nginx -t
-    systemctl reload nginx
+    nginx -t && systemctl reload nginx
     
     log_success "Nginx configured"
 }
 
-# Setup SSL with certbot
 setup_ssl() {
-    log_info "Setting up SSL with Certbot..."
-    
-    # Install certbot if needed
-    if ! command -v certbot &> /dev/null; then
-        apt install -y certbot python3-certbot-nginx
+    if [[ "$RUN_CERTBOT" != "true" ]]; then
+        return
     fi
     
-    # Get certificate
+    log_info "Setting up SSL with Certbot..."
+    
     certbot --nginx -d "${DOMAIN}" -d "www.${DOMAIN}" \
         --redirect \
         --non-interactive \
@@ -268,27 +399,27 @@ setup_ssl() {
     log_success "SSL certificate installed"
 }
 
-# Print summary
 print_summary() {
     echo ""
     echo -e "${GREEN}════════════════════════════════════════${NC}"
     echo -e "${GREEN}         SETUP COMPLETE! 🎉             ${NC}"
     echo -e "${GREEN}════════════════════════════════════════${NC}"
     echo ""
-    echo -e "Your Jukas instance is now running!"
-    echo ""
     echo -e "  🌐 URL:     ${BLUE}https://${DOMAIN}${NC}"
     echo -e "  🔌 Port:    ${PORT}"
-    echo -e "  📁 App:     /opt/jukas/app"
-    echo -e "  👤 User:    jukas"
+    echo -e "  📁 App:     ${APP_DIR}"
+    echo -e "  👤 User:    ${RUN_USER}"
     echo ""
-    echo -e "Useful commands:"
-    echo -e "  ${YELLOW}sudo systemctl status jukas${NC}   - Check status"
-    echo -e "  ${YELLOW}sudo systemctl restart jukas${NC}  - Restart app"
-    echo -e "  ${YELLOW}sudo journalctl -u jukas -f${NC}   - View logs"
-    echo ""
-    echo -e "To update:"
-    echo -e "  ${YELLOW}cd /opt/jukas/app && sudo -u jukas git pull && sudo -u jukas pnpm build && sudo systemctl restart jukas${NC}"
+    
+    if [[ "$CREATE_SERVICE" == "true" ]]; then
+        echo "Commands:"
+        echo -e "  ${YELLOW}sudo systemctl status jukas${NC}   - Check status"
+        echo -e "  ${YELLOW}sudo systemctl restart jukas${NC}  - Restart"
+        echo -e "  ${YELLOW}sudo journalctl -u jukas -f${NC}   - View logs"
+    else
+        echo "To start manually:"
+        echo -e "  ${YELLOW}cd ${APP_DIR} && PORT=${PORT} pnpm start${NC}"
+    fi
     echo ""
 }
 
@@ -296,20 +427,14 @@ print_summary() {
 main() {
     print_banner
     check_root
+    detect_existing
     get_config
     create_user
     install_deps
     setup_app
     create_service
     setup_nginx
-    
-    if [[ -n "$SSL_EMAIL" ]]; then
-        setup_ssl
-    else
-        log_warn "Skipping SSL setup (no email provided)"
-        log_info "Run manually: sudo certbot --nginx -d ${DOMAIN}"
-    fi
-    
+    setup_ssl
     print_summary
 }
 
