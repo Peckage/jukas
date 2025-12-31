@@ -201,6 +201,11 @@ export default function ScoresPage() {
   const [winner, setWinner] = useState<Player | null>(null);
   const prevPlayersRef = useRef<Player[]>([]);
 
+  // Track raw input text for each player (allows typing "-" before the number)
+  const [pendingInputs, setPendingInputs] = useState<Record<number, string>>(
+    {}
+  );
+
   // Load all data from localStorage on mount
   useEffect(() => {
     // Load saved player names
@@ -1085,23 +1090,42 @@ export default function ScoresPage() {
                   <div className="shrink-0">
                     <Input
                       type="text"
-                      pattern="-?[0-9]*"
+                      inputMode="numeric"
                       autoComplete="off"
-                      value={player.rounds[currentRound - 1] ?? ""}
+                      value={
+                        pendingInputs[playerIndex] !== undefined
+                          ? pendingInputs[playerIndex]
+                          : player.rounds[currentRound - 1] ?? ""
+                      }
                       onChange={(e) => {
                         const value = e.target.value;
+                        // Allow empty, minus sign, or valid number
                         if (
                           value === "" ||
                           value === "-" ||
                           /^-?\d+$/.test(value)
                         ) {
-                          addRoundScore(
-                            playerIndex,
-                            value === "" || value === "-"
-                              ? 0
-                              : parseInt(value, 10)
-                          );
+                          setPendingInputs((prev) => ({
+                            ...prev,
+                            [playerIndex]: value,
+                          }));
+                          // Only update the score if it's a complete number
+                          if (value !== "" && value !== "-") {
+                            addRoundScore(playerIndex, parseInt(value, 10));
+                          }
                         }
+                      }}
+                      onBlur={() => {
+                        // Clear pending input on blur, commit 0 if empty or just "-"
+                        const pending = pendingInputs[playerIndex];
+                        if (pending === "" || pending === "-") {
+                          addRoundScore(playerIndex, 0);
+                        }
+                        setPendingInputs((prev) => {
+                          const newState = { ...prev };
+                          delete newState[playerIndex];
+                          return newState;
+                        });
                       }}
                       placeholder="0"
                       className="w-14 sm:w-16 text-center font-bold bg-muted/50 h-9 sm:h-10"
