@@ -201,10 +201,35 @@ export default function ScoresPage() {
   const [winner, setWinner] = useState<Player | null>(null);
   const prevPlayersRef = useRef<Player[]>([]);
 
-  // Track raw input text for each player (allows typing "-" before the number)
-  const [pendingInputs, setPendingInputs] = useState<Record<number, string>>(
+  // Track pending scores for each player (not yet confirmed)
+  const [pendingScores, setPendingScores] = useState<Record<number, number>>(
     {}
   );
+
+  // Confirm a pending score for a player
+  const confirmScore = (playerIndex: number) => {
+    if (pendingScores[playerIndex] !== undefined) {
+      addRoundScore(playerIndex, pendingScores[playerIndex]);
+      setPendingScores((prev) => {
+        const newState = { ...prev };
+        delete newState[playerIndex];
+        return newState;
+      });
+    }
+  };
+
+  // Update pending score (doesn't save until confirmed)
+  const updatePendingScore = (playerIndex: number, value: number) => {
+    setPendingScores((prev) => ({ ...prev, [playerIndex]: value }));
+  };
+
+  // Get the display value for a player's current round
+  const getDisplayScore = (playerIndex: number, player: Player) => {
+    if (pendingScores[playerIndex] !== undefined) {
+      return pendingScores[playerIndex];
+    }
+    return player.rounds[currentRound - 1] ?? 0;
+  };
 
   // Load all data from localStorage on mount
   useEffect(() => {
@@ -1092,13 +1117,8 @@ export default function ScoresPage() {
                     <button
                       type="button"
                       onClick={() => {
-                        const current = player.rounds[currentRound - 1] || 0;
-                        addRoundScore(playerIndex, current - 1);
-                        setPendingInputs((prev) => {
-                          const newState = { ...prev };
-                          delete newState[playerIndex];
-                          return newState;
-                        });
+                        const current = getDisplayScore(playerIndex, player);
+                        updatePendingScore(playerIndex, current - 1);
                       }}
                       disabled={isEliminated}
                       className="w-7 h-9 sm:h-10 rounded bg-red-500/20 hover:bg-red-500/40 text-red-400 font-bold text-sm transition-colors disabled:opacity-30 disabled:cursor-not-allowed"
@@ -1111,8 +1131,8 @@ export default function ScoresPage() {
                       inputMode="numeric"
                       autoComplete="off"
                       value={
-                        pendingInputs[playerIndex] !== undefined
-                          ? pendingInputs[playerIndex]
+                        pendingScores[playerIndex] !== undefined
+                          ? pendingScores[playerIndex]
                           : player.rounds[currentRound - 1] ?? ""
                       }
                       onChange={(e) => {
@@ -1123,30 +1143,22 @@ export default function ScoresPage() {
                           value === "-" ||
                           /^-?\d+$/.test(value)
                         ) {
-                          setPendingInputs((prev) => ({
-                            ...prev,
-                            [playerIndex]: value,
-                          }));
-                          // Only update the score if it's a complete number
-                          if (value !== "" && value !== "-") {
-                            addRoundScore(playerIndex, parseInt(value, 10));
+                          if (value === "" || value === "-") {
+                            updatePendingScore(playerIndex, 0);
+                          } else {
+                            updatePendingScore(
+                              playerIndex,
+                              parseInt(value, 10)
+                            );
                           }
                         }
                       }}
-                      onBlur={() => {
-                        // Clear pending input on blur, commit 0 if empty or just "-"
-                        const pending = pendingInputs[playerIndex];
-                        if (pending === "" || pending === "-") {
-                          addRoundScore(playerIndex, 0);
-                        }
-                        setPendingInputs((prev) => {
-                          const newState = { ...prev };
-                          delete newState[playerIndex];
-                          return newState;
-                        });
-                      }}
                       placeholder="0"
-                      className="w-12 sm:w-14 text-center font-bold bg-muted/50 h-9 sm:h-10"
+                      className={`w-12 sm:w-14 text-center font-bold h-9 sm:h-10 ${
+                        pendingScores[playerIndex] !== undefined
+                          ? "bg-amber-500/20 border-amber-500/50"
+                          : "bg-muted/50"
+                      }`}
                       disabled={isEliminated}
                     />
 
@@ -1157,14 +1169,11 @@ export default function ScoresPage() {
                           key={num}
                           type="button"
                           onClick={() => {
-                            const current =
-                              player.rounds[currentRound - 1] || 0;
-                            addRoundScore(playerIndex, current + num);
-                            setPendingInputs((prev) => {
-                              const newState = { ...prev };
-                              delete newState[playerIndex];
-                              return newState;
-                            });
+                            const current = getDisplayScore(
+                              playerIndex,
+                              player
+                            );
+                            updatePendingScore(playerIndex, current + num);
                           }}
                           disabled={isEliminated}
                           className="w-7 sm:w-8 h-9 sm:h-10 rounded bg-emerald-500/20 hover:bg-emerald-500/40 text-emerald-400 font-bold text-xs sm:text-sm transition-colors disabled:opacity-30 disabled:cursor-not-allowed"
@@ -1173,6 +1182,22 @@ export default function ScoresPage() {
                         </button>
                       ))}
                     </div>
+
+                    {/* Confirm button */}
+                    <button
+                      type="button"
+                      onClick={() => confirmScore(playerIndex)}
+                      disabled={
+                        isEliminated || pendingScores[playerIndex] === undefined
+                      }
+                      className={`w-9 sm:w-10 h-9 sm:h-10 rounded font-bold text-lg transition-all ${
+                        pendingScores[playerIndex] !== undefined
+                          ? "bg-amber-500 hover:bg-amber-400 text-black animate-pulse"
+                          : "bg-muted/30 text-muted-foreground/30 cursor-not-allowed"
+                      } disabled:opacity-30 disabled:cursor-not-allowed`}
+                    >
+                      ✓
+                    </button>
                   </div>
 
                   {/* Total */}
