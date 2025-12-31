@@ -6,6 +6,7 @@ on:
       - "canary"
 
 env:
+  APP_DIR: /opt/jukas/app
   APP_PORT: 3050
 
 jobs:
@@ -13,25 +14,21 @@ jobs:
     runs-on: jukas_runner
 
     steps:
-      - name: Checkout
-        uses: actions/checkout@v4
-
-      - name: Install pnpm
-        uses: pnpm/action-setup@v4
-        with:
-          version: 10
-
-      - name: Setup Node.js
-        uses: actions/setup-node@v4
-        with:
-          node-version: 20
-          cache: "pnpm"
+      - name: Pull latest code
+        run: |
+          cd ${{ env.APP_DIR }}
+          git fetch origin canary
+          git reset --hard origin/canary
 
       - name: Install dependencies
-        run: pnpm install --frozen-lockfile
+        run: |
+          cd ${{ env.APP_DIR }}
+          pnpm install --frozen-lockfile
 
       - name: Build
-        run: pnpm build
+        run: |
+          cd ${{ env.APP_DIR }}
+          pnpm build
 
       - name: Restart service
         run: sudo systemctl restart jukas.service
