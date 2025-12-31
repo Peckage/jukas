@@ -80,6 +80,15 @@ const cardData = [
     effect: "No effect. Counts as +13 in front of you. Avoid at all costs!",
     hasEffect: false,
   },
+  {
+    name: "Joker",
+    suits: "🃏",
+    value: "0",
+    valueType: "bonus",
+    effect:
+      "No effect. Worth 0 points — great for bluffing! Opponents think you have cards, but it doesn't hurt your score.",
+    hasEffect: false,
+  },
 ];
 
 function getValueBadgeStyle(type: string) {
