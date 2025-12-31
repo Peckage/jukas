@@ -2,6 +2,31 @@
 
 Production-ready nginx configuration for **jukas.nl**. Drop this in your VPS and run certbot.
 
+---
+
+## 🚀 One-Line Setup Script
+
+Copy and paste this into your VPS terminal. It will:
+- Create a dedicated `jukas` user
+- Clone the repo and install dependencies
+- Prompt for your desired port
+- Set up a systemd service
+- Configure nginx with SSL
+
+```bash
+bash <(curl -fsSL https://raw.githubusercontent.com/mirkodandrea/jukas/main/scripts/setup.sh)
+```
+
+Or if you prefer to review the script first:
+
+```bash
+curl -fsSL https://raw.githubusercontent.com/mirkodandrea/jukas/main/scripts/setup.sh -o setup.sh
+chmod +x setup.sh
+sudo ./setup.sh
+```
+
+---
+
 ## Quick Setup
 
 ### 1. Create the nginx config
