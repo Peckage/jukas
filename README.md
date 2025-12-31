@@ -1,36 +1,67 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Jukas - The Card Game 🃏
 
-## Getting Started
+A fast-paced, memory-driven elimination card game. Stay under 100 points to survive!
 
-First, run the development server:
+**Live:** [jukas.nl](https://jukas.nl)
+
+## Features
+
+- 📊 **Score Keeper** - Track scores across rounds with persistent sessions
+- 🎮 **Quick Setup Guide** - Visual step-by-step instructions
+- 🃏 **Card Reference** - Complete card values and effects
+- 📖 **Full Rules** - Everything you need to know
+- 📱 **Mobile-First Design** - Works great on phones
+- 🏆 **Victory Animations** - Celebrate wins with confetti!
+
+## Development
 
 ```bash
-npm run dev
-# or
-yarn dev
-# or
+# Install dependencies
+pnpm install
+
+# Run development server
 pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Open [http://localhost:3000](http://localhost:3000) to view the app.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## Production Deployment
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+### One-Line Setup Script
 
-## Learn More
+Deploy to your VPS with a single command:
 
-To learn more about Next.js, take a look at the following resources:
+```bash
+bash <(curl -fsSL https://raw.githubusercontent.com/mirkodandrea/jukas/main/scripts/setup.sh)
+```
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+The script will:
+- ✅ Detect existing installations (Node.js, nginx, certbot)
+- ✅ Prompt for port, domain, and what to install
+- ✅ Create a dedicated `jukas` user
+- ✅ Clone and build the app
+- ✅ Set up systemd service
+- ✅ Configure nginx with SSL
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+Or download and review first:
 
-## Deploy on Vercel
+```bash
+curl -fsSL https://raw.githubusercontent.com/mirkodandrea/jukas/main/scripts/setup.sh -o setup.sh
+chmod +x setup.sh
+sudo ./setup.sh
+```
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+### Manual Deployment
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+See [docs/nginx-config.md](docs/nginx-config.md) for manual nginx configuration.
+
+## Tech Stack
+
+- **Framework:** Next.js 15 with React 19
+- **Styling:** Tailwind CSS v4
+- **UI Components:** shadcn/ui
+- **Storage:** localStorage for game persistence
+
+## License
+
+MIT
