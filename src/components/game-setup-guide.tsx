@@ -26,19 +26,19 @@ export default function GameSetupGuide() {
           <TabsList className="grid w-full grid-cols-3 mb-6 h-auto p-1.5 bg-muted/50">
             <TabsTrigger
               value="setup"
-              className="py-3 text-xs sm:text-sm data-[state=active]:bg-gradient-to-r data-[state=active]:from-orange-600 data-[state=active]:to-red-600 data-[state=active]:text-white data-[state=active]:shadow-lg"
+              className="py-3 text-xs sm:text-sm data-[state=active]:bg-primary data-[state=active]:text-white data-[state=active]:shadow-lg"
             >
               <span className="hidden sm:inline">Initial </span>Setup
             </TabsTrigger>
             <TabsTrigger
               value="layout"
-              className="py-3 text-xs sm:text-sm data-[state=active]:bg-gradient-to-r data-[state=active]:from-orange-600 data-[state=active]:to-red-600 data-[state=active]:text-white data-[state=active]:shadow-lg"
+              className="py-3 text-xs sm:text-sm data-[state=active]:bg-primary data-[state=active]:text-white data-[state=active]:shadow-lg"
             >
               <span className="hidden sm:inline">Card </span>Layout
             </TabsTrigger>
             <TabsTrigger
               value="turn"
-              className="py-3 text-xs sm:text-sm data-[state=active]:bg-gradient-to-r data-[state=active]:from-orange-600 data-[state=active]:to-red-600 data-[state=active]:text-white data-[state=active]:shadow-lg"
+              className="py-3 text-xs sm:text-sm data-[state=active]:bg-primary data-[state=active]:text-white data-[state=active]:shadow-lg"
             >
               <span className="hidden sm:inline">Turn </span>Example
             </TabsTrigger>
@@ -52,7 +52,7 @@ export default function GameSetupGuide() {
                   {/* Step 1 */}
                   <div className="flex flex-col items-center text-center">
                     <div className="relative mb-4">
-                      <div className="h-16 w-16 sm:h-20 sm:w-20 rounded-2xl bg-gradient-to-br from-orange-500 to-red-600 flex items-center justify-center text-white text-2xl sm:text-3xl font-bold shadow-lg glow-orange">
+                      <div className="h-16 w-16 sm:h-20 sm:w-20 rounded-2xl bg-linear-to-br from-primary to-primary/70 flex items-center justify-center text-white text-2xl sm:text-3xl font-bold shadow-lg">
                         1
                       </div>
                     </div>
@@ -65,7 +65,7 @@ export default function GameSetupGuide() {
                   {/* Step 2 */}
                   <div className="flex flex-col items-center text-center">
                     <div className="relative mb-4">
-                      <div className="h-16 w-16 sm:h-20 sm:w-20 rounded-2xl bg-gradient-to-br from-emerald-500 to-teal-600 flex items-center justify-center text-white text-2xl sm:text-3xl font-bold shadow-lg glow-emerald">
+                      <div className="h-16 w-16 sm:h-20 sm:w-20 rounded-2xl bg-linear-to-br from-emerald-500 to-teal-600 flex items-center justify-center text-white text-2xl sm:text-3xl font-bold shadow-lg">
                         2
                       </div>
                     </div>
@@ -78,7 +78,7 @@ export default function GameSetupGuide() {
                   {/* Step 3 */}
                   <div className="flex flex-col items-center text-center md:col-span-1 col-span-full">
                     <div className="relative mb-4">
-                      <div className="h-16 w-16 sm:h-20 sm:w-20 rounded-2xl bg-gradient-to-br from-amber-500 to-orange-600 flex items-center justify-center text-white text-2xl sm:text-3xl font-bold shadow-lg">
+                      <div className="h-16 w-16 sm:h-20 sm:w-20 rounded-2xl bg-linear-to-br from-accent to-accent/70 flex items-center justify-center text-white text-2xl sm:text-3xl font-bold shadow-lg">
                         3
                       </div>
                     </div>
@@ -91,11 +91,11 @@ export default function GameSetupGuide() {
                 </div>
 
                 {/* Tip Card */}
-                <div className="mt-8 p-4 sm:p-5 rounded-xl bg-gradient-to-r from-amber-500/10 to-orange-500/10 border border-amber-500/30">
+                <div className="mt-8 p-4 sm:p-5 rounded-xl bg-linear-to-r from-accent/10 to-primary/10 border border-accent/30">
                   <div className="flex items-start gap-3">
                     <span className="text-2xl shrink-0">💡</span>
                     <div>
-                      <h5 className="font-semibold text-amber-300 mb-1">
+                      <h5 className="font-semibold text-accent mb-1">
                         Remember Your Cards!
                       </h5>
                       <p className="text-sm text-muted-foreground leading-relaxed">

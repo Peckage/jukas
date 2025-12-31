@@ -31,7 +31,6 @@ import {
   AlertDialogTitle,
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
-import MobileNav from "@/components/mobile-nav";
 
 interface Player {
   name: string;
@@ -142,7 +141,7 @@ function VictoryScreen({
         <div className="mb-6">
           <span className="animate-trophy text-8xl">🏆</span>
         </div>
-        <h1 className="text-4xl font-bold mb-2 bg-gradient-to-r from-amber-400 via-yellow-300 to-amber-400 bg-clip-text text-transparent">
+        <h1 className="text-4xl font-bold mb-2 bg-linear-to-r from-primary via-accent to-primary bg-clip-text text-transparent">
           Victory!
         </h1>
         <p className="text-2xl font-semibold text-foreground mb-4">
@@ -155,7 +154,7 @@ function VictoryScreen({
           >
             ✨
           </span>
-          <Badge className="text-lg px-4 py-2 bg-gradient-to-r from-amber-500 to-yellow-500 text-black">
+          <Badge className="text-lg px-4 py-2 bg-linear-to-r from-primary to-accent text-white">
             Final Score: {winner.total} points
           </Badge>
           <span
@@ -170,7 +169,7 @@ function VictoryScreen({
         </p>
         <Button
           onClick={onClose}
-          className="bg-gradient-to-r from-orange-600 to-red-600 hover:from-orange-500 hover:to-red-500"
+          className="bg-primary hover:bg-primary/90"
           size="lg"
         >
           Continue
@@ -468,19 +467,8 @@ export default function ScoresPage() {
   // Setup View
   if (!gameActive) {
     return (
-      <div className="min-h-screen bg-background">
-        {/* Background */}
-        <div className="pointer-events-none fixed inset-0 -z-10">
-          <div className="absolute inset-0 bg-gradient-to-br from-background via-background to-background" />
-          <div className="absolute -top-32 -right-32 h-[500px] w-[500px] rounded-full bg-gradient-to-br from-orange-600/15 via-red-600/10 to-transparent blur-3xl animate-pulse" />
-          <div className="absolute top-1/4 -left-32 h-[600px] w-[600px] rounded-full bg-gradient-to-r from-amber-600/10 via-orange-700/8 to-transparent blur-3xl" />
-          <div className="absolute inset-0 bg-[linear-gradient(rgba(255,255,255,0.02)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.02)_1px,transparent_1px)] bg-[size:64px_64px]" />
-        </div>
-
-        {/* Mobile Navigation */}
-        <MobileNav />
-
-        <div className="mx-auto max-w-4xl px-4 sm:px-6 py-6 pb-24">
+      <div className="min-h-screen pb-24 md:pb-8">
+        <div className="mx-auto max-w-4xl px-4 sm:px-6 py-6">
           {/* Page Header */}
           <div className="text-center mb-8">
             <h1 className="text-2xl sm:text-3xl font-bold mb-2">
@@ -581,7 +569,7 @@ export default function ScoresPage() {
                   </Button>
 
                   {playerNames.length > 6 && (
-                    <p className="text-xs text-amber-400/80 text-center">
+                    <p className="text-xs text-primary/80 text-center">
                       💡 Recommended: 2-6 players for optimal gameplay
                     </p>
                   )}
@@ -737,7 +725,7 @@ export default function ScoresPage() {
 
                 <Button
                   onClick={startNewGame}
-                  className="w-full bg-gradient-to-r from-orange-600 to-red-600 hover:from-orange-500 hover:to-red-500 shadow-lg"
+                  className="w-full bg-primary hover:bg-primary/90 shadow-lg"
                   size="lg"
                 >
                   <svg
@@ -806,7 +794,7 @@ export default function ScoresPage() {
                                     <span
                                       className={
                                         idx === 0
-                                          ? "text-amber-400 font-medium"
+                                          ? "text-primary font-medium"
                                           : "text-muted-foreground"
                                       }
                                     >
@@ -816,7 +804,7 @@ export default function ScoresPage() {
                                     <span
                                       className={
                                         idx === 0
-                                          ? "text-amber-400 font-medium"
+                                          ? "text-primary font-medium"
                                           : "text-muted-foreground"
                                       }
                                     >
@@ -895,7 +883,7 @@ export default function ScoresPage() {
   );
 
   return (
-    <div className="min-h-screen bg-background">
+    <div className="min-h-screen pb-24 md:pb-8">
       {/* Victory Screen */}
       {showVictory && winner && (
         <VictoryScreen
@@ -904,14 +892,6 @@ export default function ScoresPage() {
           settings={settings}
         />
       )}
-
-      {/* Background */}
-      <div className="pointer-events-none fixed inset-0 -z-10">
-        <div className="absolute inset-0 bg-gradient-to-br from-background via-background to-background" />
-        <div className="absolute -top-32 -right-32 h-[500px] w-[500px] rounded-full bg-gradient-to-br from-orange-600/15 via-red-600/10 to-transparent blur-3xl animate-pulse" />
-        <div className="absolute top-1/4 -left-32 h-[600px] w-[600px] rounded-full bg-gradient-to-r from-amber-600/10 via-orange-700/8 to-transparent blur-3xl" />
-        <div className="absolute inset-0 bg-[linear-gradient(rgba(255,255,255,0.02)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.02)_1px,transparent_1px)] bg-[size:64px_64px]" />
-      </div>
 
       {/* Compact game controls bar */}
       <header className="sticky top-0 z-40 glass border-b border-border/50">
@@ -998,7 +978,7 @@ export default function ScoresPage() {
                   </AlertDialogAction>
                   <AlertDialogAction
                     onClick={() => endGame(true)}
-                    className="bg-gradient-to-r from-orange-600 to-red-600"
+                    className="bg-primary hover:bg-primary/90"
                   >
                     Save & End
                   </AlertDialogAction>
@@ -1009,10 +989,7 @@ export default function ScoresPage() {
         </div>
       </header>
 
-      {/* Mobile Navigation */}
-      <MobileNav />
-
-      <div className="mx-auto max-w-6xl px-4 sm:px-6 py-4 pb-24">
+      <div className="mx-auto max-w-6xl px-4 sm:px-6 py-4 pb-24 md:pb-8">
         {/* Compact Score Table */}
         <div className="space-y-2">
           {players
@@ -1035,9 +1012,9 @@ export default function ScoresPage() {
                       : isEliminated
                       ? "opacity-50 bg-destructive/5"
                       : isWinner
-                      ? "animate-winner border-amber-400/70 bg-amber-500/10 ring-2 ring-amber-400/50"
+                      ? "animate-winner border-primary/70 bg-primary/10 ring-2 ring-primary/50"
                       : isLeading
-                      ? "border-amber-500/50 bg-amber-500/5 ring-1 ring-amber-500/30"
+                      ? "border-primary/50 bg-primary/5 ring-1 ring-primary/30"
                       : "border-border/50"
                   }`}
                 >
@@ -1130,7 +1107,7 @@ export default function ScoresPage() {
                       placeholder="0"
                       className={`w-12 sm:w-14 text-center font-bold h-9 sm:h-10 ${
                         pendingScores[playerIndex] !== undefined
-                          ? "bg-amber-500/20 border-amber-500/50"
+                          ? "bg-primary/20 border-primary/50"
                           : "bg-muted/50"
                       }`}
                       disabled={isEliminated}
@@ -1166,7 +1143,7 @@ export default function ScoresPage() {
                       }
                       className={`w-9 sm:w-10 h-9 sm:h-10 rounded font-bold text-lg transition-all ${
                         pendingScores[playerIndex] !== undefined
-                          ? "bg-amber-500 hover:bg-amber-400 text-black animate-pulse"
+                          ? "bg-primary hover:bg-primary/80 text-white animate-pulse"
                           : "bg-muted/30 text-muted-foreground/30 cursor-not-allowed"
                       } disabled:opacity-30 disabled:cursor-not-allowed`}
                     >
@@ -1180,7 +1157,7 @@ export default function ScoresPage() {
                       isEliminated
                         ? "text-destructive"
                         : isLeading
-                        ? "text-amber-400"
+                        ? "text-primary"
                         : "text-foreground"
                     }`}
                   >

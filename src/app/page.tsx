@@ -8,59 +8,19 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { Separator } from "@/components/ui/separator";
-import MobileNav from "@/components/mobile-nav";
 
 export default function Home() {
   return (
-    <div className="relative min-h-screen bg-background text-foreground font-sans overflow-x-hidden">
-      {/* Animated background gradients */}
-      <div className="pointer-events-none fixed inset-0 -z-10">
-        <div className="absolute inset-0 bg-gradient-to-br from-background via-background to-background" />
-        <div className="absolute -top-32 -right-32 h-[500px] w-[500px] rounded-full bg-gradient-to-br from-orange-600/15 via-red-600/10 to-transparent blur-3xl animate-pulse" />
-        <div className="absolute top-1/4 -left-32 h-[600px] w-[600px] rounded-full bg-gradient-to-r from-amber-600/10 via-orange-700/8 to-transparent blur-3xl" />
-        <div className="absolute -bottom-32 left-1/2 -translate-x-1/2 h-[500px] w-[700px] rounded-full bg-gradient-to-t from-orange-800/10 via-red-800/8 to-transparent blur-3xl" />
-        <div className="absolute top-2/3 -right-16 h-80 w-80 rounded-full bg-emerald-800/8 blur-3xl" />
-        <div className="absolute inset-0 bg-[linear-gradient(rgba(255,255,255,0.02)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.02)_1px,transparent_1px)] bg-[size:64px_64px]" />
-      </div>
-
-      {/* Desktop Navigation */}
-      <nav className="sticky top-0 z-40 hidden md:block glass border-b border-border/50">
-        <div className="mx-auto flex max-w-6xl items-center justify-between px-6 py-4">
-          <Link href="/" className="flex items-center gap-2">
-            <div className="h-8 w-8 rounded-lg bg-gradient-to-br from-orange-500 to-red-600 flex items-center justify-center">
-              <span className="text-white font-bold text-sm">J</span>
-            </div>
-            <span className="font-bold text-lg tracking-tight">JUKAS</span>
-          </Link>
-          <div className="flex items-center gap-1">
-            <Button variant="ghost" size="sm" asChild>
-              <Link href="/setup">Setup</Link>
-            </Button>
-            <Button variant="ghost" size="sm" asChild>
-              <Link href="/scores">Scores</Link>
-            </Button>
-            <Button variant="ghost" size="sm" asChild>
-              <Link href="/cards">Cards</Link>
-            </Button>
-            <Separator orientation="vertical" className="h-6 mx-2" />
-            <Button variant="outline" size="sm" asChild>
-              <Link href="/rules">Full Rules</Link>
-            </Button>
-          </div>
-        </div>
-      </nav>
-
-      {/* Mobile Navigation */}
-      <MobileNav />
-
+    <div className="min-h-screen pb-24 md:pb-8">
       {/* Hero Section */}
-      <header className="mx-auto max-w-6xl px-4 sm:px-6 pt-8 pb-10 md:pt-16 md:pb-14">
+      <header className="mx-auto max-w-6xl px-4 sm:px-6 pt-8 pb-10 md:pt-12 md:pb-14">
         <div className="text-center space-y-6">
           {/* Logo for mobile */}
-          <div className="md:hidden flex justify-center mb-6">
-            <div className="h-16 w-16 rounded-2xl bg-gradient-to-br from-orange-500 to-red-600 flex items-center justify-center shadow-lg glow-orange">
-              <span className="text-white font-bold text-3xl">J</span>
+          <div className="md:hidden flex justify-center mb-4">
+            <div className="h-14 w-14 rounded-xl bg-gradient-to-br from-primary to-primary/70 flex items-center justify-center shadow-lg">
+              <span className="text-primary-foreground font-bold text-2xl">
+                J
+              </span>
             </div>
           </div>
 
@@ -78,7 +38,7 @@ export default function Home() {
           <div className="flex flex-col sm:flex-row items-center justify-center gap-3 pt-2">
             <Button
               size="lg"
-              className="w-full sm:w-auto bg-gradient-to-r from-orange-600 to-red-600 hover:from-orange-500 hover:to-red-500 shadow-lg glow-orange text-base"
+              className="w-full sm:w-auto bg-primary hover:bg-primary/90 shadow-lg text-base"
               asChild
             >
               <Link href="/scores">
@@ -101,7 +61,7 @@ export default function Home() {
             <Button
               size="lg"
               variant="outline"
-              className="w-full sm:w-auto border-accent/50 hover:bg-accent/10 text-base"
+              className="w-full sm:w-auto text-base"
               asChild
             >
               <Link href="/setup">
@@ -182,9 +142,9 @@ export default function Home() {
         <div className="grid gap-4 sm:gap-6 sm:grid-cols-2">
           {/* Score Keeper Card */}
           <Link href="/scores" className="block group">
-            <Card className="card-hover glass border-orange-500/30 bg-gradient-to-br from-orange-950/30 to-transparent h-full">
+            <Card className="card-hover glass border-primary/30 bg-linear-to-br from-primary/10 to-transparent h-full">
               <CardHeader>
-                <div className="h-14 w-14 rounded-2xl bg-gradient-to-br from-orange-500 to-red-600 flex items-center justify-center mb-3 shadow-lg group-hover:scale-110 transition-transform">
+                <div className="h-14 w-14 rounded-2xl bg-linear-to-br from-primary to-primary/70 flex items-center justify-center mb-3 shadow-lg group-hover:scale-110 transition-transform">
                   <svg
                     className="w-7 h-7 text-white"
                     fill="none"
@@ -199,7 +159,7 @@ export default function Home() {
                     />
                   </svg>
                 </div>
-                <CardTitle className="text-xl text-orange-300 group-hover:text-orange-200 transition-colors">
+                <CardTitle className="text-xl text-primary group-hover:text-primary/80 transition-colors">
                   Score Keeper
                 </CardTitle>
                 <CardDescription className="text-base">
@@ -210,7 +170,7 @@ export default function Home() {
               <CardContent>
                 <Badge
                   variant="outline"
-                  className="border-orange-500/50 text-orange-300"
+                  className="border-primary/50 text-primary"
                 >
                   Most Popular
                 </Badge>
@@ -258,9 +218,9 @@ export default function Home() {
 
           {/* Card Reference Card */}
           <Link href="/cards" className="block group">
-            <Card className="card-hover glass border-amber-500/30 bg-gradient-to-br from-amber-950/30 to-transparent h-full">
+            <Card className="card-hover glass border-accent/30 bg-linear-to-br from-accent/10 to-transparent h-full">
               <CardHeader>
-                <div className="h-14 w-14 rounded-2xl bg-gradient-to-br from-amber-500 to-orange-600 flex items-center justify-center mb-3 shadow-lg group-hover:scale-110 transition-transform">
+                <div className="h-14 w-14 rounded-2xl bg-linear-to-br from-accent to-accent/70 flex items-center justify-center mb-3 shadow-lg group-hover:scale-110 transition-transform">
                   <svg
                     className="w-7 h-7 text-white"
                     fill="none"
@@ -275,7 +235,7 @@ export default function Home() {
                     />
                   </svg>
                 </div>
-                <CardTitle className="text-xl text-amber-300 group-hover:text-amber-200 transition-colors">
+                <CardTitle className="text-xl text-accent group-hover:text-accent/80 transition-colors">
                   Card Reference
                 </CardTitle>
                 <CardDescription className="text-base">
@@ -285,7 +245,7 @@ export default function Home() {
               <CardContent>
                 <Badge
                   variant="outline"
-                  className="border-amber-500/50 text-amber-300"
+                  className="border-accent/50 text-accent"
                 >
                   Quick Lookup
                 </Badge>
@@ -346,9 +306,9 @@ export default function Home() {
           </div>
 
           <div className="grid gap-4 sm:gap-6 sm:grid-cols-2 lg:grid-cols-3">
-            <Card className="card-hover glass border-orange-500/20 bg-gradient-to-br from-orange-950/20 to-transparent">
+            <Card className="card-hover glass border-primary/20 bg-linear-to-br from-primary/10 to-transparent">
               <CardHeader>
-                <div className="h-12 w-12 rounded-xl bg-gradient-to-br from-orange-500 to-red-600 flex items-center justify-center mb-3 shadow-lg">
+                <div className="h-12 w-12 rounded-xl bg-linear-to-br from-primary to-primary/70 flex items-center justify-center mb-3 shadow-lg">
                   <svg
                     className="w-6 h-6 text-white"
                     fill="none"
@@ -363,7 +323,7 @@ export default function Home() {
                     />
                   </svg>
                 </div>
-                <CardTitle className="text-orange-300">2–6 Players</CardTitle>
+                <CardTitle className="text-primary">2–6 Players</CardTitle>
                 <CardDescription>
                   Perfect for quick sessions or full game nights with friends
                   and family.
@@ -371,9 +331,9 @@ export default function Home() {
               </CardHeader>
             </Card>
 
-            <Card className="card-hover glass border-emerald-500/20 bg-gradient-to-br from-emerald-950/20 to-transparent">
+            <Card className="card-hover glass border-emerald-500/20 bg-linear-to-br from-emerald-950/20 to-transparent">
               <CardHeader>
-                <div className="h-12 w-12 rounded-xl bg-gradient-to-br from-emerald-500 to-teal-600 flex items-center justify-center mb-3 shadow-lg">
+                <div className="h-12 w-12 rounded-xl bg-linear-to-br from-emerald-500 to-teal-600 flex items-center justify-center mb-3 shadow-lg">
                   <svg
                     className="w-6 h-6 text-white"
                     fill="none"
@@ -397,9 +357,9 @@ export default function Home() {
               </CardHeader>
             </Card>
 
-            <Card className="card-hover glass border-amber-500/20 bg-gradient-to-br from-amber-950/20 to-transparent sm:col-span-2 lg:col-span-1">
+            <Card className="card-hover glass border-accent/20 bg-linear-to-br from-accent/10 to-transparent sm:col-span-2 lg:col-span-1">
               <CardHeader>
-                <div className="h-12 w-12 rounded-xl bg-gradient-to-br from-amber-500 to-orange-600 flex items-center justify-center mb-3 shadow-lg">
+                <div className="h-12 w-12 rounded-xl bg-linear-to-br from-accent to-accent/70 flex items-center justify-center mb-3 shadow-lg">
                   <svg
                     className="w-6 h-6 text-white"
                     fill="none"
@@ -414,9 +374,7 @@ export default function Home() {
                     />
                   </svg>
                 </div>
-                <CardTitle className="text-amber-300">
-                  Memory & Strategy
-                </CardTitle>
+                <CardTitle className="text-accent">Memory & Strategy</CardTitle>
                 <CardDescription>
                   Remember cards, bluff opponents, and survive the longest to
                   win.
@@ -432,7 +390,7 @@ export default function Home() {
         <div className="mx-auto max-w-6xl px-4 sm:px-6 py-6">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-2">
-              <div className="h-6 w-6 rounded-md bg-gradient-to-br from-orange-500 to-red-600 flex items-center justify-center">
+              <div className="h-6 w-6 rounded-md bg-linear-to-br from-primary to-primary/70 flex items-center justify-center">
                 <span className="text-white font-bold text-xs">J</span>
               </div>
               <span className="text-sm text-muted-foreground">

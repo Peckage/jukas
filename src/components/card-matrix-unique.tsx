@@ -89,7 +89,7 @@ function getValueBadgeStyle(type: string) {
     case "normal":
       return "bg-muted text-muted-foreground border-border";
     case "high":
-      return "bg-orange-500/20 text-orange-300 border-orange-500/30";
+      return "bg-yellow-500/20 text-yellow-300 border-yellow-500/30";
     case "bonus":
       return "bg-green-500/20 text-green-300 border-green-500/30";
     case "danger":
@@ -172,11 +172,11 @@ export default function UniqueCardsTable() {
         </Accordion>
 
         {/* Critical Note */}
-        <div className="m-4 p-4 rounded-xl bg-gradient-to-r from-amber-500/10 to-orange-500/10 border border-amber-500/30">
+        <div className="m-4 p-4 rounded-xl bg-linear-to-r from-accent/10 to-primary/10 border border-accent/30">
           <div className="flex items-start gap-3">
             <span className="text-xl">⚠️</span>
             <div>
-              <p className="font-semibold text-amber-300 mb-1">Important</p>
+              <p className="font-semibold text-accent mb-1">Important</p>
               <p className="text-sm text-muted-foreground leading-relaxed">
                 Card effects only work when drawn from deck and immediately
                 discarded. Cards in your layout are just point values—no
@@ -249,12 +249,12 @@ export default function UniqueCardsTable() {
               ))}
             </tbody>
             <tfoot>
-              <tr className="bg-gradient-to-r from-amber-500/10 to-orange-500/10">
+              <tr className="bg-linear-to-r from-accent/10 to-primary/10">
                 <td colSpan={4} className="px-6 py-4">
                   <div className="flex items-center gap-2">
-                    <span className="text-amber-400">⚠️</span>
+                    <span className="text-accent">⚠️</span>
                     <span className="text-sm">
-                      <span className="font-semibold text-amber-300">
+                      <span className="font-semibold text-accent">
                         CRITICAL:
                       </span>
                       <span className="text-muted-foreground ml-1">

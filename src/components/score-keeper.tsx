@@ -247,7 +247,7 @@ export default function ScoreKeeper() {
 
                 <Button
                   onClick={startNewGame}
-                  className="w-full bg-gradient-to-r from-orange-600 to-red-600 hover:from-orange-500 hover:to-red-500 shadow-lg"
+                  className="w-full bg-primary hover:bg-primary/90 shadow-lg"
                   size="lg"
                 >
                   <svg
@@ -314,7 +314,7 @@ export default function ScoreKeeper() {
                                     <span
                                       className={
                                         idx === 0
-                                          ? "text-amber-400 font-medium"
+                                          ? "text-primary font-medium"
                                           : "text-muted-foreground"
                                       }
                                     >
@@ -324,7 +324,7 @@ export default function ScoreKeeper() {
                                     <span
                                       className={
                                         idx === 0
-                                          ? "text-amber-400 font-medium"
+                                          ? "text-primary font-medium"
                                           : "text-muted-foreground"
                                       }
                                     >
@@ -479,7 +479,7 @@ export default function ScoreKeeper() {
                   isEliminated
                     ? "opacity-60 border-destructive/30 bg-destructive/5"
                     : isLeading
-                    ? "border-amber-500/50 bg-amber-500/5 glow-orange"
+                    ? "border-primary/50 bg-primary/5"
                     : "border-border/50"
                 }`}
               >
@@ -541,7 +541,7 @@ export default function ScoreKeeper() {
                         isEliminated
                           ? "text-destructive"
                           : isLeading
-                          ? "text-amber-400"
+                          ? "text-primary"
                           : "text-foreground"
                       }`}
                     >

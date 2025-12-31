@@ -1,72 +1,23 @@
-import Link from "next/link";
-import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Separator } from "@/components/ui/separator";
-import MobileNav from "@/components/mobile-nav";
 
 export default function RulesPage() {
   return (
-    <div className="relative min-h-screen bg-background text-foreground font-sans overflow-x-hidden">
-      {/* Background */}
-      <div className="pointer-events-none fixed inset-0 -z-10">
-        <div className="absolute inset-0 bg-gradient-to-br from-background via-background to-background" />
-        <div className="absolute -top-32 -right-32 h-[500px] w-[500px] rounded-full bg-gradient-to-br from-orange-600/15 via-red-600/10 to-transparent blur-3xl animate-pulse" />
-        <div className="absolute top-1/4 -left-32 h-[600px] w-[600px] rounded-full bg-gradient-to-r from-amber-600/10 via-orange-700/8 to-transparent blur-3xl" />
-        <div className="absolute -bottom-32 left-1/2 -translate-x-1/2 h-[500px] w-[700px] rounded-full bg-gradient-to-t from-orange-800/10 via-red-800/8 to-transparent blur-3xl" />
-        <div className="absolute inset-0 bg-[linear-gradient(rgba(255,255,255,0.02)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.02)_1px,transparent_1px)] bg-[size:64px_64px]" />
-      </div>
-
-      {/* Navigation */}
-      <nav className="sticky top-0 z-40 glass border-b border-border/50">
-        <div className="mx-auto flex max-w-4xl items-center justify-between px-4 sm:px-6 py-4">
-          <Link href="/" className="flex items-center gap-2">
-            <div className="h-8 w-8 rounded-lg bg-gradient-to-br from-orange-500 to-red-600 flex items-center justify-center">
-              <span className="text-white font-bold text-sm">J</span>
-            </div>
-            <span className="font-bold text-lg tracking-tight">JUKAS</span>
-          </Link>
-          <Button variant="outline" size="sm" asChild>
-            <Link href="/">
-              <svg
-                className="w-4 h-4 mr-2"
-                fill="none"
-                stroke="currentColor"
-                viewBox="0 0 24 24"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth={2}
-                  d="M10 19l-7-7m0 0l7-7m-7 7h18"
-                />
-              </svg>
-              Back
-            </Link>
-          </Button>
-        </div>
-      </nav>
-
-      {/* Mobile Navigation */}
-      <MobileNav />
-
-      <div className="mx-auto max-w-4xl px-4 sm:px-6 py-10 md:py-16 pb-24">
+    <div className="min-h-screen pb-24 md:pb-8">
+      <div className="mx-auto max-w-4xl px-4 sm:px-6 py-8 md:py-12">
         {/* Header */}
-        <div className="text-center mb-12">
-          <Badge variant="outline" className="mb-4">
-            Complete Guide
-          </Badge>
-          <h1 className="text-3xl sm:text-4xl md:text-5xl font-extrabold tracking-tight mb-4">
+        <div className="text-center mb-8">
+          <h1 className="text-2xl sm:text-3xl font-bold mb-2">
             How to Play Jukas
           </h1>
-          <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
-            A fast-paced memory and strategy card game. Last player under 100
-            points wins!
+          <p className="text-sm text-muted-foreground">
+            A fast-paced memory and strategy card game
           </p>
         </div>
 
         {/* Game Overview */}
-        <Card className="glass border-border/50 mb-8">
+        <Card className="glass border-border/50 mb-6">
           <CardHeader>
             <CardTitle className="flex items-center gap-2 text-primary">
               <span className="text-2xl">🎯</span>
@@ -145,7 +96,7 @@ export default function RulesPage() {
               },
             ].map((item) => (
               <div key={item.step} className="flex items-start gap-4">
-                <div className="shrink-0 h-10 w-10 rounded-xl bg-gradient-to-br from-orange-500 to-red-600 flex items-center justify-center text-white font-bold shadow-lg">
+                <div className="shrink-0 h-10 w-10 rounded-xl bg-linear-to-br from-orange-500 to-red-600 flex items-center justify-center text-white font-bold shadow-lg">
                   {item.step}
                 </div>
                 <div>

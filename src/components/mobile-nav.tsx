@@ -153,7 +153,7 @@ export default function MobileNav() {
             <SheetContent side="bottom" className="rounded-t-3xl glass">
               <SheetHeader className="pb-4">
                 <div className="flex items-center gap-3">
-                  <div className="h-10 w-10 rounded-xl bg-gradient-to-br from-orange-500 to-red-600 flex items-center justify-center">
+                  <div className="h-10 w-10 rounded-xl bg-linear-to-br from-primary to-primary/70 flex items-center justify-center">
                     <span className="text-white font-bold text-lg">J</span>
                   </div>
                   <SheetTitle className="text-xl">Jukas</SheetTitle>
@@ -168,7 +168,7 @@ export default function MobileNav() {
                   onClick={() => setOpen(false)}
                   className={`flex items-center gap-4 p-4 rounded-xl transition-colors ${
                     pathname === "/"
-                      ? "bg-orange-600/20 text-orange-300"
+                      ? "bg-primary/20 text-primary"
                       : "hover:bg-muted/50"
                   }`}
                 >
@@ -182,7 +182,7 @@ export default function MobileNav() {
                     onClick={() => setOpen(false)}
                     className={`flex items-center gap-4 p-4 rounded-xl transition-colors ${
                       isActive(item.href)
-                        ? "bg-orange-600/20 text-orange-300"
+                        ? "bg-primary/20 text-primary"
                         : "hover:bg-muted/50"
                     }`}
                   >
@@ -196,7 +196,7 @@ export default function MobileNav() {
 
               <div className="pb-6">
                 <Button
-                  className="w-full bg-gradient-to-r from-orange-600 to-red-600 hover:from-orange-500 hover:to-red-500"
+                  className="w-full bg-primary hover:bg-primary/90"
                   size="lg"
                   asChild
                 >
