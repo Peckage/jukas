@@ -947,27 +947,16 @@ export default function ScoresPage() {
         <div className="absolute inset-0 bg-[linear-gradient(rgba(255,255,255,0.02)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.02)_1px,transparent_1px)] bg-[size:64px_64px]" />
       </div>
 
-      {/* Header with game controls */}
+      {/* Compact game controls bar */}
       <header className="sticky top-0 z-40 glass border-b border-border/50">
-        <div className="mx-auto max-w-6xl px-4 sm:px-6 py-3">
-          <div className="flex items-center justify-between">
-            <div className="flex items-center gap-3">
-              <Link href="/" className="flex items-center gap-2">
-                <div className="h-8 w-8 rounded-lg bg-gradient-to-br from-orange-500 to-red-600 flex items-center justify-center">
-                  <span className="text-white font-bold text-sm">J</span>
-                </div>
-              </Link>
-              <div>
-                <h1 className="font-bold text-lg">Round {currentRound}</h1>
-                <p className="text-xs text-muted-foreground">
-                  {activePlayers.length} players remaining
-                </p>
-              </div>
-            </div>
+        <div className="mx-auto max-w-6xl px-2 sm:px-4 py-2">
+          <div className="flex items-center justify-between gap-2">
+            {/* Round info */}
             <div className="flex items-center gap-2">
               <Button
-                variant="outline"
-                size="sm"
+                variant="ghost"
+                size="icon"
+                className="h-8 w-8"
                 onClick={previousRound}
                 disabled={currentRound === 1}
               >
@@ -985,7 +974,15 @@ export default function ScoresPage() {
                   />
                 </svg>
               </Button>
-              <Button variant="outline" size="sm" onClick={nextRound}>
+              <span className="font-bold text-sm sm:text-base whitespace-nowrap">
+                Round {currentRound}
+              </span>
+              <Button
+                variant="ghost"
+                size="icon"
+                className="h-8 w-8"
+                onClick={nextRound}
+              >
                 <svg
                   className="w-4 h-4"
                   fill="none"
@@ -1000,37 +997,48 @@ export default function ScoresPage() {
                   />
                 </svg>
               </Button>
-              <AlertDialog>
-                <AlertDialogTrigger asChild>
-                  <Button variant="destructive" size="sm">
-                    End
-                  </Button>
-                </AlertDialogTrigger>
-                <AlertDialogContent className="glass">
-                  <AlertDialogHeader>
-                    <AlertDialogTitle>End this game?</AlertDialogTitle>
-                    <AlertDialogDescription>
-                      Would you like to save the results to your history?
-                    </AlertDialogDescription>
-                  </AlertDialogHeader>
-                  <AlertDialogFooter className="flex-col sm:flex-row gap-2">
-                    <AlertDialogCancel>Keep Playing</AlertDialogCancel>
-                    <AlertDialogAction
-                      onClick={() => endGame(false)}
-                      className="bg-muted text-muted-foreground hover:bg-muted/80"
-                    >
-                      End Without Saving
-                    </AlertDialogAction>
-                    <AlertDialogAction
-                      onClick={() => endGame(true)}
-                      className="bg-gradient-to-r from-orange-600 to-red-600"
-                    >
-                      Save & End
-                    </AlertDialogAction>
-                  </AlertDialogFooter>
-                </AlertDialogContent>
-              </AlertDialog>
             </div>
+
+            {/* Player count */}
+            <Badge variant="outline" className="text-xs">
+              {activePlayers.length}/{players.length} alive
+            </Badge>
+
+            {/* End game */}
+            <AlertDialog>
+              <AlertDialogTrigger asChild>
+                <Button
+                  variant="destructive"
+                  size="sm"
+                  className="h-8 text-xs px-3"
+                >
+                  End
+                </Button>
+              </AlertDialogTrigger>
+              <AlertDialogContent className="glass">
+                <AlertDialogHeader>
+                  <AlertDialogTitle>End this game?</AlertDialogTitle>
+                  <AlertDialogDescription>
+                    Would you like to save the results to your history?
+                  </AlertDialogDescription>
+                </AlertDialogHeader>
+                <AlertDialogFooter className="flex-col sm:flex-row gap-2">
+                  <AlertDialogCancel>Keep Playing</AlertDialogCancel>
+                  <AlertDialogAction
+                    onClick={() => endGame(false)}
+                    className="bg-muted text-muted-foreground hover:bg-muted/80"
+                  >
+                    End Without Saving
+                  </AlertDialogAction>
+                  <AlertDialogAction
+                    onClick={() => endGame(true)}
+                    className="bg-gradient-to-r from-orange-600 to-red-600"
+                  >
+                    Save & End
+                  </AlertDialogAction>
+                </AlertDialogFooter>
+              </AlertDialogContent>
+            </AlertDialog>
           </div>
         </div>
       </header>
