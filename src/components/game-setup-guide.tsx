@@ -1,229 +1,387 @@
 "use client";
 
-import { useState } from 'react';
+import { Card, CardContent } from "@/components/ui/card";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Badge } from "@/components/ui/badge";
 
 export default function GameSetupGuide() {
-  const [activeTab, setActiveTab] = useState<'setup' | 'layout' | 'turn'>('setup');
-
   return (
-    <section id="setup" className="border-t border-white/10">
-      <div className="mx-auto max-w-6xl px-6 py-14">
-        <div className="text-center mb-8">
-          <h2 className="text-3xl font-bold mb-4">Quick Setup Guide</h2>
-          <p className="text-white/70 max-w-2xl mx-auto">
-            Visual guide to get your game started quickly
+    <section id="setup" className="border-t border-border/50">
+      <div className="mx-auto max-w-6xl px-4 sm:px-6 py-12 md:py-16">
+        {/* Section Header */}
+        <div className="text-center mb-8 md:mb-10">
+          <Badge variant="outline" className="mb-4">
+            Visual Guide
+          </Badge>
+          <h2 className="text-2xl sm:text-3xl font-bold mb-3">
+            Quick Setup Guide
+          </h2>
+          <p className="text-muted-foreground max-w-xl mx-auto">
+            Get your game started in under a minute with this visual guide
           </p>
         </div>
 
-        {/* Tab Navigation */}
-        <div className="flex justify-center mb-8">
-          <div className="bg-slate-900/70 border border-white/10 rounded-lg p-1 flex backdrop-blur-md">
-            <button
-              onClick={() => setActiveTab('setup')}
-              className={`px-4 py-2 rounded-md font-medium transition ${
-                activeTab === 'setup'
-                  ? 'bg-gradient-to-r from-orange-700 to-red-700 text-white shadow-lg shadow-orange-900/40'
-                  : 'text-white/70 hover:text-white hover:bg-white/10'
-              }`}
+        {/* Tabs */}
+        <Tabs defaultValue="setup" className="w-full">
+          <TabsList className="grid w-full grid-cols-3 mb-6 h-auto p-1.5 bg-muted/50">
+            <TabsTrigger
+              value="setup"
+              className="py-3 text-xs sm:text-sm data-[state=active]:bg-gradient-to-r data-[state=active]:from-orange-600 data-[state=active]:to-red-600 data-[state=active]:text-white data-[state=active]:shadow-lg"
             >
-              Initial Setup
-            </button>
-            <button
-              onClick={() => setActiveTab('layout')}
-              className={`px-4 py-2 rounded-md font-medium transition ${
-                activeTab === 'layout'
-                  ? 'bg-gradient-to-r from-orange-700 to-red-700 text-white shadow-lg shadow-orange-900/40'
-                  : 'text-white/70 hover:text-white hover:bg-white/10'
-              }`}
+              <span className="hidden sm:inline">Initial </span>Setup
+            </TabsTrigger>
+            <TabsTrigger
+              value="layout"
+              className="py-3 text-xs sm:text-sm data-[state=active]:bg-gradient-to-r data-[state=active]:from-orange-600 data-[state=active]:to-red-600 data-[state=active]:text-white data-[state=active]:shadow-lg"
             >
-              Card Layout
-            </button>
-            <button
-              onClick={() => setActiveTab('turn')}
-              className={`px-4 py-2 rounded-md font-medium transition ${
-                activeTab === 'turn'
-                  ? 'bg-gradient-to-r from-orange-700 to-red-700 text-white shadow-lg shadow-orange-900/40'
-                  : 'text-white/70 hover:text-white hover:bg-white/10'
-              }`}
+              <span className="hidden sm:inline">Card </span>Layout
+            </TabsTrigger>
+            <TabsTrigger
+              value="turn"
+              className="py-3 text-xs sm:text-sm data-[state=active]:bg-gradient-to-r data-[state=active]:from-orange-600 data-[state=active]:to-red-600 data-[state=active]:text-white data-[state=active]:shadow-lg"
             >
-              Turn Example
-            </button>
-          </div>
-        </div>
+              <span className="hidden sm:inline">Turn </span>Example
+            </TabsTrigger>
+          </TabsList>
 
-        {/* Tab Content */}
-        <div className="bg-slate-900/70 border border-white/10 rounded-xl p-8 backdrop-blur-md shadow-xl">
-          {activeTab === 'setup' && (
-            <div className="space-y-8">
-              <h3 className="text-2xl font-semibold text-center mb-6">Game Setup</h3>
-
-              <div className="grid md:grid-cols-3 gap-6">
-                <div className="text-center">
-                  <div className="w-20 h-20 mx-auto mb-4 bg-gradient-to-br from-orange-600 to-red-700 rounded-full flex items-center justify-center text-white text-2xl font-bold shadow-lg shadow-orange-900/40">
-                    1
+          {/* Setup Tab */}
+          <TabsContent value="setup" className="mt-0">
+            <Card className="glass border-border/50">
+              <CardContent className="p-6 sm:p-8">
+                <div className="grid gap-6 md:grid-cols-3">
+                  {/* Step 1 */}
+                  <div className="flex flex-col items-center text-center">
+                    <div className="relative mb-4">
+                      <div className="h-16 w-16 sm:h-20 sm:w-20 rounded-2xl bg-gradient-to-br from-orange-500 to-red-600 flex items-center justify-center text-white text-2xl sm:text-3xl font-bold shadow-lg glow-orange">
+                        1
+                      </div>
+                    </div>
+                    <h4 className="font-semibold text-lg mb-2">Deal 4 Cards</h4>
+                    <p className="text-sm text-muted-foreground leading-relaxed">
+                      Each player gets 4 cards face-down arranged in a 2×2 grid
+                    </p>
                   </div>
-                  <h4 className="font-semibold mb-2">Deal 4 Cards</h4>
-                  <p className="text-sm text-white/70">Each player gets 4 cards face-down in a 2×2 grid</p>
+
+                  {/* Step 2 */}
+                  <div className="flex flex-col items-center text-center">
+                    <div className="relative mb-4">
+                      <div className="h-16 w-16 sm:h-20 sm:w-20 rounded-2xl bg-gradient-to-br from-emerald-500 to-teal-600 flex items-center justify-center text-white text-2xl sm:text-3xl font-bold shadow-lg glow-emerald">
+                        2
+                      </div>
+                    </div>
+                    <h4 className="font-semibold text-lg mb-2">Create Piles</h4>
+                    <p className="text-sm text-muted-foreground leading-relaxed">
+                      Remaining cards = draw pile, flip top card for discard
+                    </p>
+                  </div>
+
+                  {/* Step 3 */}
+                  <div className="flex flex-col items-center text-center md:col-span-1 col-span-full">
+                    <div className="relative mb-4">
+                      <div className="h-16 w-16 sm:h-20 sm:w-20 rounded-2xl bg-gradient-to-br from-amber-500 to-orange-600 flex items-center justify-center text-white text-2xl sm:text-3xl font-bold shadow-lg">
+                        3
+                      </div>
+                    </div>
+                    <h4 className="font-semibold text-lg mb-2">Peek at 2</h4>
+                    <p className="text-sm text-muted-foreground leading-relaxed">
+                      Each player looks at any 2 of their 4 cards, then puts
+                      them back
+                    </p>
+                  </div>
                 </div>
 
-                <div className="text-center">
-                  <div className="w-20 h-20 mx-auto mb-4 bg-emerald-800 rounded-full flex items-center justify-center text-white text-2xl font-bold shadow-lg shadow-emerald-900/20">
-                    2
+                {/* Tip Card */}
+                <div className="mt-8 p-4 sm:p-5 rounded-xl bg-gradient-to-r from-amber-500/10 to-orange-500/10 border border-amber-500/30">
+                  <div className="flex items-start gap-3">
+                    <span className="text-2xl shrink-0">💡</span>
+                    <div>
+                      <h5 className="font-semibold text-amber-300 mb-1">
+                        Remember Your Cards!
+                      </h5>
+                      <p className="text-sm text-muted-foreground leading-relaxed">
+                        The key to Jukas is remembering which cards you peeked
+                        at initially. This memory will guide your strategy
+                        throughout the game.
+                      </p>
+                    </div>
                   </div>
-                  <h4 className="font-semibold mb-2">Create Piles</h4>
-                  <p className="text-sm text-white/70">Remaining cards = draw pile, flip top card for discard</p>
                 </div>
+              </CardContent>
+            </Card>
+          </TabsContent>
 
-                <div className="text-center">
-                  <div className="w-20 h-20 mx-auto mb-4 bg-gradient-to-br from-amber-700 to-orange-800 rounded-full flex items-center justify-center text-white text-2xl font-bold shadow-lg shadow-amber-900/30">
-                    3
-                  </div>
-                  <h4 className="font-semibold mb-2">Peek at 2</h4>
-                  <p className="text-sm text-white/70">Each player looks at any 2 of their 4 cards, then puts them back</p>
-                </div>
-              </div>
-
-              <div className="mt-8 p-6 bg-amber-900/20 rounded-lg border border-amber-700/30">
-                <h4 className="font-semibold text-amber-300 mb-2">⚠️ Remember Your Cards!</h4>
-                <p className="text-sm text-white/80">
-                  The key to Jukas is remembering which cards you peeked at initially. This memory will guide your strategy throughout the game.
-                </p>
-              </div>
-            </div>
-          )}
-
-          {activeTab === 'layout' && (
-            <div className="space-y-8">
-              <h3 className="text-2xl font-semibold text-center mb-6">Table Layout</h3>
-
-              <div className="max-w-4xl mx-auto">
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-8 items-center">
-                  {/* Player Cards */}
-                  <div className="text-center">
-                    <h4 className="font-semibold mb-4">Your Cards (2×2 Grid)</h4>
-                    <div className="inline-block p-4 bg-slate-950/50 rounded-lg border border-white/10">
+          {/* Layout Tab */}
+          <TabsContent value="layout" className="mt-0">
+            <Card className="glass border-border/50">
+              <CardContent className="p-6 sm:p-8">
+                <div className="grid gap-8 md:grid-cols-3 items-start">
+                  {/* Your Cards */}
+                  <div className="flex flex-col items-center text-center">
+                    <h4 className="font-semibold mb-4">
+                      Your Cards (2×2 Grid)
+                    </h4>
+                    <div className="p-4 rounded-xl bg-muted/30 border border-border/50">
                       <div className="grid grid-cols-2 gap-2">
-                        {[1,2,3,4].map(i => (
-                          <div key={i} className="w-12 h-16 bg-blue-600 rounded border-2 border-blue-400 flex items-center justify-center text-white text-xs font-bold">
-                            ?
+                        {[1, 2, 3, 4].map((i) => (
+                          <div
+                            key={i}
+                            className="w-11 h-14 sm:w-14 sm:h-18 rounded-lg bg-gradient-to-br from-blue-600 to-blue-700 border-2 border-blue-400 flex items-center justify-center shadow-md"
+                          >
+                            <span className="text-white font-bold text-lg">
+                              ?
+                            </span>
                           </div>
                         ))}
                       </div>
                     </div>
-                    <p className="text-xs text-white/60 mt-2">Face-down cards</p>
+                    <p className="text-xs text-muted-foreground mt-3">
+                      Face-down cards
+                    </p>
                   </div>
 
                   {/* Center Piles */}
-                  <div className="text-center space-y-6">
-                    <div>
-                      <h4 className="font-semibold mb-2">Draw Pile</h4>
-                      <div className="w-16 h-20 mx-auto bg-blue-800 rounded border-2 border-blue-600 flex items-center justify-center text-white font-bold">
-                        ?
+                  <div className="flex flex-col items-center text-center">
+                    <div className="space-y-6">
+                      <div>
+                        <h4 className="font-semibold mb-3">Draw Pile</h4>
+                        <div className="w-14 h-18 sm:w-16 sm:h-20 mx-auto rounded-lg bg-gradient-to-br from-blue-700 to-blue-800 border-2 border-blue-500 flex items-center justify-center shadow-lg">
+                          <span className="text-white font-bold text-xl">
+                            ?
+                          </span>
+                        </div>
                       </div>
-                    </div>
 
-                    <div>
-                      <h4 className="font-semibold mb-2">Discard Pile</h4>
-                      <div className="w-16 h-20 mx-auto bg-white rounded border-2 border-gray-300 flex items-center justify-center text-red-600 font-bold text-lg">
-                        K♥
+                      <div className="flex justify-center">
+                        <svg
+                          className="w-6 h-6 text-muted-foreground"
+                          fill="none"
+                          stroke="currentColor"
+                          viewBox="0 0 24 24"
+                        >
+                          <path
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                            strokeWidth={2}
+                            d="M19 14l-7 7m0 0l-7-7m7 7V3"
+                          />
+                        </svg>
                       </div>
-                      <p className="text-xs text-white/60 mt-1">Face-up</p>
+
+                      <div>
+                        <h4 className="font-semibold mb-3">Discard Pile</h4>
+                        <div className="w-14 h-18 sm:w-16 sm:h-20 mx-auto rounded-lg bg-white border-2 border-gray-300 flex items-center justify-center shadow-lg">
+                          <span className="text-red-500 font-bold text-lg">
+                            K♥
+                          </span>
+                        </div>
+                        <p className="text-xs text-muted-foreground mt-2">
+                          Face-up
+                        </p>
+                      </div>
                     </div>
                   </div>
 
                   {/* Opponent Cards */}
-                  <div className="text-center">
+                  <div className="flex flex-col items-center text-center">
                     <h4 className="font-semibold mb-4">Opponent Cards</h4>
-                    <div className="inline-block p-4 bg-slate-950/50 rounded-lg border border-white/10">
+                    <div className="p-4 rounded-xl bg-muted/30 border border-border/50">
                       <div className="grid grid-cols-2 gap-2">
-                        {[1,2,3,4].map(i => (
-                          <div key={i} className="w-12 h-16 bg-gray-600 rounded border-2 border-gray-400 flex items-center justify-center text-white text-xs font-bold">
-                            ?
+                        {[1, 2, 3, 4].map((i) => (
+                          <div
+                            key={i}
+                            className="w-11 h-14 sm:w-14 sm:h-18 rounded-lg bg-gradient-to-br from-gray-600 to-gray-700 border-2 border-gray-400 flex items-center justify-center shadow-md"
+                          >
+                            <span className="text-white font-bold text-lg">
+                              ?
+                            </span>
                           </div>
                         ))}
                       </div>
                     </div>
-                    <p className="text-xs text-white/60 mt-2">Also face-down</p>
-                  </div>
-                </div>
-              </div>
-
-              <div className="mt-8 p-6 bg-emerald-900/20 rounded-lg border border-emerald-700/30">
-                <h4 className="font-semibold text-emerald-300 mb-2">💡 Layout Tip</h4>
-                <p className="text-sm text-white/80">
-                  Keep your cards arranged consistently in the same 2×2 pattern throughout the game. This helps with memory and prevents confusion.
-                </p>
-              </div>
-            </div>
-          )}
-
-          {activeTab === 'turn' && (
-            <div className="space-y-8">
-              <h3 className="text-2xl font-semibold text-center mb-6">Turn Example</h3>
-
-              <div className="max-w-3xl mx-auto space-y-6">
-                <div className="bg-slate-950/50 rounded-lg p-6 border border-white/10">
-                  <h4 className="font-semibold mb-4 text-lg">Option A: Draw from Deck</h4>
-                  <div className="grid md:grid-cols-4 gap-4 items-center text-center">
-                    <div>
-                      <div className="w-12 h-16 mx-auto bg-blue-800 rounded border-2 border-blue-600 flex items-center justify-center text-white font-bold text-xs mb-2">
-                        ?
-                      </div>
-                      <p className="text-xs text-white/80">1. Draw</p>
-                    </div>
-                    <div className="text-2xl text-white/60">→</div>
-                    <div>
-                      <div className="w-12 h-16 mx-auto bg-white rounded border-2 border-gray-300 flex items-center justify-center text-red-600 font-bold text-sm mb-2">
-                        7♥
-                      </div>
-                      <p className="text-xs text-white/80">2. Look & Use Effect</p>
-                    </div>
-                    <div className="text-2xl text-white/60">→</div>
-                    <div>
-                      <div className="w-12 h-16 mx-auto bg-gray-300 rounded border-2 border-gray-400 flex items-center justify-center text-gray-600 font-bold text-sm mb-2">
-                        7♥
-                      </div>
-                      <p className="text-xs text-white/80">3. Discard</p>
-                    </div>
+                    <p className="text-xs text-muted-foreground mt-3">
+                      Also face-down
+                    </p>
                   </div>
                 </div>
 
-                <div className="bg-slate-950/50 rounded-lg p-6 border border-white/10">
-                  <h4 className="font-semibold mb-4 text-lg">Option B: Take from Discard</h4>
-                  <div className="grid md:grid-cols-4 gap-4 items-center text-center">
+                {/* Layout Tip */}
+                <div className="mt-8 p-4 sm:p-5 rounded-xl bg-gradient-to-r from-emerald-500/10 to-teal-500/10 border border-emerald-500/30">
+                  <div className="flex items-start gap-3">
+                    <span className="text-2xl shrink-0">📐</span>
                     <div>
-                      <div className="w-12 h-16 mx-auto bg-gray-300 rounded border-2 border-gray-400 flex items-center justify-center text-red-600 font-bold text-sm mb-2">
-                        K♥
-                      </div>
-                      <p className="text-xs text-white/80">1. Take Top Card</p>
-                    </div>
-                    <div className="text-2xl text-white/60">→</div>
-                    <div>
-                      <div className="w-12 h-16 mx-auto bg-blue-600 rounded border-2 border-blue-400 flex items-center justify-center text-white font-bold text-xs mb-2">
-                        ?
-                      </div>
-                      <p className="text-xs text-white/80">2. Swap with Your Card</p>
-                    </div>
-                    <div className="text-2xl text-white/60">→</div>
-                    <div>
-                      <div className="w-12 h-16 mx-auto bg-gray-300 rounded border-2 border-gray-400 flex items-center justify-center text-gray-800 font-bold text-sm mb-2">
-                        Q♠
-                      </div>
-                      <p className="text-xs text-white/80">3. Discard Swapped Card</p>
+                      <h5 className="font-semibold text-emerald-300 mb-1">
+                        Layout Tip
+                      </h5>
+                      <p className="text-sm text-muted-foreground leading-relaxed">
+                        Keep your cards arranged consistently in the same 2×2
+                        pattern throughout the game. This helps with memory and
+                        prevents confusion.
+                      </p>
                     </div>
                   </div>
                 </div>
-              </div>
+              </CardContent>
+            </Card>
+          </TabsContent>
 
-              <div className="mt-8 p-6 bg-emerald-900/20 rounded-lg border border-emerald-700/30">
-                <h4 className="font-semibold text-emerald-300 mb-2">🎯 Strategy Tip</h4>
-                <p className="text-sm text-white/80">
-                  In this example, taking the Red King (K♥ = -1 point) from discard is usually better than drawing unknown cards from the deck, especially if you can swap it with a high-value card you remember.
-                </p>
-              </div>
-            </div>
-          )}
-        </div>
+          {/* Turn Example Tab */}
+          <TabsContent value="turn" className="mt-0">
+            <Card className="glass border-border/50">
+              <CardContent className="p-6 sm:p-8 space-y-8">
+                {/* Option A */}
+                <div className="p-4 sm:p-6 rounded-xl bg-muted/30 border border-border/50">
+                  <h4 className="font-semibold text-lg mb-5">
+                    Option A: Draw from Deck
+                  </h4>
+                  <div className="flex flex-wrap items-center justify-center gap-3 sm:gap-4">
+                    <div className="flex flex-col items-center">
+                      <div className="w-11 h-14 sm:w-14 sm:h-18 rounded-lg bg-gradient-to-br from-blue-700 to-blue-800 border-2 border-blue-500 flex items-center justify-center shadow-md mb-2">
+                        <span className="text-white font-bold">?</span>
+                      </div>
+                      <span className="text-xs text-muted-foreground">
+                        1. Draw
+                      </span>
+                    </div>
+
+                    <svg
+                      className="w-5 h-5 text-muted-foreground shrink-0"
+                      fill="none"
+                      stroke="currentColor"
+                      viewBox="0 0 24 24"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth={2}
+                        d="M9 5l7 7-7 7"
+                      />
+                    </svg>
+
+                    <div className="flex flex-col items-center">
+                      <div className="w-11 h-14 sm:w-14 sm:h-18 rounded-lg bg-white border-2 border-gray-300 flex items-center justify-center shadow-md mb-2">
+                        <span className="text-red-500 font-bold text-sm">
+                          7♥
+                        </span>
+                      </div>
+                      <span className="text-xs text-muted-foreground text-center">
+                        2. Look & Use
+                      </span>
+                    </div>
+
+                    <svg
+                      className="w-5 h-5 text-muted-foreground shrink-0"
+                      fill="none"
+                      stroke="currentColor"
+                      viewBox="0 0 24 24"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth={2}
+                        d="M9 5l7 7-7 7"
+                      />
+                    </svg>
+
+                    <div className="flex flex-col items-center">
+                      <div className="w-11 h-14 sm:w-14 sm:h-18 rounded-lg bg-gray-300 border-2 border-gray-400 flex items-center justify-center shadow-md mb-2">
+                        <span className="text-gray-600 font-bold text-sm">
+                          7♥
+                        </span>
+                      </div>
+                      <span className="text-xs text-muted-foreground">
+                        3. Discard
+                      </span>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Option B */}
+                <div className="p-4 sm:p-6 rounded-xl bg-muted/30 border border-border/50">
+                  <h4 className="font-semibold text-lg mb-5">
+                    Option B: Take from Discard
+                  </h4>
+                  <div className="flex flex-wrap items-center justify-center gap-3 sm:gap-4">
+                    <div className="flex flex-col items-center">
+                      <div className="w-11 h-14 sm:w-14 sm:h-18 rounded-lg bg-gray-300 border-2 border-gray-400 flex items-center justify-center shadow-md mb-2">
+                        <span className="text-red-500 font-bold text-sm">
+                          K♥
+                        </span>
+                      </div>
+                      <span className="text-xs text-muted-foreground text-center">
+                        1. Take Card
+                      </span>
+                    </div>
+
+                    <svg
+                      className="w-5 h-5 text-muted-foreground shrink-0"
+                      fill="none"
+                      stroke="currentColor"
+                      viewBox="0 0 24 24"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth={2}
+                        d="M9 5l7 7-7 7"
+                      />
+                    </svg>
+
+                    <div className="flex flex-col items-center">
+                      <div className="w-11 h-14 sm:w-14 sm:h-18 rounded-lg bg-gradient-to-br from-blue-600 to-blue-700 border-2 border-blue-400 flex items-center justify-center shadow-md mb-2">
+                        <span className="text-white font-bold">?</span>
+                      </div>
+                      <span className="text-xs text-muted-foreground text-center">
+                        2. Swap
+                      </span>
+                    </div>
+
+                    <svg
+                      className="w-5 h-5 text-muted-foreground shrink-0"
+                      fill="none"
+                      stroke="currentColor"
+                      viewBox="0 0 24 24"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth={2}
+                        d="M9 5l7 7-7 7"
+                      />
+                    </svg>
+
+                    <div className="flex flex-col items-center">
+                      <div className="w-11 h-14 sm:w-14 sm:h-18 rounded-lg bg-gray-300 border-2 border-gray-400 flex items-center justify-center shadow-md mb-2">
+                        <span className="text-gray-800 font-bold text-sm">
+                          Q♠
+                        </span>
+                      </div>
+                      <span className="text-xs text-muted-foreground">
+                        3. Discard
+                      </span>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Strategy Tip */}
+                <div className="p-4 sm:p-5 rounded-xl bg-gradient-to-r from-emerald-500/10 to-teal-500/10 border border-emerald-500/30">
+                  <div className="flex items-start gap-3">
+                    <span className="text-2xl shrink-0">🎯</span>
+                    <div>
+                      <h5 className="font-semibold text-emerald-300 mb-1">
+                        Strategy Tip
+                      </h5>
+                      <p className="text-sm text-muted-foreground leading-relaxed">
+                        Taking the Red King (K♥ = -1 point) from discard is
+                        usually better than drawing unknown cards, especially if
+                        you can swap it with a high-value card you remember.
+                      </p>
+                    </div>
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
+          </TabsContent>
+        </Tabs>
       </div>
     </section>
   );
