@@ -467,7 +467,7 @@ export default function ScoresPage() {
   // Setup View
   if (!gameActive) {
     return (
-      <div className="min-h-screen pb-24 md:pb-8">
+      <div className="pb-24 md:pb-0">
         <div className="mx-auto max-w-4xl px-4 sm:px-6 py-6">
           {/* Page Header */}
           <div className="text-center mb-8">
@@ -883,7 +883,7 @@ export default function ScoresPage() {
   );
 
   return (
-    <div className="min-h-screen pb-24 md:pb-8">
+    <div className="pb-24 md:pb-0">
       {/* Victory Screen */}
       {showVictory && winner && (
         <VictoryScreen
@@ -989,7 +989,7 @@ export default function ScoresPage() {
         </div>
       </header>
 
-      <div className="mx-auto max-w-6xl px-4 sm:px-6 py-4 pb-24 md:pb-8">
+      <div className="mx-auto max-w-6xl px-4 sm:px-6 py-4">
         {/* Compact Score Table */}
         <div className="space-y-2">
           {players

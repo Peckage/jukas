@@ -54,7 +54,7 @@ export default function RootLayout({
   return (
     <html lang="en" className="scroll-smooth dark">
       <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased min-h-screen bg-background`}
+        className={`${geistSans.variable} ${geistMono.variable} antialiased min-h-screen bg-background flex flex-col`}
       >
         {/* Animated background */}
         <div className="pointer-events-none fixed inset-0 -z-10">
@@ -107,7 +107,7 @@ export default function RootLayout({
         </nav>
 
         {/* Main content */}
-        <main>{children}</main>
+        <main className="flex-1">{children}</main>
 
         {/* Global Footer - hidden on mobile (MobileNav takes its place) */}
         <footer className="hidden md:block border-t border-border/50 bg-card/30">
@@ -122,7 +122,7 @@ export default function RootLayout({
                 </span>
               </div>
               <a
-                href="https://github.com/mirkodandrea"
+                href="https://github.com/Peckage"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="flex items-center gap-1.5 text-sm text-muted-foreground hover:text-foreground transition-colors"

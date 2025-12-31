@@ -32,7 +32,7 @@ Open [http://localhost:3000](http://localhost:3000) to view the app.
 Deploy to your VPS with a single command:
 
 ```bash
-bash <(curl -fsSL https://raw.githubusercontent.com/mirkodandrea/jukas/main/scripts/setup.sh)
+bash <(curl -fsSL https://raw.githubusercontent.com/Peckage/jukas/main/scripts/setup.sh)
 ```
 
 The script will:
@@ -47,7 +47,7 @@ The script will:
 Or download and review first:
 
 ```bash
-curl -fsSL https://raw.githubusercontent.com/mirkodandrea/jukas/main/scripts/setup.sh -o setup.sh
+curl -fsSL https://raw.githubusercontent.com/Peckage/jukas/main/scripts/setup.sh -o setup.sh
 chmod +x setup.sh
 sudo ./setup.sh
 ```

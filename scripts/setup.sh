@@ -113,8 +113,8 @@ get_config() {
     DOMAIN=${DOMAIN:-jukas.nl}
     
     # GitHub repo
-    read -p "GitHub repo [mirkodandrea/jukas]: " REPO
-    REPO=${REPO:-mirkodandrea/jukas}
+    read -p "GitHub repo [Peckage/jukas]: " REPO
+    REPO=${REPO:-Peckage/jukas}
     
     echo ""
     echo "─────────────────────────────────────────"

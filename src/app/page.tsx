@@ -11,7 +11,7 @@ import { Badge } from "@/components/ui/badge";
 
 export default function Home() {
   return (
-    <div className="min-h-screen pb-24 md:pb-8">
+    <div className="pb-24 md:pb-0">
       {/* Hero Section */}
       <header className="mx-auto max-w-6xl px-4 sm:px-6 pt-8 pb-10 md:pt-12 md:pb-14">
         <div className="text-center space-y-6">

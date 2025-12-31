@@ -15,13 +15,13 @@ Copy and paste this into your VPS terminal. It will:
 - Configure nginx with SSL
 
 ```bash
-bash <(curl -fsSL https://raw.githubusercontent.com/mirkodandrea/jukas/main/scripts/setup.sh)
+bash <(curl -fsSL https://raw.githubusercontent.com/Peckage/jukas/main/scripts/setup.sh)
 ```
 
 Or if you prefer to review the script first:
 
 ```bash
-curl -fsSL https://raw.githubusercontent.com/mirkodandrea/jukas/main/scripts/setup.sh -o setup.sh
+curl -fsSL https://raw.githubusercontent.com/Peckage/jukas/main/scripts/setup.sh -o setup.sh
 chmod +x setup.sh
 sudo ./setup.sh
 ```

@@ -4,7 +4,7 @@ import { Separator } from "@/components/ui/separator";
 
 export default function RulesPage() {
   return (
-    <div className="min-h-screen pb-24 md:pb-8">
+    <div className="pb-24 md:pb-0">
       <div className="mx-auto max-w-4xl px-4 sm:px-6 py-8 md:py-12">
         {/* Header */}
         <div className="text-center mb-8">
