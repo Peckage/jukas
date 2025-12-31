@@ -86,7 +86,7 @@ const cardData = [
     value: "0",
     valueType: "bonus",
     effect:
-      "No effect. Worth 0 points — great for bluffing! Opponents think you have cards, but it doesn't hurt your score.",
+      "No effect. Worth 0 points - great for bluffing! Opponents think you have cards, but it doesn't hurt your score.",
     hasEffect: false,
   },
 ];
@@ -188,7 +188,7 @@ export default function UniqueCardsTable() {
               <p className="font-semibold text-accent mb-1">Important</p>
               <p className="text-sm text-muted-foreground leading-relaxed">
                 Card effects only work when drawn from deck and immediately
-                discarded. Cards in your layout are just point values—no
+                discarded. Cards in your layout are just point values-no
                 effects!
               </p>
             </div>
@@ -268,7 +268,7 @@ export default function UniqueCardsTable() {
                       </span>
                       <span className="text-muted-foreground ml-1">
                         Effects only work when drawn from deck and immediately
-                        discarded. Cards in your layout are just point values—no
+                        discarded. Cards in your layout are just point values-no
                         effects!
                       </span>
                     </span>
