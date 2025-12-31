@@ -1086,8 +1086,26 @@ export default function ScoresPage() {
                     </div>
                   </div>
 
-                  {/* Current Round Input */}
-                  <div className="shrink-0">
+                  {/* Current Round Input with Quick Actions */}
+                  <div className="flex items-center gap-1 shrink-0">
+                    {/* Quick subtract */}
+                    <button
+                      type="button"
+                      onClick={() => {
+                        const current = player.rounds[currentRound - 1] || 0;
+                        addRoundScore(playerIndex, current - 1);
+                        setPendingInputs((prev) => {
+                          const newState = { ...prev };
+                          delete newState[playerIndex];
+                          return newState;
+                        });
+                      }}
+                      disabled={isEliminated}
+                      className="w-7 h-9 sm:h-10 rounded bg-red-500/20 hover:bg-red-500/40 text-red-400 font-bold text-sm transition-colors disabled:opacity-30 disabled:cursor-not-allowed"
+                    >
+                      −1
+                    </button>
+
                     <Input
                       type="text"
                       inputMode="numeric"
@@ -1128,9 +1146,32 @@ export default function ScoresPage() {
                         });
                       }}
                       placeholder="0"
-                      className="w-14 sm:w-16 text-center font-bold bg-muted/50 h-9 sm:h-10"
+                      className="w-12 sm:w-14 text-center font-bold bg-muted/50 h-9 sm:h-10"
                       disabled={isEliminated}
                     />
+
+                    {/* Quick add buttons */}
+                    <div className="flex gap-0.5">
+                      {[1, 2, 5, 10].map((num) => (
+                        <button
+                          key={num}
+                          type="button"
+                          onClick={() => {
+                            const current = player.rounds[currentRound - 1] || 0;
+                            addRoundScore(playerIndex, current + num);
+                            setPendingInputs((prev) => {
+                              const newState = { ...prev };
+                              delete newState[playerIndex];
+                              return newState;
+                            });
+                          }}
+                          disabled={isEliminated}
+                          className="w-7 sm:w-8 h-9 sm:h-10 rounded bg-emerald-500/20 hover:bg-emerald-500/40 text-emerald-400 font-bold text-xs sm:text-sm transition-colors disabled:opacity-30 disabled:cursor-not-allowed"
+                        >
+                          +{num}
+                        </button>
+                      ))}
+                    </div>
                   </div>
 
                   {/* Total */}
