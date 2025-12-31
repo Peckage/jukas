@@ -477,51 +477,17 @@ export default function ScoresPage() {
           <div className="absolute inset-0 bg-[linear-gradient(rgba(255,255,255,0.02)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.02)_1px,transparent_1px)] bg-[size:64px_64px]" />
         </div>
 
-        {/* Header */}
-        <header className="sticky top-0 z-40 glass border-b border-border/50">
-          <div className="mx-auto flex max-w-4xl items-center justify-between px-4 sm:px-6 py-4">
-            <Link href="/" className="flex items-center gap-2">
-              <div className="h-8 w-8 rounded-lg bg-gradient-to-br from-orange-500 to-red-600 flex items-center justify-center">
-                <span className="text-white font-bold text-sm">J</span>
-              </div>
-              <span className="font-bold text-lg tracking-tight">JUKAS</span>
-            </Link>
-            <Button variant="ghost" size="sm" asChild>
-              <Link href="/">
-                <svg
-                  className="w-4 h-4 mr-2"
-                  fill="none"
-                  stroke="currentColor"
-                  viewBox="0 0 24 24"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth={2}
-                    d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"
-                  />
-                </svg>
-                Home
-              </Link>
-            </Button>
-          </div>
-        </header>
-
         {/* Mobile Navigation */}
         <MobileNav />
 
-        <div className="mx-auto max-w-4xl px-4 sm:px-6 py-10 md:py-16 pb-24">
+        <div className="mx-auto max-w-4xl px-4 sm:px-6 py-6 pb-24">
           {/* Page Header */}
-          <div className="text-center mb-10">
-            <Badge variant="outline" className="mb-4">
-              Interactive
-            </Badge>
-            <h1 className="text-3xl sm:text-4xl font-bold mb-3">
-              Score Keeper
+          <div className="text-center mb-8">
+            <h1 className="text-2xl sm:text-3xl font-bold mb-2">
+              🎮 Score Keeper
             </h1>
-            <p className="text-muted-foreground max-w-xl mx-auto">
-              Track scores for your physical Jukas games. Customize settings to
-              match your playstyle!
+            <p className="text-sm text-muted-foreground">
+              Track scores for your Jukas games
             </p>
           </div>
 
