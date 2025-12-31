@@ -1157,7 +1157,8 @@ export default function ScoresPage() {
                           key={num}
                           type="button"
                           onClick={() => {
-                            const current = player.rounds[currentRound - 1] || 0;
+                            const current =
+                              player.rounds[currentRound - 1] || 0;
                             addRoundScore(playerIndex, current + num);
                             setPendingInputs((prev) => {
                               const newState = { ...prev };
