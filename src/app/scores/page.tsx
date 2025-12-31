@@ -1015,110 +1015,115 @@ export default function ScoresPage() {
             .map((player, originalIndex) => ({ player, originalIndex }))
             .sort((a, b) => a.player.total - b.player.total)
             .map(({ player, originalIndex: playerIndex }, sortedIndex) => {
-            const isEliminated = player.total >= settings.eliminationThreshold;
-            const isLeading = player.total === lowestScore && !isEliminated;
-            const isJustEliminated = justEliminated.has(playerIndex);
-            const isWinner =
-              winner?.name === player.name && activePlayers.length === 1;
+              const isEliminated =
+                player.total >= settings.eliminationThreshold;
+              const isLeading = player.total === lowestScore && !isEliminated;
+              const isJustEliminated = justEliminated.has(playerIndex);
+              const isWinner =
+                winner?.name === player.name && activePlayers.length === 1;
 
-            return (
-              <div
-                key={playerIndex}
-                className={`flex items-center gap-2 sm:gap-4 p-2 sm:p-3 rounded-xl glass transition-all ${
-                  isJustEliminated
-                    ? "animate-eliminated animate-flash-red"
-                    : isEliminated
-                    ? "opacity-50 bg-destructive/5"
-                    : isWinner
-                    ? "animate-winner border-amber-400/70 bg-amber-500/10 ring-2 ring-amber-400/50"
-                    : isLeading
-                    ? "border-amber-500/50 bg-amber-500/5 ring-1 ring-amber-500/30"
-                    : "border-border/50"
-                }`}
-              >
-                {/* Rank */}
-                <div className="w-6 sm:w-8 text-center shrink-0">
-                  {isWinner ? (
-                    <span className="animate-crown text-lg sm:text-xl">👑</span>
-                  ) : isLeading ? (
-                    <span className="text-lg sm:text-xl">👑</span>
-                  ) : isEliminated ? (
-                    <span className="text-lg sm:text-xl">💀</span>
-                  ) : (
-                    <span className="text-sm text-muted-foreground font-medium">
-                      #{sortedIndex + 1}
-                    </span>
-                  )}
-                </div>
-
-                {/* Name */}
-                <div className="flex-1 min-w-0">
-                  <div className="flex items-center gap-2">
-                    <span
-                      className={`font-semibold truncate text-sm sm:text-base ${
-                        isEliminated ? "line-through text-muted-foreground" : ""
-                      }`}
-                    >
-                      {player.name}
-                    </span>
-                    {isJustEliminated && (
-                      <Badge
-                        variant="destructive"
-                        className="text-[10px] animate-pulse shrink-0"
-                      >
-                        OUT!
-                      </Badge>
-                    )}
-                  </div>
-                  {/* Compact round history */}
-                  <div className="text-[10px] sm:text-xs text-muted-foreground truncate">
-                    {player.rounds.map((s, i) => s || 0).join(" → ")}
-                  </div>
-                </div>
-
-                {/* Current Round Input */}
-                <div className="shrink-0">
-                  <Input
-                    type="text"
-                    pattern="-?[0-9]*"
-                    autoComplete="off"
-                    value={player.rounds[currentRound - 1] ?? ""}
-                    onChange={(e) => {
-                      const value = e.target.value;
-                      if (
-                        value === "" ||
-                        value === "-" ||
-                        /^-?\d+$/.test(value)
-                      ) {
-                        addRoundScore(
-                          playerIndex,
-                          value === "" || value === "-"
-                            ? 0
-                            : parseInt(value, 10)
-                        );
-                      }
-                    }}
-                    placeholder="0"
-                    className="w-14 sm:w-16 text-center font-bold bg-muted/50 h-9 sm:h-10"
-                    disabled={isEliminated}
-                  />
-                </div>
-
-                {/* Total */}
+              return (
                 <div
-                  className={`w-12 sm:w-16 text-right font-bold text-lg sm:text-xl shrink-0 ${
-                    isEliminated
-                      ? "text-destructive"
+                  key={playerIndex}
+                  className={`flex items-center gap-2 sm:gap-4 p-2 sm:p-3 rounded-xl glass transition-all ${
+                    isJustEliminated
+                      ? "animate-eliminated animate-flash-red"
+                      : isEliminated
+                      ? "opacity-50 bg-destructive/5"
+                      : isWinner
+                      ? "animate-winner border-amber-400/70 bg-amber-500/10 ring-2 ring-amber-400/50"
                       : isLeading
-                      ? "text-amber-400"
-                      : "text-foreground"
+                      ? "border-amber-500/50 bg-amber-500/5 ring-1 ring-amber-500/30"
+                      : "border-border/50"
                   }`}
                 >
-                  {player.total}
+                  {/* Rank */}
+                  <div className="w-6 sm:w-8 text-center shrink-0">
+                    {isWinner ? (
+                      <span className="animate-crown text-lg sm:text-xl">
+                        👑
+                      </span>
+                    ) : isLeading ? (
+                      <span className="text-lg sm:text-xl">👑</span>
+                    ) : isEliminated ? (
+                      <span className="text-lg sm:text-xl">💀</span>
+                    ) : (
+                      <span className="text-sm text-muted-foreground font-medium">
+                        #{sortedIndex + 1}
+                      </span>
+                    )}
+                  </div>
+
+                  {/* Name */}
+                  <div className="flex-1 min-w-0">
+                    <div className="flex items-center gap-2">
+                      <span
+                        className={`font-semibold truncate text-sm sm:text-base ${
+                          isEliminated
+                            ? "line-through text-muted-foreground"
+                            : ""
+                        }`}
+                      >
+                        {player.name}
+                      </span>
+                      {isJustEliminated && (
+                        <Badge
+                          variant="destructive"
+                          className="text-[10px] animate-pulse shrink-0"
+                        >
+                          OUT!
+                        </Badge>
+                      )}
+                    </div>
+                    {/* Compact round history */}
+                    <div className="text-[10px] sm:text-xs text-muted-foreground truncate">
+                      {player.rounds.map((s, i) => s || 0).join(" → ")}
+                    </div>
+                  </div>
+
+                  {/* Current Round Input */}
+                  <div className="shrink-0">
+                    <Input
+                      type="text"
+                      pattern="-?[0-9]*"
+                      autoComplete="off"
+                      value={player.rounds[currentRound - 1] ?? ""}
+                      onChange={(e) => {
+                        const value = e.target.value;
+                        if (
+                          value === "" ||
+                          value === "-" ||
+                          /^-?\d+$/.test(value)
+                        ) {
+                          addRoundScore(
+                            playerIndex,
+                            value === "" || value === "-"
+                              ? 0
+                              : parseInt(value, 10)
+                          );
+                        }
+                      }}
+                      placeholder="0"
+                      className="w-14 sm:w-16 text-center font-bold bg-muted/50 h-9 sm:h-10"
+                      disabled={isEliminated}
+                    />
+                  </div>
+
+                  {/* Total */}
+                  <div
+                    className={`w-12 sm:w-16 text-right font-bold text-lg sm:text-xl shrink-0 ${
+                      isEliminated
+                        ? "text-destructive"
+                        : isLeading
+                        ? "text-amber-400"
+                        : "text-foreground"
+                    }`}
+                  >
+                    {player.total}
+                  </div>
                 </div>
-              </div>
-            );
-          })}
+              );
+            })}
         </div>
 
         {/* Quick legend */}

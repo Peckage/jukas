@@ -36,6 +36,7 @@ bash <(curl -fsSL https://raw.githubusercontent.com/mirkodandrea/jukas/main/scri
 ```
 
 The script will:
+
 - ✅ Detect existing installations (Node.js, nginx, certbot)
 - ✅ Prompt for port, domain, and what to install
 - ✅ Create a dedicated `jukas` user
