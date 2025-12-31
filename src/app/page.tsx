@@ -428,37 +428,15 @@ export default function Home() {
       </section>
 
       {/* Footer */}
-      <footer className="border-t border-border/50 bg-card/30 safe-bottom pb-20 md:pb-0">
-        <div className="mx-auto max-w-6xl px-4 sm:px-6 py-8">
-          <div className="flex flex-col sm:flex-row items-center justify-between gap-4">
-            <div className="flex items-center gap-2">
-              <div className="h-6 w-6 rounded-md bg-gradient-to-br from-orange-500 to-red-600 flex items-center justify-center">
-                <span className="text-white font-bold text-xs">J</span>
-              </div>
-              <span className="text-sm text-muted-foreground">
-                © {new Date().getFullYear()} Jukas
-              </span>
+      <footer className="border-t border-border/50 bg-card/30 safe-bottom pb-24 md:pb-0">
+        <div className="mx-auto max-w-6xl px-4 sm:px-6 py-6">
+          <div className="flex items-center justify-center gap-2">
+            <div className="h-6 w-6 rounded-md bg-gradient-to-br from-orange-500 to-red-600 flex items-center justify-center">
+              <span className="text-white font-bold text-xs">J</span>
             </div>
-            <div className="flex items-center gap-4 text-sm text-muted-foreground">
-              <Link
-                href="/rules"
-                className="hover:text-foreground transition-colors"
-              >
-                Rules
-              </Link>
-              <Link
-                href="/setup"
-                className="hover:text-foreground transition-colors"
-              >
-                Setup
-              </Link>
-              <Link
-                href="/scores"
-                className="hover:text-foreground transition-colors"
-              >
-                Scores
-              </Link>
-            </div>
+            <span className="text-sm text-muted-foreground">
+              © {new Date().getFullYear()} Jukas
+            </span>
           </div>
         </div>
       </footer>
