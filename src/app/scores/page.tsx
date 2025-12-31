@@ -1008,10 +1008,13 @@ export default function ScoresPage() {
       {/* Mobile Navigation */}
       <MobileNav />
 
-      <div className="mx-auto max-w-6xl px-4 sm:px-6 py-6 pb-24">
-        {/* Score Cards */}
-        <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-          {players.map((player, playerIndex) => {
+      <div className="mx-auto max-w-6xl px-4 sm:px-6 py-4 pb-24">
+        {/* Compact Score Table */}
+        <div className="space-y-2">
+          {players
+            .map((player, originalIndex) => ({ player, originalIndex }))
+            .sort((a, b) => a.player.total - b.player.total)
+            .map(({ player, originalIndex: playerIndex }, sortedIndex) => {
             const isEliminated = player.total >= settings.eliminationThreshold;
             const isLeading = player.total === lowestScore && !isEliminated;
             const isJustEliminated = justEliminated.has(playerIndex);
@@ -1019,140 +1022,115 @@ export default function ScoresPage() {
               winner?.name === player.name && activePlayers.length === 1;
 
             return (
-              <Card
+              <div
                 key={playerIndex}
-                className={`glass transition-all ${
+                className={`flex items-center gap-2 sm:gap-4 p-2 sm:p-3 rounded-xl glass transition-all ${
                   isJustEliminated
-                    ? "animate-eliminated"
+                    ? "animate-eliminated animate-flash-red"
                     : isEliminated
-                    ? "opacity-60 border-destructive/30 bg-destructive/5"
+                    ? "opacity-50 bg-destructive/5"
                     : isWinner
                     ? "animate-winner border-amber-400/70 bg-amber-500/10 ring-2 ring-amber-400/50"
                     : isLeading
-                    ? "border-amber-500/50 bg-amber-500/5 ring-2 ring-amber-500/30"
+                    ? "border-amber-500/50 bg-amber-500/5 ring-1 ring-amber-500/30"
                     : "border-border/50"
-                } ${isJustEliminated ? "animate-flash-red" : ""}`}
+                }`}
               >
-                <CardHeader className="pb-3">
-                  <div className="flex items-center justify-between">
-                    <div className="flex items-center gap-2">
-                      {isWinner && (
-                        <span className="animate-crown text-xl">👑</span>
-                      )}
-                      {isLeading && !isWinner && (
-                        <span className="text-xl">👑</span>
-                      )}
-                      <CardTitle
-                        className={`text-lg ${
-                          isEliminated ? "line-through text-destructive/70" : ""
-                        }`}
-                      >
-                        {player.name}
-                      </CardTitle>
-                    </div>
+                {/* Rank */}
+                <div className="w-6 sm:w-8 text-center shrink-0">
+                  {isWinner ? (
+                    <span className="animate-crown text-lg sm:text-xl">👑</span>
+                  ) : isLeading ? (
+                    <span className="text-lg sm:text-xl">👑</span>
+                  ) : isEliminated ? (
+                    <span className="text-lg sm:text-xl">💀</span>
+                  ) : (
+                    <span className="text-sm text-muted-foreground font-medium">
+                      #{sortedIndex + 1}
+                    </span>
+                  )}
+                </div>
+
+                {/* Name */}
+                <div className="flex-1 min-w-0">
+                  <div className="flex items-center gap-2">
+                    <span
+                      className={`font-semibold truncate text-sm sm:text-base ${
+                        isEliminated ? "line-through text-muted-foreground" : ""
+                      }`}
+                    >
+                      {player.name}
+                    </span>
                     {isJustEliminated && (
                       <Badge
                         variant="destructive"
-                        className="text-xs animate-pulse"
+                        className="text-[10px] animate-pulse shrink-0"
                       >
-                        💀 ELIMINATED!
-                      </Badge>
-                    )}
-                    {isEliminated && !isJustEliminated && (
-                      <Badge variant="destructive" className="text-xs">
-                        OUT
-                      </Badge>
-                    )}
-                    {isWinner && (
-                      <Badge className="text-xs bg-gradient-to-r from-amber-500 to-yellow-500 text-black">
-                        🏆 WINNER
+                        OUT!
                       </Badge>
                     )}
                   </div>
-                </CardHeader>
-                <CardContent className="space-y-4">
-                  {/* Current Round Input */}
-                  <div>
-                    <Label className="text-xs text-muted-foreground mb-2 block">
-                      Round {currentRound} Score
-                    </Label>
-                    <Input
-                      type="text"
-                      pattern="-?[0-9]*"
-                      autoComplete="off"
-                      value={player.rounds[currentRound - 1] ?? ""}
-                      onChange={(e) => {
-                        const value = e.target.value;
-                        // Allow empty, minus sign, or valid integer (positive or negative)
-                        if (
-                          value === "" ||
-                          value === "-" ||
-                          /^-?\d+$/.test(value)
-                        ) {
-                          addRoundScore(
-                            playerIndex,
-                            value === "" || value === "-"
-                              ? 0
-                              : parseInt(value, 10)
-                          );
-                        }
-                      }}
-                      placeholder="0"
-                      className="text-center text-xl font-bold h-14 bg-muted/50"
-                      disabled={isEliminated}
-                    />
+                  {/* Compact round history */}
+                  <div className="text-[10px] sm:text-xs text-muted-foreground truncate">
+                    {player.rounds.map((s, i) => s || 0).join(" → ")}
                   </div>
+                </div>
 
-                  {/* Total Score */}
-                  <div className="flex items-center justify-between p-3 rounded-lg bg-muted/30">
-                    <span className="text-sm text-muted-foreground">Total</span>
-                    <span
-                      className={`text-2xl font-bold ${
-                        isEliminated
-                          ? "text-destructive"
-                          : isLeading
-                          ? "text-amber-400"
-                          : "text-foreground"
-                      }`}
-                    >
-                      {player.total}
-                    </span>
-                  </div>
+                {/* Current Round Input */}
+                <div className="shrink-0">
+                  <Input
+                    type="text"
+                    pattern="-?[0-9]*"
+                    autoComplete="off"
+                    value={player.rounds[currentRound - 1] ?? ""}
+                    onChange={(e) => {
+                      const value = e.target.value;
+                      if (
+                        value === "" ||
+                        value === "-" ||
+                        /^-?\d+$/.test(value)
+                      ) {
+                        addRoundScore(
+                          playerIndex,
+                          value === "" || value === "-"
+                            ? 0
+                            : parseInt(value, 10)
+                        );
+                      }
+                    }}
+                    placeholder="0"
+                    className="w-14 sm:w-16 text-center font-bold bg-muted/50 h-9 sm:h-10"
+                    disabled={isEliminated}
+                  />
+                </div>
 
-                  {/* Round History */}
-                  {player.rounds.length > 0 && (
-                    <div className="flex flex-wrap gap-1.5">
-                      {player.rounds.map((score, roundIdx) => (
-                        <Badge
-                          key={roundIdx}
-                          variant="secondary"
-                          className={`text-xs ${
-                            roundIdx === currentRound - 1
-                              ? "ring-2 ring-primary"
-                              : ""
-                          }`}
-                        >
-                          R{roundIdx + 1}: {score || 0}
-                        </Badge>
-                      ))}
-                    </div>
-                  )}
-                </CardContent>
-              </Card>
+                {/* Total */}
+                <div
+                  className={`w-12 sm:w-16 text-right font-bold text-lg sm:text-xl shrink-0 ${
+                    isEliminated
+                      ? "text-destructive"
+                      : isLeading
+                      ? "text-amber-400"
+                      : "text-foreground"
+                  }`}
+                >
+                  {player.total}
+                </div>
+              </div>
             );
           })}
         </div>
 
-        {/* Tips */}
-        <div className="mt-8 p-4 rounded-xl bg-muted/30 border border-border/50 text-center">
-          <p className="text-sm text-muted-foreground">
-            💡 <span className="font-medium">Tip:</span> Players are eliminated
-            at{" "}
+        {/* Quick legend */}
+        <div className="mt-4 flex flex-wrap justify-center gap-x-4 gap-y-1 text-xs text-muted-foreground">
+          <span>
+            🔴 Eliminated at{" "}
             <span className="text-destructive font-medium">
-              {settings.eliminationThreshold} points
+              {settings.eliminationThreshold}
             </span>
-            . Red Kings = -1, Black Kings = +13
-          </p>
+          </span>
+          <span>♦️♥️ K = -1</span>
+          <span>♠️♣️ K = +13</span>
         </div>
       </div>
     </div>
