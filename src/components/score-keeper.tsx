@@ -1,6 +1,35 @@
 "use client";
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect } from "react";
+import { Button } from "@/components/ui/button";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Badge } from "@/components/ui/badge";
+import { Separator } from "@/components/ui/separator";
+import {
+  Accordion,
+  AccordionContent,
+  AccordionItem,
+  AccordionTrigger,
+} from "@/components/ui/accordion";
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from "@/components/ui/alert-dialog";
 
 interface Player {
   name: string;
@@ -18,19 +47,21 @@ interface GameSession {
 export default function ScoreKeeper() {
   const [gameActive, setGameActive] = useState(false);
   const [players, setPlayers] = useState<Player[]>([]);
-  const [playerNames, setPlayerNames] = useState<string[]>(['Player 1', 'Player 2']);
+  const [playerNames, setPlayerNames] = useState<string[]>([
+    "Player 1",
+    "Player 2",
+  ]);
   const [currentRound, setCurrentRound] = useState(1);
   const [gameHistory, setGameHistory] = useState<GameSession[]>([]);
-  const [showHistory, setShowHistory] = useState(false);
 
   // Load game history from localStorage on mount
   useEffect(() => {
-    const saved = localStorage.getItem('jukasScoreHistory');
+    const saved = localStorage.getItem("jukasScoreHistory");
     if (saved) {
       try {
         setGameHistory(JSON.parse(saved));
       } catch (e) {
-        console.error('Failed to load game history:', e);
+        console.error("Failed to load game history:", e);
       }
     }
   }, []);
@@ -38,7 +69,7 @@ export default function ScoreKeeper() {
   // Save game history to localStorage
   const saveGameHistory = (updatedHistory: GameSession[]) => {
     setGameHistory(updatedHistory);
-    localStorage.setItem('jukasScoreHistory', JSON.stringify(updatedHistory));
+    localStorage.setItem("jukasScoreHistory", JSON.stringify(updatedHistory));
   };
 
   const addPlayer = () => {
@@ -61,10 +92,10 @@ export default function ScoreKeeper() {
   };
 
   const startNewGame = () => {
-    const initialPlayers = playerNames.map(name => ({
-      name: name.trim() || 'Player',
+    const initialPlayers = playerNames.map((name) => ({
+      name: name.trim() || "Player",
       rounds: [],
-      total: 0
+      total: 0,
     }));
     setPlayers(initialPlayers);
     setGameActive(true);
@@ -73,15 +104,11 @@ export default function ScoreKeeper() {
 
   const addRoundScore = (playerIndex: number, score: number) => {
     const newPlayers = [...players];
-    if (!newPlayers[playerIndex].rounds[currentRound - 1]) {
-      newPlayers[playerIndex].rounds[currentRound - 1] = score;
-    } else {
-      newPlayers[playerIndex].rounds[currentRound - 1] = score;
-    }
-    
-    // Recalculate total
-    newPlayers[playerIndex].total = newPlayers[playerIndex].rounds.reduce((sum, roundScore) => sum + (roundScore || 0), 0);
-    
+    newPlayers[playerIndex].rounds[currentRound - 1] = score;
+    newPlayers[playerIndex].total = newPlayers[playerIndex].rounds.reduce(
+      (sum, roundScore) => sum + (roundScore || 0),
+      0
+    );
     setPlayers(newPlayers);
   };
 
@@ -96,15 +123,11 @@ export default function ScoreKeeper() {
   };
 
   const endGame = () => {
-    if (!confirm('Are you sure you want to end this game? The results will be saved to history.')) {
-      return;
-    }
-
     const gameSession: GameSession = {
       id: Date.now().toString(),
       date: new Date().toISOString(),
       players: [...players],
-      completed: true
+      completed: true,
     };
 
     const updatedHistory = [gameSession, ...gameHistory];
@@ -116,131 +139,239 @@ export default function ScoreKeeper() {
   };
 
   const clearHistory = () => {
-    if (confirm('Are you sure you want to clear all score history?')) {
-      saveGameHistory([]);
-    }
+    saveGameHistory([]);
   };
 
   const formatDate = (dateStr: string) => {
-    return new Date(dateStr).toLocaleDateString('en-US', {
-      month: 'short',
-      day: 'numeric',
-      hour: '2-digit',
-      minute: '2-digit'
+    return new Date(dateStr).toLocaleDateString("en-US", {
+      month: "short",
+      day: "numeric",
+      hour: "2-digit",
+      minute: "2-digit",
     });
   };
 
+  // Setup View
   if (!gameActive) {
     return (
-      <section id="scorekeeper" className="border-t border-white/10">
-        <div className="mx-auto max-w-6xl px-6 py-14">
-          <div className="text-center mb-8">
-            <h2 className="text-3xl font-bold mb-4">Score Keeper</h2>
-            <p className="text-white/70 max-w-2xl mx-auto">
-              Track scores for your physical Jukas games across multiple rounds. Players are eliminated when they reach 100 points. Last survivor wins!
+      <section id="scorekeeper" className="border-t border-border/50">
+        <div className="mx-auto max-w-6xl px-4 sm:px-6 py-12 md:py-16">
+          {/* Section Header */}
+          <div className="text-center mb-8 md:mb-10">
+            <Badge variant="outline" className="mb-4">
+              Interactive
+            </Badge>
+            <h2 className="text-2xl sm:text-3xl font-bold mb-3">
+              Score Keeper
+            </h2>
+            <p className="text-muted-foreground max-w-xl mx-auto">
+              Track scores for your physical Jukas games. Players are eliminated
+              at 100 points!
             </p>
           </div>
 
-          <div className="max-w-2xl mx-auto">
-            <div className="bg-slate-900/70 border border-white/10 rounded-xl p-8 backdrop-blur-md shadow-xl">
-              <h3 className="text-xl font-semibold mb-6">Setup New Game</h3>
-              
-              <div className="space-y-6">
-                <div>
-                  <label className="block text-sm font-medium mb-3 text-white/90">
-                    Players (2-6)
-                  </label>
-                  <div className="space-y-3">
-                    {playerNames.map((name, index) => (
-                      <div key={index} className="flex gap-3 items-center">
-                        <input
-                          type="text"
-                          value={name}
-                          onChange={(e) => updatePlayerName(index, e.target.value)}
-                          className="flex-1 px-4 py-2 bg-slate-950/50 border border-white/20 rounded-lg text-white placeholder-white/40 focus:outline-none focus:border-red-700"
-                          placeholder={`Player ${index + 1} name`}
-                        />
-                        {playerNames.length > 2 && (
-                          <button
-                            onClick={() => removePlayer(index)}
-                            className="px-3 py-2 bg-red-900/40 hover:bg-red-900/60 border border-red-700/40 rounded-lg text-red-300 transition"
+          <div className="max-w-lg mx-auto">
+            <Card className="glass border-border/50 shadow-xl">
+              <CardHeader>
+                <CardTitle className="flex items-center gap-2">
+                  <span className="text-2xl">🎮</span>
+                  New Game
+                </CardTitle>
+                <CardDescription>
+                  Add 2-6 players to start tracking scores
+                </CardDescription>
+              </CardHeader>
+              <CardContent className="space-y-6">
+                {/* Player Names */}
+                <div className="space-y-3">
+                  <Label className="text-sm font-medium">Players</Label>
+                  {playerNames.map((name, index) => (
+                    <div key={index} className="flex gap-2">
+                      <Input
+                        type="text"
+                        value={name}
+                        onChange={(e) =>
+                          updatePlayerName(index, e.target.value)
+                        }
+                        placeholder={`Player ${index + 1}`}
+                        className="flex-1 bg-muted/50 border-border/50"
+                      />
+                      {playerNames.length > 2 && (
+                        <Button
+                          variant="destructive"
+                          size="icon"
+                          onClick={() => removePlayer(index)}
+                          className="shrink-0"
+                        >
+                          <svg
+                            className="w-4 h-4"
+                            fill="none"
+                            stroke="currentColor"
+                            viewBox="0 0 24 24"
                           >
-                            ✕
-                          </button>
-                        )}
-                      </div>
-                    ))}
-                  </div>
+                            <path
+                              strokeLinecap="round"
+                              strokeLinejoin="round"
+                              strokeWidth={2}
+                              d="M6 18L18 6M6 6l12 12"
+                            />
+                          </svg>
+                        </Button>
+                      )}
+                    </div>
+                  ))}
 
                   {playerNames.length < 6 && (
-                    <button
+                    <Button
+                      variant="outline"
                       onClick={addPlayer}
-                      className="mt-4 px-4 py-2 bg-white/10 hover:bg-white/20 border border-white/20 rounded-lg transition"
+                      className="w-full border-dashed"
                     >
-                      + Add Player
-                    </button>
+                      <svg
+                        className="w-4 h-4 mr-2"
+                        fill="none"
+                        stroke="currentColor"
+                        viewBox="0 0 24 24"
+                      >
+                        <path
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          strokeWidth={2}
+                          d="M12 4v16m8-8H4"
+                        />
+                      </svg>
+                      Add Player
+                    </Button>
                   )}
                 </div>
 
-                <button
+                <Button
                   onClick={startNewGame}
-                  className="w-full px-6 py-3 bg-gradient-to-r from-orange-700 to-red-700 hover:from-orange-600 hover:to-red-600 text-white font-semibold rounded-lg transition text-lg shadow-lg shadow-orange-900/40"
+                  className="w-full bg-gradient-to-r from-orange-600 to-red-600 hover:from-orange-500 hover:to-red-500 shadow-lg"
+                  size="lg"
                 >
-                  Start Score Tracking
-                </button>
-              </div>
-            </div>
+                  <svg
+                    className="w-5 h-5 mr-2"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth={2}
+                      d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z"
+                    />
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth={2}
+                      d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
+                    />
+                  </svg>
+                  Start Game
+                </Button>
+              </CardContent>
+            </Card>
 
             {/* Game History */}
             {gameHistory.length > 0 && (
-              <div className="mt-8 bg-slate-900/70 border border-white/10 rounded-xl p-8 backdrop-blur-md">
-                <div className="flex justify-between items-center mb-6">
-                  <h3 className="text-xl font-semibold">Game History</h3>
-                  <div className="flex gap-3">
-                    <button
-                      onClick={() => setShowHistory(!showHistory)}
-                      className="px-4 py-2 bg-white/10 hover:bg-white/20 border border-white/20 rounded-lg transition text-sm"
-                    >
-                      {showHistory ? 'Hide' : `Show (${gameHistory.length})`}
-                    </button>
-                    <button
-                      onClick={clearHistory}
-                      className="px-4 py-2 bg-red-900/40 hover:bg-red-900/60 border border-red-700/40 text-red-300 rounded-lg transition text-sm"
-                    >
-                      Clear All
-                    </button>
-                  </div>
-                </div>
-
-                {showHistory && (
-                  <div className="space-y-4 max-h-96 overflow-y-auto">
-                    {gameHistory.map((game) => (
-                      <div key={game.id} className="bg-slate-950/50 border border-white/10 rounded-lg p-4">
-                        <div className="flex justify-between items-center mb-3">
-                          <span className="text-sm text-white/70">{formatDate(game.date)}</span>
-                          <span className="text-xs bg-emerald-900/30 text-emerald-300 border border-emerald-700/30 px-2 py-1 rounded">
-                            {game.players.length} players
-                          </span>
-                        </div>
-                        <div className="grid grid-cols-2 gap-2">
-                          {game.players
-                            .sort((a, b) => a.total - b.total)
-                            .map((player, index) => (
-                              <div key={index} className="flex justify-between text-sm">
-                                <span className={index === 0 ? 'text-amber-300 font-semibold' : 'text-white/70'}>
-                                  {index === 0 && '🏆 '}{player.name}
-                                </span>
-                                <span className={index === 0 ? 'text-amber-300 font-semibold' : 'text-white/50'}>
-                                  {player.total}
-                                </span>
-                              </div>
-                            ))}
-                        </div>
+              <Card className="glass border-border/50 mt-6">
+                <Accordion type="single" collapsible>
+                  <AccordionItem value="history" className="border-none">
+                    <AccordionTrigger className="px-6 py-4 hover:no-underline">
+                      <div className="flex items-center gap-2">
+                        <span className="text-xl">📊</span>
+                        <span className="font-semibold">Game History</span>
+                        <Badge variant="secondary" className="ml-2">
+                          {gameHistory.length}
+                        </Badge>
                       </div>
-                    ))}
-                  </div>
-                )}
-              </div>
+                    </AccordionTrigger>
+                    <AccordionContent className="px-6 pb-6">
+                      <div className="space-y-3 max-h-64 overflow-y-auto">
+                        {gameHistory.map((game) => (
+                          <div
+                            key={game.id}
+                            className="p-4 rounded-xl bg-muted/30 border border-border/50"
+                          >
+                            <div className="flex items-center justify-between mb-3">
+                              <span className="text-sm text-muted-foreground">
+                                {formatDate(game.date)}
+                              </span>
+                              <Badge variant="outline" className="text-xs">
+                                {game.players.length} players
+                              </Badge>
+                            </div>
+                            <div className="grid grid-cols-2 gap-2">
+                              {game.players
+                                .sort((a, b) => a.total - b.total)
+                                .map((player, idx) => (
+                                  <div
+                                    key={idx}
+                                    className="flex justify-between text-sm"
+                                  >
+                                    <span
+                                      className={
+                                        idx === 0
+                                          ? "text-amber-400 font-medium"
+                                          : "text-muted-foreground"
+                                      }
+                                    >
+                                      {idx === 0 && "🏆 "}
+                                      {player.name}
+                                    </span>
+                                    <span
+                                      className={
+                                        idx === 0
+                                          ? "text-amber-400 font-medium"
+                                          : "text-muted-foreground"
+                                      }
+                                    >
+                                      {player.total}
+                                    </span>
+                                  </div>
+                                ))}
+                            </div>
+                          </div>
+                        ))}
+                      </div>
+                      <Separator className="my-4" />
+                      <AlertDialog>
+                        <AlertDialogTrigger asChild>
+                          <Button
+                            variant="destructive"
+                            size="sm"
+                            className="w-full"
+                          >
+                            Clear History
+                          </Button>
+                        </AlertDialogTrigger>
+                        <AlertDialogContent className="glass border-border/50">
+                          <AlertDialogHeader>
+                            <AlertDialogTitle>
+                              Clear all history?
+                            </AlertDialogTitle>
+                            <AlertDialogDescription>
+                              This will permanently delete all saved game
+                              records. This action cannot be undone.
+                            </AlertDialogDescription>
+                          </AlertDialogHeader>
+                          <AlertDialogFooter>
+                            <AlertDialogCancel>Cancel</AlertDialogCancel>
+                            <AlertDialogAction
+                              onClick={clearHistory}
+                              className="bg-destructive text-destructive-foreground hover:bg-destructive/90"
+                            >
+                              Clear History
+                            </AlertDialogAction>
+                          </AlertDialogFooter>
+                        </AlertDialogContent>
+                      </AlertDialog>
+                    </AccordionContent>
+                  </AccordionItem>
+                </Accordion>
+              </Card>
             )}
           </div>
         </div>
@@ -248,101 +379,206 @@ export default function ScoreKeeper() {
     );
   }
 
+  // Active Game View
+  const lowestScore = Math.min(
+    ...players.filter((p) => p.total < 100).map((p) => p.total)
+  );
+
   return (
-    <section id="scorekeeper" className="border-t border-white/10">
-      <div className="mx-auto max-w-6xl px-6 py-14">
-        <div className="flex flex-col sm:flex-row justify-between items-center mb-8">
+    <section id="scorekeeper" className="border-t border-border/50">
+      <div className="mx-auto max-w-6xl px-4 sm:px-6 py-12 md:py-16">
+        {/* Header */}
+        <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-8">
           <div>
-            <h2 className="text-3xl font-bold mb-2">Round {currentRound}</h2>
-            <p className="text-white/70">Enter scores for this round (lower is better)</p>
+            <Badge variant="outline" className="mb-2">
+              Live Game
+            </Badge>
+            <h2 className="text-2xl sm:text-3xl font-bold">
+              Round {currentRound}
+            </h2>
+            <p className="text-muted-foreground mt-1">
+              Enter scores for this round
+            </p>
           </div>
-          <div className="flex flex-col gap-3 mt-4 sm:mt-0">
-            <button
-              onClick={endGame}
-              className="px-4 py-2 bg-gradient-to-r from-orange-700 to-red-700 hover:from-orange-600 hover:to-red-600 rounded-lg font-semibold transition shadow-lg shadow-orange-900/40"
+          <div className="flex flex-wrap gap-2">
+            <Button
+              variant="outline"
+              size="sm"
+              onClick={previousRound}
+              disabled={currentRound === 1}
             >
-              End Game
-            </button>
-            <div className="flex gap-3">
-              <button
-                onClick={previousRound}
-                disabled={currentRound === 1}
-                className="px-4 py-2 bg-emerald-800 hover:bg-emerald-700 disabled:bg-slate-700 disabled:cursor-not-allowed disabled:opacity-50 rounded-lg font-semibold transition"
+              <svg
+                className="w-4 h-4 mr-1"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
               >
-                Previous
-              </button>
-              <button
-                onClick={nextRound}
-                className="px-4 py-2 bg-emerald-800 hover:bg-emerald-700 rounded-lg font-semibold transition"
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d="M15 19l-7-7 7-7"
+                />
+              </svg>
+              Prev
+            </Button>
+            <Button variant="outline" size="sm" onClick={nextRound}>
+              Next
+              <svg
+                className="w-4 h-4 ml-1"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
               >
-                Next
-              </button>
-            </div>
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d="M9 5l7 7-7 7"
+                />
+              </svg>
+            </Button>
+            <AlertDialog>
+              <AlertDialogTrigger asChild>
+                <Button variant="destructive" size="sm">
+                  End Game
+                </Button>
+              </AlertDialogTrigger>
+              <AlertDialogContent className="glass border-border/50">
+                <AlertDialogHeader>
+                  <AlertDialogTitle>End this game?</AlertDialogTitle>
+                  <AlertDialogDescription>
+                    The current scores will be saved to your game history. You
+                    can start a new game afterward.
+                  </AlertDialogDescription>
+                </AlertDialogHeader>
+                <AlertDialogFooter>
+                  <AlertDialogCancel>Continue Playing</AlertDialogCancel>
+                  <AlertDialogAction
+                    onClick={endGame}
+                    className="bg-destructive text-destructive-foreground hover:bg-destructive/90"
+                  >
+                    End Game
+                  </AlertDialogAction>
+                </AlertDialogFooter>
+              </AlertDialogContent>
+            </AlertDialog>
           </div>
         </div>
 
-        <div className="bg-slate-900/70 border border-white/10 rounded-xl backdrop-blur-md overflow-hidden shadow-xl">
-          <div className="overflow-x-auto">
-            <table className="w-full">
-              <thead className="bg-slate-900/50">
-                <tr>
-                  <th className="text-left p-4 font-semibold">Player</th>
-                  {Array.from({ length: Math.max(currentRound, 1) }, (_, i) => (
-                    <th key={i} className="text-center p-4 font-semibold w-20">
-                      R{i + 1}
-                    </th>
-                  ))}
-                  <th className="text-center p-4 font-semibold w-24 bg-slate-950/50">Total</th>
-                </tr>
-              </thead>
-              <tbody>
-                {players.map((player, playerIndex) => (
-                  <tr key={playerIndex} className={`border-t border-white/10 ${player.total >= 100 ? 'opacity-50 bg-red-900/20' : ''}`}>
-                    <td className="p-4 font-medium">
-                      {player.name}
-                      {player.total >= 100 && <span className="ml-2 text-red-400 text-xs">ELIMINATED</span>}
-                    </td>
-                    {Array.from({ length: Math.max(currentRound, 1) }, (_, roundIndex) => (
-                      <td key={roundIndex} className="p-4 text-center">
-                        {roundIndex < currentRound - 1 ? (
-                          <span className="text-white/80">{player.rounds[roundIndex] || 0}</span>
-                        ) : roundIndex === currentRound - 1 ? (
-                          <input
-                            type="text"
-                            value={player.rounds[roundIndex] ?? ''}
-                            onChange={(e) => {
-                              const value = e.target.value;
-                              // Allow empty, minus sign, and valid numbers (including negative)
-                              if (value === '' || value === '-' || /^-?\d+$/.test(value)) {
-                                addRoundScore(playerIndex, value === '' || value === '-' ? 0 : parseInt(value, 10));
-                              }
-                            }}
-                            className="w-16 px-2 py-1 bg-slate-950/50 border border-white/20 rounded text-center text-white focus:outline-none focus:border-red-700"
-                            placeholder="0"
-                          />
-                        ) : (
-                          <span className="text-white/40">-</span>
-                        )}
-                      </td>
-                    ))}
-                    <td className="p-4 text-center font-bold text-lg bg-slate-950/30">
-                      <span className={
-                        player.total >= 100 ? 'text-red-400' :
-                        player.total === Math.min(...players.filter(p => p.total < 100).map(p => p.total)) ? 'text-amber-400' : 'text-white'
-                      }>
-                        {player.total}
-                      </span>
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
+        {/* Score Cards - Mobile Optimized */}
+        <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+          {players.map((player, playerIndex) => {
+            const isEliminated = player.total >= 100;
+            const isLeading = player.total === lowestScore && !isEliminated;
+
+            return (
+              <Card
+                key={playerIndex}
+                className={`glass transition-all ${
+                  isEliminated
+                    ? "opacity-60 border-destructive/30 bg-destructive/5"
+                    : isLeading
+                    ? "border-amber-500/50 bg-amber-500/5 glow-orange"
+                    : "border-border/50"
+                }`}
+              >
+                <CardHeader className="pb-3">
+                  <div className="flex items-center justify-between">
+                    <div className="flex items-center gap-2">
+                      {isLeading && <span className="text-xl">👑</span>}
+                      <CardTitle
+                        className={`text-lg ${
+                          isEliminated ? "line-through" : ""
+                        }`}
+                      >
+                        {player.name}
+                      </CardTitle>
+                    </div>
+                    {isEliminated && (
+                      <Badge variant="destructive" className="text-xs">
+                        OUT
+                      </Badge>
+                    )}
+                  </div>
+                </CardHeader>
+                <CardContent className="space-y-4">
+                  {/* Current Round Input */}
+                  <div>
+                    <Label className="text-xs text-muted-foreground mb-2 block">
+                      Round {currentRound} Score
+                    </Label>
+                    <Input
+                      type="text"
+                      inputMode="numeric"
+                      value={player.rounds[currentRound - 1] ?? ""}
+                      onChange={(e) => {
+                        const value = e.target.value;
+                        if (
+                          value === "" ||
+                          value === "-" ||
+                          /^-?\d+$/.test(value)
+                        ) {
+                          addRoundScore(
+                            playerIndex,
+                            value === "" || value === "-"
+                              ? 0
+                              : parseInt(value, 10)
+                          );
+                        }
+                      }}
+                      placeholder="0"
+                      className="text-center text-xl font-bold h-14 bg-muted/50"
+                      disabled={isEliminated}
+                    />
+                  </div>
+
+                  {/* Total Score */}
+                  <div className="flex items-center justify-between p-3 rounded-lg bg-muted/30">
+                    <span className="text-sm text-muted-foreground">Total</span>
+                    <span
+                      className={`text-2xl font-bold ${
+                        isEliminated
+                          ? "text-destructive"
+                          : isLeading
+                          ? "text-amber-400"
+                          : "text-foreground"
+                      }`}
+                    >
+                      {player.total}
+                    </span>
+                  </div>
+
+                  {/* Round History */}
+                  {player.rounds.length > 0 && (
+                    <div className="flex flex-wrap gap-1.5">
+                      {player.rounds.map((score, roundIdx) => (
+                        <Badge
+                          key={roundIdx}
+                          variant="secondary"
+                          className={`text-xs ${
+                            roundIdx === currentRound - 1
+                              ? "ring-2 ring-primary"
+                              : ""
+                          }`}
+                        >
+                          R{roundIdx + 1}: {score || 0}
+                        </Badge>
+                      ))}
+                    </div>
+                  )}
+                </CardContent>
+              </Card>
+            );
+          })}
         </div>
 
-        <div className="mt-6 text-center">
-          <p className="text-sm text-white/60">
-            💡 Tip: Players are <strong>eliminated at 100 points</strong>. Last survivor wins! Red Kings = -1, Black Kings = +13
+        {/* Tips */}
+        <div className="mt-8 p-4 rounded-xl bg-muted/30 border border-border/50 text-center">
+          <p className="text-sm text-muted-foreground">
+            💡 <span className="font-medium">Tip:</span> Players are eliminated
+            at <span className="text-destructive font-medium">100 points</span>.
+            Red Kings = -1, Black Kings = +13
           </p>
         </div>
       </div>
