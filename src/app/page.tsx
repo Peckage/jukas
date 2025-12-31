@@ -17,14 +17,14 @@ export default function Home() {
         <div className="text-center space-y-6">
           {/* Logo for mobile */}
           <div className="md:hidden flex justify-center mb-4">
-            <div className="h-14 w-14 rounded-xl bg-gradient-to-br from-primary to-primary/70 flex items-center justify-center shadow-lg">
+            <div className="h-14 w-14 rounded-xl bg-linear-to-br from-primary to-primary/70 flex items-center justify-center shadow-lg">
               <span className="text-primary-foreground font-bold text-2xl">
                 J
               </span>
             </div>
           </div>
 
-          <h1 className="text-4xl sm:text-5xl md:text-6xl font-extrabold tracking-tight bg-gradient-to-r from-white via-white to-white/70 bg-clip-text text-transparent">
+          <h1 className="text-4xl sm:text-5xl md:text-6xl font-extrabold tracking-tight bg-linear-to-r from-white via-white to-white/70 bg-clip-text text-transparent">
             Jukas - The Card Game
           </h1>
 
@@ -180,9 +180,9 @@ export default function Home() {
 
           {/* Setup Guide Card */}
           <Link href="/setup" className="block group">
-            <Card className="card-hover glass border-emerald-500/30 bg-gradient-to-br from-emerald-950/30 to-transparent h-full">
+            <Card className="card-hover glass border-emerald-500/30 bg-linear-to-br from-emerald-950/30 to-transparent h-full">
               <CardHeader>
-                <div className="h-14 w-14 rounded-2xl bg-gradient-to-br from-emerald-500 to-teal-600 flex items-center justify-center mb-3 shadow-lg group-hover:scale-110 transition-transform">
+                <div className="h-14 w-14 rounded-2xl bg-linear-to-br from-emerald-500 to-teal-600 flex items-center justify-center mb-3 shadow-lg group-hover:scale-110 transition-transform">
                   <svg
                     className="w-7 h-7 text-white"
                     fill="none"
@@ -255,9 +255,9 @@ export default function Home() {
 
           {/* Full Rules Card */}
           <Link href="/rules" className="block group">
-            <Card className="card-hover glass border-blue-500/30 bg-gradient-to-br from-blue-950/30 to-transparent h-full">
+            <Card className="card-hover glass border-blue-500/30 bg-linear-to-br from-blue-950/30 to-transparent h-full">
               <CardHeader>
-                <div className="h-14 w-14 rounded-2xl bg-gradient-to-br from-blue-500 to-indigo-600 flex items-center justify-center mb-3 shadow-lg group-hover:scale-110 transition-transform">
+                <div className="h-14 w-14 rounded-2xl bg-linear-to-br from-blue-500 to-indigo-600 flex items-center justify-center mb-3 shadow-lg group-hover:scale-110 transition-transform">
                   <svg
                     className="w-7 h-7 text-white"
                     fill="none"

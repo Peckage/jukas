@@ -47,7 +47,7 @@ export default function SetupPage() {
                   {/* Step 1 */}
                   <div className="flex flex-col items-center text-center">
                     <div className="relative mb-4">
-                      <div className="h-16 w-16 sm:h-20 sm:w-20 rounded-2xl bg-gradient-to-br from-orange-500 to-red-600 flex items-center justify-center text-white text-2xl sm:text-3xl font-bold shadow-lg glow-orange">
+                      <div className="h-16 w-16 sm:h-20 sm:w-20 rounded-2xl bg-linear-to-br from-orange-500 to-red-600 flex items-center justify-center text-white text-2xl sm:text-3xl font-bold shadow-lg glow-orange">
                         1
                       </div>
                     </div>
@@ -60,7 +60,7 @@ export default function SetupPage() {
                   {/* Step 2 */}
                   <div className="flex flex-col items-center text-center">
                     <div className="relative mb-4">
-                      <div className="h-16 w-16 sm:h-20 sm:w-20 rounded-2xl bg-gradient-to-br from-emerald-500 to-teal-600 flex items-center justify-center text-white text-2xl sm:text-3xl font-bold shadow-lg glow-emerald">
+                      <div className="h-16 w-16 sm:h-20 sm:w-20 rounded-2xl bg-linear-to-br from-emerald-500 to-teal-600 flex items-center justify-center text-white text-2xl sm:text-3xl font-bold shadow-lg glow-emerald">
                         2
                       </div>
                     </div>
@@ -73,7 +73,7 @@ export default function SetupPage() {
                   {/* Step 3 */}
                   <div className="flex flex-col items-center text-center md:col-span-1 col-span-full">
                     <div className="relative mb-4">
-                      <div className="h-16 w-16 sm:h-20 sm:w-20 rounded-2xl bg-gradient-to-br from-amber-500 to-orange-600 flex items-center justify-center text-white text-2xl sm:text-3xl font-bold shadow-lg">
+                      <div className="h-16 w-16 sm:h-20 sm:w-20 rounded-2xl bg-linear-to-br from-amber-500 to-orange-600 flex items-center justify-center text-white text-2xl sm:text-3xl font-bold shadow-lg">
                         3
                       </div>
                     </div>
@@ -86,7 +86,7 @@ export default function SetupPage() {
                 </div>
 
                 {/* Tip Card */}
-                <div className="mt-8 p-4 sm:p-5 rounded-xl bg-gradient-to-r from-amber-500/10 to-orange-500/10 border border-amber-500/30">
+                <div className="mt-8 p-4 sm:p-5 rounded-xl bg-linear-to-r from-amber-500/10 to-orange-500/10 border border-amber-500/30">
                   <div className="flex items-start gap-3">
                     <span className="text-2xl shrink-0">💡</span>
                     <div>
@@ -120,7 +120,7 @@ export default function SetupPage() {
                         {[1, 2, 3, 4].map((i) => (
                           <div
                             key={i}
-                            className="w-11 h-14 sm:w-14 sm:h-18 rounded-lg bg-gradient-to-br from-blue-600 to-blue-700 border-2 border-blue-400 flex items-center justify-center shadow-md"
+                            className="w-11 h-14 sm:w-14 sm:h-18 rounded-lg bg-linear-to-br from-blue-600 to-blue-700 border-2 border-blue-400 flex items-center justify-center shadow-md"
                           >
                             <span className="text-white font-bold text-lg">
                               ?
@@ -139,7 +139,7 @@ export default function SetupPage() {
                     <div className="space-y-6">
                       <div>
                         <h4 className="font-semibold mb-3">Draw Pile</h4>
-                        <div className="w-14 h-18 sm:w-16 sm:h-20 mx-auto rounded-lg bg-gradient-to-br from-blue-700 to-blue-800 border-2 border-blue-500 flex items-center justify-center shadow-lg">
+                        <div className="w-14 h-18 sm:w-16 sm:h-20 mx-auto rounded-lg bg-linear-to-br from-blue-700 to-blue-800 border-2 border-blue-500 flex items-center justify-center shadow-lg">
                           <span className="text-white font-bold text-xl">
                             ?
                           </span>
@@ -184,7 +184,7 @@ export default function SetupPage() {
                         {[1, 2, 3, 4].map((i) => (
                           <div
                             key={i}
-                            className="w-11 h-14 sm:w-14 sm:h-18 rounded-lg bg-gradient-to-br from-gray-600 to-gray-700 border-2 border-gray-400 flex items-center justify-center shadow-md"
+                            className="w-11 h-14 sm:w-14 sm:h-18 rounded-lg bg-linear-to-br from-gray-600 to-gray-700 border-2 border-gray-400 flex items-center justify-center shadow-md"
                           >
                             <span className="text-white font-bold text-lg">
                               ?
@@ -200,7 +200,7 @@ export default function SetupPage() {
                 </div>
 
                 {/* Layout Tip */}
-                <div className="mt-8 p-4 sm:p-5 rounded-xl bg-gradient-to-r from-emerald-500/10 to-teal-500/10 border border-emerald-500/30">
+                <div className="mt-8 p-4 sm:p-5 rounded-xl bg-linear-to-r from-emerald-500/10 to-teal-500/10 border border-emerald-500/30">
                   <div className="flex items-start gap-3">
                     <span className="text-2xl shrink-0">📐</span>
                     <div>
@@ -230,7 +230,7 @@ export default function SetupPage() {
                   </h4>
                   <div className="flex flex-wrap items-center justify-center gap-3 sm:gap-4">
                     <div className="flex flex-col items-center">
-                      <div className="w-11 h-14 sm:w-14 sm:h-18 rounded-lg bg-gradient-to-br from-blue-700 to-blue-800 border-2 border-blue-500 flex items-center justify-center shadow-md mb-2">
+                      <div className="w-11 h-14 sm:w-14 sm:h-18 rounded-lg bg-linear-to-br from-blue-700 to-blue-800 border-2 border-blue-500 flex items-center justify-center shadow-md mb-2">
                         <span className="text-white font-bold">?</span>
                       </div>
                       <span className="text-xs text-muted-foreground">
@@ -322,7 +322,7 @@ export default function SetupPage() {
                     </svg>
 
                     <div className="flex flex-col items-center">
-                      <div className="w-11 h-14 sm:w-14 sm:h-18 rounded-lg bg-gradient-to-br from-blue-600 to-blue-700 border-2 border-blue-400 flex items-center justify-center shadow-md mb-2">
+                      <div className="w-11 h-14 sm:w-14 sm:h-18 rounded-lg bg-linear-to-br from-blue-600 to-blue-700 border-2 border-blue-400 flex items-center justify-center shadow-md mb-2">
                         <span className="text-white font-bold">?</span>
                       </div>
                       <span className="text-xs text-muted-foreground text-center">
@@ -358,7 +358,7 @@ export default function SetupPage() {
                 </div>
 
                 {/* Strategy Tip */}
-                <div className="p-4 sm:p-5 rounded-xl bg-gradient-to-r from-emerald-500/10 to-teal-500/10 border border-emerald-500/30">
+                <div className="p-4 sm:p-5 rounded-xl bg-linear-to-r from-emerald-500/10 to-teal-500/10 border border-emerald-500/30">
                   <div className="flex items-start gap-3">
                     <span className="text-2xl shrink-0">🎯</span>
                     <div>

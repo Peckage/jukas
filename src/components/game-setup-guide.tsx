@@ -125,7 +125,7 @@ export default function GameSetupGuide() {
                         {[1, 2, 3, 4].map((i) => (
                           <div
                             key={i}
-                            className="w-11 h-14 sm:w-14 sm:h-18 rounded-lg bg-gradient-to-br from-blue-600 to-blue-700 border-2 border-blue-400 flex items-center justify-center shadow-md"
+                            className="w-11 h-14 sm:w-14 sm:h-18 rounded-lg bg-linear-to-br from-blue-600 to-blue-700 border-2 border-blue-400 flex items-center justify-center shadow-md"
                           >
                             <span className="text-white font-bold text-lg">
                               ?
@@ -144,7 +144,7 @@ export default function GameSetupGuide() {
                     <div className="space-y-6">
                       <div>
                         <h4 className="font-semibold mb-3">Draw Pile</h4>
-                        <div className="w-14 h-18 sm:w-16 sm:h-20 mx-auto rounded-lg bg-gradient-to-br from-blue-700 to-blue-800 border-2 border-blue-500 flex items-center justify-center shadow-lg">
+                        <div className="w-14 h-18 sm:w-16 sm:h-20 mx-auto rounded-lg bg-linear-to-br from-blue-700 to-blue-800 border-2 border-blue-500 flex items-center justify-center shadow-lg">
                           <span className="text-white font-bold text-xl">
                             ?
                           </span>
@@ -189,7 +189,7 @@ export default function GameSetupGuide() {
                         {[1, 2, 3, 4].map((i) => (
                           <div
                             key={i}
-                            className="w-11 h-14 sm:w-14 sm:h-18 rounded-lg bg-gradient-to-br from-gray-600 to-gray-700 border-2 border-gray-400 flex items-center justify-center shadow-md"
+                            className="w-11 h-14 sm:w-14 sm:h-18 rounded-lg bg-linear-to-br from-gray-600 to-gray-700 border-2 border-gray-400 flex items-center justify-center shadow-md"
                           >
                             <span className="text-white font-bold text-lg">
                               ?
@@ -205,7 +205,7 @@ export default function GameSetupGuide() {
                 </div>
 
                 {/* Layout Tip */}
-                <div className="mt-8 p-4 sm:p-5 rounded-xl bg-gradient-to-r from-emerald-500/10 to-teal-500/10 border border-emerald-500/30">
+                <div className="mt-8 p-4 sm:p-5 rounded-xl bg-linear-to-r from-emerald-500/10 to-teal-500/10 border border-emerald-500/30">
                   <div className="flex items-start gap-3">
                     <span className="text-2xl shrink-0">📐</span>
                     <div>
@@ -235,7 +235,7 @@ export default function GameSetupGuide() {
                   </h4>
                   <div className="flex flex-wrap items-center justify-center gap-3 sm:gap-4">
                     <div className="flex flex-col items-center">
-                      <div className="w-11 h-14 sm:w-14 sm:h-18 rounded-lg bg-gradient-to-br from-blue-700 to-blue-800 border-2 border-blue-500 flex items-center justify-center shadow-md mb-2">
+                      <div className="w-11 h-14 sm:w-14 sm:h-18 rounded-lg bg-linear-to-br from-blue-700 to-blue-800 border-2 border-blue-500 flex items-center justify-center shadow-md mb-2">
                         <span className="text-white font-bold">?</span>
                       </div>
                       <span className="text-xs text-muted-foreground">
@@ -327,7 +327,7 @@ export default function GameSetupGuide() {
                     </svg>
 
                     <div className="flex flex-col items-center">
-                      <div className="w-11 h-14 sm:w-14 sm:h-18 rounded-lg bg-gradient-to-br from-blue-600 to-blue-700 border-2 border-blue-400 flex items-center justify-center shadow-md mb-2">
+                      <div className="w-11 h-14 sm:w-14 sm:h-18 rounded-lg bg-linear-to-br from-blue-600 to-blue-700 border-2 border-blue-400 flex items-center justify-center shadow-md mb-2">
                         <span className="text-white font-bold">?</span>
                       </div>
                       <span className="text-xs text-muted-foreground text-center">
@@ -363,7 +363,7 @@ export default function GameSetupGuide() {
                 </div>
 
                 {/* Strategy Tip */}
-                <div className="p-4 sm:p-5 rounded-xl bg-gradient-to-r from-emerald-500/10 to-teal-500/10 border border-emerald-500/30">
+                <div className="p-4 sm:p-5 rounded-xl bg-linear-to-r from-emerald-500/10 to-teal-500/10 border border-emerald-500/30">
                   <div className="flex items-start gap-3">
                     <span className="text-2xl shrink-0">🎯</span>
                     <div>

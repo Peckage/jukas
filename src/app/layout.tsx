@@ -58,17 +58,17 @@ export default function RootLayout({
       >
         {/* Animated background */}
         <div className="pointer-events-none fixed inset-0 -z-10">
-          <div className="absolute inset-0 bg-gradient-to-br from-background via-background to-background" />
-          <div className="absolute -top-32 -right-32 h-[500px] w-[500px] rounded-full bg-gradient-to-br from-primary/10 via-primary/5 to-transparent blur-3xl" />
-          <div className="absolute top-1/3 -left-32 h-[600px] w-[600px] rounded-full bg-gradient-to-r from-accent/8 via-accent/4 to-transparent blur-3xl" />
-          <div className="absolute inset-0 bg-[linear-gradient(rgba(255,255,255,0.015)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.015)_1px,transparent_1px)] bg-[size:64px_64px]" />
+          <div className="absolute inset-0 bg-linear-to-br from-background via-background to-background" />
+          <div className="absolute -top-32 -right-32 h-125 w-125 rounded-full bg-linear-to-br from-primary/10 via-primary/5 to-transparent blur-3xl" />
+          <div className="absolute top-1/3 -left-32 h-150 w-150 rounded-full bg-linear-to-r from-accent/8 via-accent/4 to-transparent blur-3xl" />
+          <div className="absolute inset-0 bg-[linear-gradient(rgba(255,255,255,0.015)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.015)_1px,transparent_1px)] bg-size[64px_64px]" />
         </div>
 
         {/* Desktop Navigation - hidden on mobile */}
         <nav className="sticky top-0 z-40 hidden md:block glass border-b border-border/50">
           <div className="mx-auto flex max-w-6xl items-center justify-between px-6 py-3">
             <Link href="/" className="flex items-center gap-2.5 group">
-              <div className="h-8 w-8 rounded-lg bg-gradient-to-br from-primary to-primary/80 flex items-center justify-center shadow-lg group-hover:shadow-primary/25 transition-shadow">
+              <div className="h-8 w-8 rounded-lg bg-linear-to-br from-primary to-primary/80 flex items-center justify-center shadow-lg group-hover:shadow-primary/25 transition-shadow">
                 <span className="text-primary-foreground font-bold text-sm">
                   J
                 </span>
