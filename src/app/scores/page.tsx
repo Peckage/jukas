@@ -14,6 +14,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Badge } from "@/components/ui/badge";
 import { Separator } from "@/components/ui/separator";
+import { Progress } from "@/components/ui/progress";
 import {
   Accordion,
   AccordionContent,
@@ -31,6 +32,26 @@ import {
   AlertDialogTitle,
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
+import {
+  BarChart3,
+  Play,
+  Plus,
+  X,
+  Settings as SettingsIcon,
+  ChevronDown,
+  ChevronLeft,
+  ChevronRight,
+  Layers,
+  BookOpen,
+  Zap,
+  Skull,
+  Crown,
+  Check,
+  Minus,
+  Trophy,
+  Trash2,
+  History,
+} from "lucide-react";
 
 interface Player {
   name: string;
@@ -40,7 +61,7 @@ interface Player {
 
 interface GameSettings {
   eliminationThreshold: number;
-  maxPlayers: number | null; // null = unlimited
+  maxPlayers: number | null;
 }
 
 interface GameSession {
@@ -59,10 +80,9 @@ const SETTINGS_KEY = "jukasGameSettings";
 
 const DEFAULT_SETTINGS: GameSettings = {
   eliminationThreshold: 100,
-  maxPlayers: null, // Unlimited by default
+  maxPlayers: null,
 };
 
-// Confetti component for victory celebration
 function Confetti({ active }: { active: boolean }) {
   const [particles, setParticles] = useState<
     Array<{
@@ -94,8 +114,6 @@ function Confetti({ active }: { active: boolean }) {
         size: 6 + Math.random() * 8,
       }));
       setParticles(newParticles);
-
-      // Clean up after animation
       const timer = setTimeout(() => setParticles([]), 5000);
       return () => clearTimeout(timer);
     }
@@ -124,7 +142,6 @@ function Confetti({ active }: { active: boolean }) {
   );
 }
 
-// Victory screen component
 function VictoryScreen({
   winner,
   onClose,
@@ -135,41 +152,41 @@ function VictoryScreen({
   settings: GameSettings;
 }) {
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-background/80 backdrop-blur-sm">
+    <div className="fixed inset-0 z-50 flex items-center justify-center bg-background/85 backdrop-blur-md">
       <Confetti active={true} />
-      <div className="animate-victory-entrance text-center p-8 max-w-md mx-4">
+      <div className="animate-victory-entrance text-center p-8 max-w-sm mx-4">
         <div className="mb-6">
-          <span className="animate-trophy text-8xl">🏆</span>
+          <span className="animate-trophy text-7xl">🏆</span>
         </div>
-        <h1 className="text-4xl font-bold mb-2 bg-linear-to-r from-primary via-accent to-primary bg-clip-text text-transparent">
+        <h1 className="text-3xl font-bold mb-2 bg-linear-to-r from-primary via-accent to-primary bg-clip-text text-transparent">
           Victory!
         </h1>
-        <p className="text-2xl font-semibold text-foreground mb-4">
+        <p className="text-xl font-semibold text-foreground mb-4">
           {winner.name} Wins!
         </p>
-        <div className="flex items-center justify-center gap-2 mb-6">
+        <div className="flex items-center justify-center gap-2 mb-5">
           <span
-            className="animate-sparkle text-2xl"
+            className="animate-sparkle text-xl"
             style={{ animationDelay: "0s" }}
           >
             ✨
           </span>
-          <Badge className="text-lg px-4 py-2 bg-linear-to-r from-primary to-accent text-white">
-            Final Score: {winner.total} points
+          <Badge className="text-base px-4 py-1.5 bg-linear-to-r from-primary to-accent text-white">
+            Final Score: {winner.total}
           </Badge>
           <span
-            className="animate-sparkle text-2xl"
+            className="animate-sparkle text-xl"
             style={{ animationDelay: "0.5s" }}
           >
             ✨
           </span>
         </div>
-        <p className="text-muted-foreground mb-6">
+        <p className="text-sm text-muted-foreground mb-6">
           Survived under {settings.eliminationThreshold} points!
         </p>
         <Button
           onClick={onClose}
-          className="bg-primary hover:bg-primary/90"
+          className="bg-primary hover:bg-primary/90 h-11 px-8 press-effect"
           size="lg"
         >
           Continue
@@ -189,23 +206,16 @@ export default function ScoresPage() {
   const [currentRound, setCurrentRound] = useState(1);
   const [gameHistory, setGameHistory] = useState<GameSession[]>([]);
   const [isLoaded, setIsLoaded] = useState(false);
-
-  // Game settings
   const [settings, setSettings] = useState<GameSettings>(DEFAULT_SETTINGS);
   const [showSettings, setShowSettings] = useState(false);
-
-  // Animation states
   const [justEliminated, setJustEliminated] = useState<Set<number>>(new Set());
   const [showVictory, setShowVictory] = useState(false);
   const [winner, setWinner] = useState<Player | null>(null);
   const prevPlayersRef = useRef<Player[]>([]);
-
-  // Track pending scores for each player (not yet confirmed)
   const [pendingScores, setPendingScores] = useState<Record<number, number>>(
     {}
   );
 
-  // Confirm a pending score for a player
   const confirmScore = (playerIndex: number) => {
     if (pendingScores[playerIndex] !== undefined) {
       addRoundScore(playerIndex, pendingScores[playerIndex]);
@@ -217,12 +227,10 @@ export default function ScoresPage() {
     }
   };
 
-  // Update pending score (doesn't save until confirmed)
   const updatePendingScore = (playerIndex: number, value: number) => {
     setPendingScores((prev) => ({ ...prev, [playerIndex]: value }));
   };
 
-  // Get the display value for a player's current round
   const getDisplayScore = (playerIndex: number, player: Player) => {
     if (pendingScores[playerIndex] !== undefined) {
       return pendingScores[playerIndex];
@@ -230,9 +238,7 @@ export default function ScoresPage() {
     return player.rounds[currentRound - 1] ?? 0;
   };
 
-  // Load all data from localStorage on mount
   useEffect(() => {
-    // Load saved player names
     const savedNames = localStorage.getItem(PLAYER_NAMES_KEY);
     if (savedNames) {
       try {
@@ -241,8 +247,6 @@ export default function ScoresPage() {
         console.error("Failed to load player names:", e);
       }
     }
-
-    // Load saved settings
     const savedSettings = localStorage.getItem(SETTINGS_KEY);
     if (savedSettings) {
       try {
@@ -251,8 +255,6 @@ export default function ScoresPage() {
         console.error("Failed to load settings:", e);
       }
     }
-
-    // Load game history
     const savedHistory = localStorage.getItem(HISTORY_KEY);
     if (savedHistory) {
       try {
@@ -261,8 +263,6 @@ export default function ScoresPage() {
         console.error("Failed to load game history:", e);
       }
     }
-
-    // Load active game (most important for persistence)
     const savedGame = localStorage.getItem(ACTIVE_GAME_KEY);
     if (savedGame) {
       try {
@@ -277,11 +277,9 @@ export default function ScoresPage() {
         console.error("Failed to load active game:", e);
       }
     }
-
     setIsLoaded(true);
   }, []);
 
-  // Save active game whenever it changes
   const saveActiveGame = useCallback(() => {
     if (gameActive && players.length > 0) {
       const gameData = {
@@ -295,32 +293,24 @@ export default function ScoresPage() {
   }, [gameActive, players, currentRound, settings]);
 
   useEffect(() => {
-    if (isLoaded) {
-      saveActiveGame();
-    }
+    if (isLoaded) saveActiveGame();
   }, [isLoaded, saveActiveGame]);
 
-  // Save settings when they change
   useEffect(() => {
     if (isLoaded && !gameActive) {
       localStorage.setItem(SETTINGS_KEY, JSON.stringify(settings));
     }
   }, [settings, isLoaded, gameActive]);
 
-  // Save player names when they change
   useEffect(() => {
     if (isLoaded && !gameActive) {
       localStorage.setItem(PLAYER_NAMES_KEY, JSON.stringify(playerNames));
     }
   }, [playerNames, isLoaded, gameActive]);
 
-  // Check for eliminations and winner
   useEffect(() => {
     if (!gameActive || players.length === 0) return;
-
     const prevPlayers = prevPlayersRef.current;
-
-    // Find newly eliminated players
     const newlyEliminated = new Set<number>();
     players.forEach((player, index) => {
       const wasActive =
@@ -330,19 +320,14 @@ export default function ScoresPage() {
         newlyEliminated.add(index);
       }
     });
-
     if (newlyEliminated.size > 0) {
       setJustEliminated(newlyEliminated);
-      // Clear animation after it plays
       setTimeout(() => setJustEliminated(new Set()), 1500);
     }
-
-    // Check for winner (only 1 player remaining)
     const activePlayers = players.filter(
       (p) => p.total < settings.eliminationThreshold
     );
     if (activePlayers.length === 1 && players.length > 1) {
-      // Make sure there were eliminated players (game actually happened)
       const eliminatedCount = players.filter(
         (p) => p.total >= settings.eliminationThreshold
       ).length;
@@ -351,7 +336,6 @@ export default function ScoresPage() {
         setShowVictory(true);
       }
     }
-
     prevPlayersRef.current = [...players];
   }, [players, gameActive, settings.eliminationThreshold]);
 
@@ -361,7 +345,6 @@ export default function ScoresPage() {
   };
 
   const addPlayer = () => {
-    // Check max players limit if set
     if (
       settings.maxPlayers === null ||
       playerNames.length < settings.maxPlayers
@@ -407,14 +390,9 @@ export default function ScoresPage() {
     setPlayers(newPlayers);
   };
 
-  const nextRound = () => {
-    setCurrentRound(currentRound + 1);
-  };
-
+  const nextRound = () => setCurrentRound(currentRound + 1);
   const previousRound = () => {
-    if (currentRound > 1) {
-      setCurrentRound(currentRound - 1);
-    }
+    if (currentRound > 1) setCurrentRound(currentRound - 1);
   };
 
   const endGame = (saveToHistory: boolean = true) => {
@@ -430,10 +408,7 @@ export default function ScoresPage() {
       const updatedHistory = [gameSession, ...gameHistory];
       saveGameHistory(updatedHistory);
     }
-
-    // Clear active game from localStorage
     localStorage.removeItem(ACTIVE_GAME_KEY);
-
     setGameActive(false);
     setPlayers([]);
     setCurrentRound(1);
@@ -442,9 +417,7 @@ export default function ScoresPage() {
     setJustEliminated(new Set());
   };
 
-  const clearHistory = () => {
-    saveGameHistory([]);
-  };
+  const clearHistory = () => saveGameHistory([]);
 
   const formatDate = (dateStr: string) => {
     return new Date(dateStr).toLocaleDateString("en-US", {
@@ -455,59 +428,65 @@ export default function ScoresPage() {
     });
   };
 
-  // Loading state
   if (!isLoaded) {
     return (
       <div className="min-h-screen bg-background flex items-center justify-center">
-        <div className="animate-pulse text-muted-foreground">Loading...</div>
+        <div className="animate-pulse text-muted-foreground text-sm">
+          Loading...
+        </div>
       </div>
     );
   }
 
-  // Setup View
+  // ===== Setup View =====
   if (!gameActive) {
     return (
       <div className="pb-24 md:pb-0">
-        <div className="mx-auto max-w-4xl px-4 sm:px-6 py-6">
+        <div className="mx-auto max-w-4xl px-5 sm:px-6 py-6">
           {/* Page Header */}
           <div className="text-center mb-8">
+            <div className="inline-flex items-center justify-center w-12 h-12 rounded-2xl bg-primary/15 mb-4">
+              <BarChart3 className="w-6 h-6 text-primary" />
+            </div>
             <h1 className="text-2xl sm:text-3xl font-bold mb-2">
-              🎮 Score Keeper
+              Score Keeper
             </h1>
             <p className="text-sm text-muted-foreground">
               Track scores for your Jukas games
             </p>
           </div>
 
-          <div className="max-w-lg mx-auto space-y-6">
+          <div className="max-w-lg mx-auto space-y-5">
             {/* New Game Card */}
-            <Card className="glass border-border/50 shadow-xl">
-              <CardHeader>
-                <CardTitle className="flex items-center gap-2">
-                  <span className="text-2xl">🎮</span>
+            <Card className="glass border-border/30 shadow-xl">
+              <CardHeader className="pb-4">
+                <CardTitle className="flex items-center gap-2.5 text-base">
+                  <div className="w-8 h-8 rounded-lg bg-primary/15 flex items-center justify-center">
+                    <Play className="w-4 h-4 text-primary" />
+                  </div>
                   New Game
                 </CardTitle>
-                <CardDescription>
+                <CardDescription className="text-sm">
                   Add players and customize settings
                 </CardDescription>
               </CardHeader>
-              <CardContent className="space-y-6">
+              <CardContent className="space-y-5">
                 {/* Players Section */}
-                <div className="space-y-3">
+                <div className="space-y-2.5">
                   <div className="flex items-center justify-between">
                     <Label className="text-sm font-medium">Players</Label>
                     <span className="text-xs text-muted-foreground">
                       {playerNames.length}{" "}
                       {settings.maxPlayers
                         ? `/ ${settings.maxPlayers}`
-                        : "(unlimited)"}
+                        : ""}
                     </span>
                   </div>
                   {playerNames.map((name, index) => (
                     <div
                       key={index}
                       className="flex gap-2 animate-slide-up"
-                      style={{ animationDelay: `${index * 50}ms` }}
+                      style={{ animationDelay: `${index * 40}ms` }}
                     >
                       <Input
                         type="text"
@@ -516,28 +495,16 @@ export default function ScoresPage() {
                           updatePlayerName(index, e.target.value)
                         }
                         placeholder={`Player ${index + 1}`}
-                        className="flex-1 bg-muted/50 border-border/50"
+                        className="flex-1 bg-muted/30 border-border/30 h-11 text-sm"
                       />
                       {playerNames.length > 2 && (
                         <Button
                           variant="destructive"
                           size="icon"
                           onClick={() => removePlayer(index)}
-                          className="shrink-0"
+                          className="shrink-0 h-11 w-11 press-effect"
                         >
-                          <svg
-                            className="w-4 h-4"
-                            fill="none"
-                            stroke="currentColor"
-                            viewBox="0 0 24 24"
-                          >
-                            <path
-                              strokeLinecap="round"
-                              strokeLinejoin="round"
-                              strokeWidth={2}
-                              d="M6 18L18 6M6 6l12 12"
-                            />
-                          </svg>
+                          <X className="w-4 h-4" />
                         </Button>
                       )}
                     </div>
@@ -546,84 +513,44 @@ export default function ScoresPage() {
                   <Button
                     variant="outline"
                     onClick={addPlayer}
-                    className="w-full border-dashed"
+                    className="w-full border-dashed border-border/40 h-11 text-sm press-effect"
                     disabled={
                       settings.maxPlayers !== null &&
                       playerNames.length >= settings.maxPlayers
                     }
                   >
-                    <svg
-                      className="w-4 h-4 mr-2"
-                      fill="none"
-                      stroke="currentColor"
-                      viewBox="0 0 24 24"
-                    >
-                      <path
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        strokeWidth={2}
-                        d="M12 4v16m8-8H4"
-                      />
-                    </svg>
+                    <Plus className="w-4 h-4 mr-2" />
                     Add Player
                   </Button>
 
                   {playerNames.length > 6 && (
-                    <p className="text-xs text-primary/80 text-center">
-                      💡 Recommended: 2-6 players for optimal gameplay
+                    <p className="text-xs text-primary/70 text-center">
+                      Recommended: 2-6 players for optimal gameplay
                     </p>
                   )}
                 </div>
 
-                <Separator className="bg-border/50" />
+                <Separator className="bg-border/20" />
 
                 {/* Game Settings */}
-                <div className="space-y-4">
+                <div className="space-y-3">
                   <button
                     onClick={() => setShowSettings(!showSettings)}
-                    className="flex items-center justify-between w-full text-left"
+                    className="flex items-center justify-between w-full text-left group"
                   >
-                    <Label className="text-sm font-medium cursor-pointer flex items-center gap-2">
-                      <svg
-                        className="w-4 h-4"
-                        fill="none"
-                        stroke="currentColor"
-                        viewBox="0 0 24 24"
-                      >
-                        <path
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                          strokeWidth={2}
-                          d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"
-                        />
-                        <path
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                          strokeWidth={2}
-                          d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"
-                        />
-                      </svg>
+                    <span className="text-sm font-medium flex items-center gap-2 cursor-pointer">
+                      <SettingsIcon className="w-4 h-4 text-muted-foreground" />
                       Game Settings
-                    </Label>
-                    <svg
-                      className={`w-4 h-4 transition-transform ${
+                    </span>
+                    <ChevronDown
+                      className={`w-4 h-4 text-muted-foreground transition-transform duration-200 ${
                         showSettings ? "rotate-180" : ""
                       }`}
-                      fill="none"
-                      stroke="currentColor"
-                      viewBox="0 0 24 24"
-                    >
-                      <path
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        strokeWidth={2}
-                        d="M19 9l-7 7-7-7"
-                      />
-                    </svg>
+                    />
                   </button>
 
                   {showSettings && (
-                    <div className="space-y-4 p-4 rounded-lg bg-muted/30 border border-border/50 animate-slide-up">
+                    <div className="space-y-4 p-4 rounded-xl bg-muted/15 border border-border/20 animate-slide-up">
                       {/* Elimination Threshold */}
                       <div className="space-y-2">
                         <Label className="text-xs text-muted-foreground">
@@ -643,17 +570,13 @@ export default function ScoresPage() {
                               })
                             }
                             min={10}
-                            className="bg-muted/50 border-border/50"
+                            className="bg-muted/30 border-border/30 h-10"
                           />
                           <span className="flex items-center text-sm text-muted-foreground whitespace-nowrap">
-                            points
+                            pts
                           </span>
                         </div>
-                        <p className="text-xs text-muted-foreground">
-                          Players are eliminated when reaching this score.
-                          Default: 100
-                        </p>
-                        <div className="flex gap-2 flex-wrap">
+                        <div className="flex gap-1.5 flex-wrap">
                           {[50, 100, 150, 200].map((val) => (
                             <Button
                               key={val}
@@ -669,7 +592,7 @@ export default function ScoresPage() {
                                   eliminationThreshold: val,
                                 })
                               }
-                              className="text-xs"
+                              className="text-xs h-8 press-effect"
                             >
                               {val}
                             </Button>
@@ -682,7 +605,7 @@ export default function ScoresPage() {
                         <Label className="text-xs text-muted-foreground">
                           Max Players
                         </Label>
-                        <div className="flex gap-2 flex-wrap">
+                        <div className="flex gap-1.5 flex-wrap">
                           <Button
                             variant={
                               settings.maxPlayers === null
@@ -693,9 +616,9 @@ export default function ScoresPage() {
                             onClick={() =>
                               setSettings({ ...settings, maxPlayers: null })
                             }
-                            className="text-xs"
+                            className="text-xs h-8 press-effect"
                           >
-                            Unlimited
+                            No Limit
                           </Button>
                           {[4, 6, 8, 10].map((val) => (
                             <Button
@@ -709,15 +632,12 @@ export default function ScoresPage() {
                               onClick={() =>
                                 setSettings({ ...settings, maxPlayers: val })
                               }
-                              className="text-xs"
+                              className="text-xs h-8 press-effect"
                             >
                               {val}
                             </Button>
                           ))}
                         </div>
-                        <p className="text-xs text-muted-foreground">
-                          Limit how many players can join. Recommended: 2-6
-                        </p>
                       </div>
                     </div>
                   )}
@@ -725,71 +645,59 @@ export default function ScoresPage() {
 
                 <Button
                   onClick={startNewGame}
-                  className="w-full bg-primary hover:bg-primary/90 shadow-lg"
+                  className="w-full bg-primary hover:bg-primary/90 shadow-lg shadow-primary/20 h-12 text-base font-semibold press-effect"
                   size="lg"
                 >
-                  <svg
-                    className="w-5 h-5 mr-2"
-                    fill="none"
-                    stroke="currentColor"
-                    viewBox="0 0 24 24"
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth={2}
-                      d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z"
-                    />
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth={2}
-                      d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
-                    />
-                  </svg>
-                  Start Game ({playerNames.length} players,{" "}
-                  {settings.eliminationThreshold}pt limit)
+                  <Play className="w-5 h-5 mr-2" />
+                  Start Game
                 </Button>
               </CardContent>
             </Card>
 
             {/* Game History */}
             {gameHistory.length > 0 && (
-              <Card className="glass border-border/50">
+              <Card className="glass border-border/30">
                 <Accordion type="single" collapsible>
                   <AccordionItem value="history" className="border-none">
-                    <AccordionTrigger className="px-6 py-4 hover:no-underline">
-                      <div className="flex items-center gap-2">
-                        <span className="text-xl">📊</span>
-                        <span className="font-semibold">Game History</span>
-                        <Badge variant="secondary" className="ml-2">
+                    <AccordionTrigger className="px-5 py-4 hover:no-underline">
+                      <div className="flex items-center gap-2.5">
+                        <History className="w-4 h-4 text-muted-foreground" />
+                        <span className="font-semibold text-sm">
+                          Game History
+                        </span>
+                        <Badge
+                          variant="secondary"
+                          className="ml-1 h-5 text-[10px]"
+                        >
                           {gameHistory.length}
                         </Badge>
                       </div>
                     </AccordionTrigger>
-                    <AccordionContent className="px-6 pb-6">
-                      <div className="space-y-3 max-h-64 overflow-y-auto">
+                    <AccordionContent className="px-5 pb-5">
+                      <div className="space-y-2.5 max-h-64 overflow-y-auto">
                         {gameHistory.map((game) => (
                           <div
                             key={game.id}
-                            className="p-4 rounded-xl bg-muted/30 border border-border/50"
+                            className="p-3.5 rounded-xl bg-muted/15 border border-border/20"
                           >
-                            <div className="flex items-center justify-between mb-3">
-                              <span className="text-sm text-muted-foreground">
+                            <div className="flex items-center justify-between mb-2.5">
+                              <span className="text-xs text-muted-foreground">
                                 {formatDate(game.date)}
                               </span>
-                              <Badge variant="outline" className="text-xs">
-                                {game.players.length} players •{" "}
-                                {game.currentRound} rounds
+                              <Badge
+                                variant="outline"
+                                className="text-[10px] h-5 border-border/30"
+                              >
+                                {game.players.length}p · {game.currentRound}r
                               </Badge>
                             </div>
-                            <div className="grid grid-cols-2 gap-2">
+                            <div className="grid grid-cols-2 gap-1.5">
                               {game.players
                                 .sort((a, b) => a.total - b.total)
                                 .map((player, idx) => (
                                   <div
                                     key={idx}
-                                    className="flex justify-between text-sm"
+                                    className="flex justify-between text-xs"
                                   >
                                     <span
                                       className={
@@ -798,7 +706,9 @@ export default function ScoresPage() {
                                           : "text-muted-foreground"
                                       }
                                     >
-                                      {idx === 0 && "🏆 "}
+                                      {idx === 0 && (
+                                        <Trophy className="w-3 h-3 inline mr-1" />
+                                      )}
                                       {player.name}
                                     </span>
                                     <span
@@ -816,32 +726,34 @@ export default function ScoresPage() {
                           </div>
                         ))}
                       </div>
-                      <Separator className="my-4" />
+                      <Separator className="my-3 bg-border/20" />
                       <AlertDialog>
                         <AlertDialogTrigger asChild>
                           <Button
                             variant="destructive"
                             size="sm"
-                            className="w-full"
+                            className="w-full h-9 text-xs press-effect"
                           >
+                            <Trash2 className="w-3.5 h-3.5 mr-1.5" />
                             Clear History
                           </Button>
                         </AlertDialogTrigger>
-                        <AlertDialogContent className="glass">
+                        <AlertDialogContent className="glass-strong border-border/30 mx-4 max-w-sm">
                           <AlertDialogHeader>
-                            <AlertDialogTitle>
+                            <AlertDialogTitle className="text-base">
                               Clear all history?
                             </AlertDialogTitle>
-                            <AlertDialogDescription>
-                              This will permanently delete all your game
-                              history. This action cannot be undone.
+                            <AlertDialogDescription className="text-sm">
+                              This will permanently delete all your game history.
                             </AlertDialogDescription>
                           </AlertDialogHeader>
                           <AlertDialogFooter>
-                            <AlertDialogCancel>Cancel</AlertDialogCancel>
+                            <AlertDialogCancel className="h-10">
+                              Cancel
+                            </AlertDialogCancel>
                             <AlertDialogAction
                               onClick={clearHistory}
-                              className="bg-destructive text-destructive-foreground hover:bg-destructive/90"
+                              className="bg-destructive text-destructive-foreground hover:bg-destructive/90 h-10"
                             >
                               Delete All
                             </AlertDialogAction>
@@ -855,15 +767,39 @@ export default function ScoresPage() {
             )}
 
             {/* Quick Links */}
-            <div className="flex flex-wrap justify-center gap-2 pt-4">
-              <Button variant="outline" size="sm" asChild>
-                <Link href="/cards">Card Reference</Link>
+            <div className="flex flex-wrap justify-center gap-2 pt-2">
+              <Button
+                variant="outline"
+                size="sm"
+                asChild
+                className="h-9 text-xs border-border/30 press-effect"
+              >
+                <Link href="/cards">
+                  <Layers className="w-3.5 h-3.5 mr-1.5" />
+                  Cards
+                </Link>
               </Button>
-              <Button variant="outline" size="sm" asChild>
-                <Link href="/setup">Setup Guide</Link>
+              <Button
+                variant="outline"
+                size="sm"
+                asChild
+                className="h-9 text-xs border-border/30 press-effect"
+              >
+                <Link href="/setup">
+                  <Zap className="w-3.5 h-3.5 mr-1.5" />
+                  Setup
+                </Link>
               </Button>
-              <Button variant="outline" size="sm" asChild>
-                <Link href="/rules">Full Rules</Link>
+              <Button
+                variant="outline"
+                size="sm"
+                asChild
+                className="h-9 text-xs border-border/30 press-effect"
+              >
+                <Link href="/rules">
+                  <BookOpen className="w-3.5 h-3.5 mr-1.5" />
+                  Rules
+                </Link>
               </Button>
             </div>
           </div>
@@ -872,7 +808,7 @@ export default function ScoresPage() {
     );
   }
 
-  // Active Game View
+  // ===== Active Game View =====
   const lowestScore = Math.min(
     ...players
       .filter((p) => p.total < settings.eliminationThreshold)
@@ -884,7 +820,6 @@ export default function ScoresPage() {
 
   return (
     <div className="pb-24 md:pb-0">
-      {/* Victory Screen */}
       {showVictory && winner && (
         <VictoryScreen
           winner={winner}
@@ -894,59 +829,38 @@ export default function ScoresPage() {
       )}
 
       {/* Compact game controls bar */}
-      <header className="sticky top-0 z-40 glass border-b border-border/50">
-        <div className="mx-auto max-w-6xl px-2 sm:px-4 py-2">
+      <header className="sticky top-0 z-40 glass-strong border-b border-border/30">
+        <div className="mx-auto max-w-6xl px-3 sm:px-5 py-2.5">
           <div className="flex items-center justify-between gap-2">
-            {/* Round info */}
-            <div className="flex items-center gap-2">
+            {/* Round navigation */}
+            <div className="flex items-center gap-1.5">
               <Button
                 variant="ghost"
                 size="icon"
-                className="h-8 w-8"
+                className="h-8 w-8 press-effect"
                 onClick={previousRound}
                 disabled={currentRound === 1}
               >
-                <svg
-                  className="w-4 h-4"
-                  fill="none"
-                  stroke="currentColor"
-                  viewBox="0 0 24 24"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth={2}
-                    d="M15 19l-7-7 7-7"
-                  />
-                </svg>
+                <ChevronLeft className="w-4 h-4" />
               </Button>
-              <span className="font-bold text-sm sm:text-base whitespace-nowrap">
+              <span className="font-bold text-sm whitespace-nowrap min-w-[70px] text-center">
                 Round {currentRound}
               </span>
               <Button
                 variant="ghost"
                 size="icon"
-                className="h-8 w-8"
+                className="h-8 w-8 press-effect"
                 onClick={nextRound}
               >
-                <svg
-                  className="w-4 h-4"
-                  fill="none"
-                  stroke="currentColor"
-                  viewBox="0 0 24 24"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth={2}
-                    d="M9 5l7 7-7 7"
-                  />
-                </svg>
+                <ChevronRight className="w-4 h-4" />
               </Button>
             </div>
 
             {/* Player count */}
-            <Badge variant="outline" className="text-xs">
+            <Badge
+              variant="outline"
+              className="text-[10px] h-6 border-border/30"
+            >
               {activePlayers.length}/{players.length} alive
             </Badge>
 
@@ -956,29 +870,33 @@ export default function ScoresPage() {
                 <Button
                   variant="destructive"
                   size="sm"
-                  className="h-8 text-xs px-3"
+                  className="h-8 text-xs px-3 press-effect"
                 >
                   End
                 </Button>
               </AlertDialogTrigger>
-              <AlertDialogContent className="glass">
+              <AlertDialogContent className="glass-strong border-border/30 mx-4 max-w-sm">
                 <AlertDialogHeader>
-                  <AlertDialogTitle>End this game?</AlertDialogTitle>
-                  <AlertDialogDescription>
-                    Would you like to save the results to your history?
+                  <AlertDialogTitle className="text-base">
+                    End this game?
+                  </AlertDialogTitle>
+                  <AlertDialogDescription className="text-sm">
+                    Save results to your history?
                   </AlertDialogDescription>
                 </AlertDialogHeader>
                 <AlertDialogFooter className="flex-col sm:flex-row gap-2">
-                  <AlertDialogCancel>Keep Playing</AlertDialogCancel>
+                  <AlertDialogCancel className="h-10">
+                    Keep Playing
+                  </AlertDialogCancel>
                   <AlertDialogAction
                     onClick={() => endGame(false)}
-                    className="bg-muted text-muted-foreground hover:bg-muted/80"
+                    className="bg-muted text-muted-foreground hover:bg-muted/80 h-10"
                   >
                     End Without Saving
                   </AlertDialogAction>
                   <AlertDialogAction
                     onClick={() => endGame(true)}
-                    className="bg-primary hover:bg-primary/90"
+                    className="bg-primary hover:bg-primary/90 h-10"
                   >
                     Save & End
                   </AlertDialogAction>
@@ -989,8 +907,8 @@ export default function ScoresPage() {
         </div>
       </header>
 
-      <div className="mx-auto max-w-6xl px-4 sm:px-6 py-4">
-        {/* Compact Score Table */}
+      <div className="mx-auto max-w-6xl px-3 sm:px-5 py-3">
+        {/* Score Cards */}
         <div className="space-y-2">
           {players
             .map((player, originalIndex) => ({ player, originalIndex }))
@@ -1002,68 +920,95 @@ export default function ScoresPage() {
               const isJustEliminated = justEliminated.has(playerIndex);
               const isWinner =
                 winner?.name === player.name && activePlayers.length === 1;
+              const progressPercent = Math.min(
+                (player.total / settings.eliminationThreshold) * 100,
+                100
+              );
 
               return (
                 <div
                   key={playerIndex}
-                  className={`flex items-center gap-2 sm:gap-4 p-2 sm:p-3 rounded-xl glass transition-all ${
+                  className={`p-3 rounded-xl glass transition-all duration-200 ${
                     isJustEliminated
                       ? "animate-eliminated animate-flash-red"
                       : isEliminated
-                      ? "opacity-50 bg-destructive/5"
-                      : isWinner
-                      ? "animate-winner border-primary/70 bg-primary/10 ring-2 ring-primary/50"
-                      : isLeading
-                      ? "border-primary/50 bg-primary/5 ring-1 ring-primary/30"
-                      : "border-border/50"
+                        ? "opacity-40"
+                        : isWinner
+                          ? "animate-winner border-primary/50 ring-2 ring-primary/30"
+                          : isLeading
+                            ? "border-primary/30 ring-1 ring-primary/20"
+                            : "border-border/20"
                   }`}
                 >
-                  {/* Rank */}
-                  <div className="w-6 sm:w-8 text-center shrink-0">
-                    {isWinner ? (
-                      <span className="animate-crown text-lg sm:text-xl">
-                        👑
-                      </span>
-                    ) : isLeading ? (
-                      <span className="text-lg sm:text-xl">👑</span>
-                    ) : isEliminated ? (
-                      <span className="text-lg sm:text-xl">💀</span>
-                    ) : (
-                      <span className="text-sm text-muted-foreground font-medium">
-                        #{sortedIndex + 1}
-                      </span>
-                    )}
-                  </div>
-
-                  {/* Name */}
-                  <div className="flex-1 min-w-0">
-                    <div className="flex items-center gap-2">
-                      <span
-                        className={`font-semibold truncate text-sm sm:text-base ${
-                          isEliminated
-                            ? "line-through text-muted-foreground"
-                            : ""
-                        }`}
-                      >
-                        {player.name}
-                      </span>
-                      {isJustEliminated && (
-                        <Badge
-                          variant="destructive"
-                          className="text-[10px] animate-pulse shrink-0"
-                        >
-                          OUT!
-                        </Badge>
+                  {/* Top row: Rank, Name, Total */}
+                  <div className="flex items-center gap-2 mb-2">
+                    {/* Rank indicator */}
+                    <div className="w-7 text-center shrink-0">
+                      {isWinner ? (
+                        <span className="animate-crown text-lg">👑</span>
+                      ) : isLeading ? (
+                        <Crown className="w-4 h-4 text-primary mx-auto" />
+                      ) : isEliminated ? (
+                        <Skull className="w-4 h-4 text-destructive mx-auto" />
+                      ) : (
+                        <span className="text-xs text-muted-foreground font-medium">
+                          #{sortedIndex + 1}
+                        </span>
                       )}
                     </div>
-                    {/* Compact round history */}
-                    <div className="text-[10px] sm:text-xs text-muted-foreground truncate">
-                      {player.rounds.map((s, i) => s || 0).join(" → ")}
+
+                    {/* Name & round history */}
+                    <div className="flex-1 min-w-0">
+                      <div className="flex items-center gap-1.5">
+                        <span
+                          className={`font-semibold truncate text-sm ${
+                            isEliminated
+                              ? "line-through text-muted-foreground"
+                              : ""
+                          }`}
+                        >
+                          {player.name}
+                        </span>
+                        {isJustEliminated && (
+                          <Badge
+                            variant="destructive"
+                            className="text-[9px] h-4 px-1.5 animate-pulse shrink-0"
+                          >
+                            OUT!
+                          </Badge>
+                        )}
+                      </div>
+                      <div className="text-[10px] text-muted-foreground truncate">
+                        {player.rounds.map((s) => s || 0).join(" → ")}
+                      </div>
+                    </div>
+
+                    {/* Total score */}
+                    <div
+                      className={`text-right font-bold text-xl tabular-nums shrink-0 ${
+                        isEliminated
+                          ? "text-destructive"
+                          : isLeading
+                            ? "text-primary"
+                            : "text-foreground"
+                      }`}
+                    >
+                      {player.total}
                     </div>
                   </div>
 
-                  {/* Current Round Input with Quick Actions */}
-                  <div className="flex items-center gap-1 shrink-0">
+                  {/* Progress bar */}
+                  {!isEliminated && (
+                    <div className="mb-2.5">
+                      <Progress
+                        value={progressPercent}
+                        className="h-1.5 bg-muted/30"
+                      />
+                    </div>
+                  )}
+
+                  {/* Score input row */}
+                  <div className="flex items-center gap-1">
                     {/* Quick subtract */}
                     <button
                       type="button"
@@ -1072,9 +1017,9 @@ export default function ScoresPage() {
                         updatePendingScore(playerIndex, current - 1);
                       }}
                       disabled={isEliminated}
-                      className="w-7 h-9 sm:h-10 rounded bg-red-500/20 hover:bg-red-500/40 text-red-400 font-bold text-sm transition-colors disabled:opacity-30 disabled:cursor-not-allowed"
+                      className="w-8 h-9 rounded-lg bg-red-500/15 hover:bg-red-500/25 active:bg-red-500/35 text-red-400 font-bold text-xs transition-colors disabled:opacity-20 disabled:cursor-not-allowed press-effect flex items-center justify-center"
                     >
-                      −1
+                      <Minus className="w-3.5 h-3.5" />
                     </button>
 
                     <Input
@@ -1088,7 +1033,6 @@ export default function ScoresPage() {
                       }
                       onChange={(e) => {
                         const value = e.target.value;
-                        // Allow empty, minus sign, or valid number
                         if (
                           value === "" ||
                           value === "-" ||
@@ -1105,34 +1049,29 @@ export default function ScoresPage() {
                         }
                       }}
                       placeholder="0"
-                      className={`w-12 sm:w-14 text-center font-bold h-9 sm:h-10 ${
+                      className={`w-12 text-center font-bold text-sm h-9 border-border/20 ${
                         pendingScores[playerIndex] !== undefined
-                          ? "bg-primary/20 border-primary/50"
-                          : "bg-muted/50"
+                          ? "bg-primary/15 border-primary/30"
+                          : "bg-muted/20"
                       }`}
                       disabled={isEliminated}
                     />
 
                     {/* Quick add buttons */}
-                    <div className="flex gap-0.5">
-                      {[1, 2, 5, 10].map((num) => (
-                        <button
-                          key={num}
-                          type="button"
-                          onClick={() => {
-                            const current = getDisplayScore(
-                              playerIndex,
-                              player
-                            );
-                            updatePendingScore(playerIndex, current + num);
-                          }}
-                          disabled={isEliminated}
-                          className="w-7 sm:w-8 h-9 sm:h-10 rounded bg-emerald-500/20 hover:bg-emerald-500/40 text-emerald-400 font-bold text-xs sm:text-sm transition-colors disabled:opacity-30 disabled:cursor-not-allowed"
-                        >
-                          +{num}
-                        </button>
-                      ))}
-                    </div>
+                    {[1, 2, 5, 10].map((num) => (
+                      <button
+                        key={num}
+                        type="button"
+                        onClick={() => {
+                          const current = getDisplayScore(playerIndex, player);
+                          updatePendingScore(playerIndex, current + num);
+                        }}
+                        disabled={isEliminated}
+                        className="flex-1 h-9 rounded-lg bg-emerald-500/15 hover:bg-emerald-500/25 active:bg-emerald-500/35 text-emerald-400 font-bold text-xs transition-colors disabled:opacity-20 disabled:cursor-not-allowed press-effect"
+                      >
+                        +{num}
+                      </button>
+                    ))}
 
                     {/* Confirm button */}
                     <button
@@ -1141,27 +1080,14 @@ export default function ScoresPage() {
                       disabled={
                         isEliminated || pendingScores[playerIndex] === undefined
                       }
-                      className={`w-9 sm:w-10 h-9 sm:h-10 rounded font-bold text-lg transition-all ${
+                      className={`w-10 h-9 rounded-lg font-bold transition-all press-effect flex items-center justify-center ${
                         pendingScores[playerIndex] !== undefined
-                          ? "bg-primary hover:bg-primary/80 text-white animate-pulse"
-                          : "bg-muted/30 text-muted-foreground/30 cursor-not-allowed"
-                      } disabled:opacity-30 disabled:cursor-not-allowed`}
+                          ? "bg-primary hover:bg-primary/80 text-white shadow-lg shadow-primary/20 animate-pulse"
+                          : "bg-muted/20 text-muted-foreground/20 cursor-not-allowed"
+                      } disabled:opacity-20 disabled:cursor-not-allowed`}
                     >
-                      ✓
+                      <Check className="w-4 h-4" />
                     </button>
-                  </div>
-
-                  {/* Total */}
-                  <div
-                    className={`w-12 sm:w-16 text-right font-bold text-lg sm:text-xl shrink-0 ${
-                      isEliminated
-                        ? "text-destructive"
-                        : isLeading
-                        ? "text-primary"
-                        : "text-foreground"
-                    }`}
-                  >
-                    {player.total}
                   </div>
                 </div>
               );
@@ -1169,9 +1095,9 @@ export default function ScoresPage() {
         </div>
 
         {/* Quick legend */}
-        <div className="mt-4 flex flex-wrap justify-center gap-x-4 gap-y-1 text-xs text-muted-foreground">
+        <div className="mt-4 flex flex-wrap justify-center gap-x-4 gap-y-1 text-[10px] text-muted-foreground">
           <span>
-            🔴 Eliminated at{" "}
+            Eliminated at{" "}
             <span className="text-destructive font-medium">
               {settings.eliminationThreshold}
             </span>

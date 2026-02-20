@@ -8,129 +8,94 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
+import { JukasLogo } from "@/components/jukas-logo";
+import {
+  Zap,
+  BarChart3,
+  Layers,
+  BookOpen,
+  Users,
+  Clock,
+  Shield,
+  Brain,
+  RefreshCw,
+  Play,
+  ArrowRight,
+} from "lucide-react";
 
 export default function Home() {
   return (
     <div className="pb-24 md:pb-0">
       {/* Hero Section */}
-      <header className="mx-auto max-w-6xl px-4 sm:px-6 pt-8 pb-10 md:pt-12 md:pb-14">
+      <header className="mx-auto max-w-6xl px-5 sm:px-6 pt-10 pb-12 md:pt-16 md:pb-16">
         <div className="text-center space-y-6">
-          {/* Logo for mobile */}
-          <div className="md:hidden flex justify-center mb-4">
-            <div className="h-14 w-14 rounded-xl bg-linear-to-br from-primary to-primary/70 flex items-center justify-center shadow-lg">
-              <span className="text-primary-foreground font-bold text-2xl">
-                J
-              </span>
+          {/* Logo */}
+          <div className="flex justify-center">
+            <div className="animate-float">
+              <JukasLogo size={80} className="drop-shadow-xl" />
             </div>
           </div>
 
-          <h1 className="text-4xl sm:text-5xl md:text-6xl font-extrabold tracking-tight bg-linear-to-r from-white via-white to-white/70 bg-clip-text text-transparent">
-            Jukas - The Card Game
-          </h1>
+          <div className="space-y-4">
+            <h1 className="text-4xl sm:text-5xl md:text-6xl font-extrabold tracking-tight bg-linear-to-r from-foreground via-foreground to-foreground/60 bg-clip-text text-transparent">
+              Jukas
+            </h1>
+            <p className="text-lg sm:text-xl text-muted-foreground font-medium">
+              The Card Game
+            </p>
+          </div>
 
-          <p className="text-base sm:text-lg text-muted-foreground max-w-2xl mx-auto leading-relaxed px-2">
-            Stay under 100 points to survive. Remember what you&apos;ve seen. A
-            fast-paced, memory-driven elimination game of risk, deduction, and
-            sabotage.
+          <p className="text-base sm:text-lg text-muted-foreground max-w-lg mx-auto leading-relaxed px-2">
+            A fast-paced memory-driven elimination game of risk, deduction, and
+            sabotage. Stay under 100 points to survive.
           </p>
 
           {/* CTA Buttons */}
           <div className="flex flex-col sm:flex-row items-center justify-center gap-3 pt-2">
             <Button
               size="lg"
-              className="w-full sm:w-auto bg-primary hover:bg-primary/90 shadow-lg text-base"
+              className="w-full sm:w-auto bg-primary hover:bg-primary/90 shadow-lg shadow-primary/20 h-12 text-base font-semibold press-effect"
               asChild
             >
               <Link href="/scores">
-                <svg
-                  className="w-5 h-5 mr-2"
-                  fill="none"
-                  stroke="currentColor"
-                  viewBox="0 0 24 24"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth={2}
-                    d="M13 10V3L4 14h7v7l9-11h-7z"
-                  />
-                </svg>
+                <Play className="w-5 h-5 mr-2" />
                 Start Playing
               </Link>
             </Button>
             <Button
               size="lg"
               variant="outline"
-              className="w-full sm:w-auto text-base"
+              className="w-full sm:w-auto h-12 text-base font-medium press-effect border-border/50"
               asChild
             >
               <Link href="/setup">
-                <svg
-                  className="w-5 h-5 mr-2"
-                  fill="none"
-                  stroke="currentColor"
-                  viewBox="0 0 24 24"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth={2}
-                    d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-3 7h3m-3 4h3m-6-4h.01M9 16h.01"
-                  />
-                </svg>
+                <Zap className="w-5 h-5 mr-2" />
                 Quick Setup
               </Link>
             </Button>
           </div>
 
-          {/* Game badges */}
-          <div className="flex flex-wrap items-center justify-center gap-2 pt-4">
-            <Badge variant="secondary" className="px-3 py-1.5 text-sm">
-              <svg
-                className="w-4 h-4 mr-1.5"
-                fill="none"
-                stroke="currentColor"
-                viewBox="0 0 24 24"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth={2}
-                  d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"
-                />
-              </svg>
+          {/* Game Info pills */}
+          <div className="flex flex-wrap items-center justify-center gap-2 pt-3">
+            <Badge
+              variant="secondary"
+              className="px-3 py-1.5 text-sm bg-secondary/80 border border-border/30"
+            >
+              <Users className="w-3.5 h-3.5 mr-1.5" />
               2–6 players
             </Badge>
-            <Badge variant="secondary" className="px-3 py-1.5 text-sm">
-              <svg
-                className="w-4 h-4 mr-1.5"
-                fill="none"
-                stroke="currentColor"
-                viewBox="0 0 24 24"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth={2}
-                  d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"
-                />
-              </svg>
-              5-10 min rounds
+            <Badge
+              variant="secondary"
+              className="px-3 py-1.5 text-sm bg-secondary/80 border border-border/30"
+            >
+              <Clock className="w-3.5 h-3.5 mr-1.5" />
+              5–10 min
             </Badge>
-            <Badge variant="secondary" className="px-3 py-1.5 text-sm">
-              <svg
-                className="w-4 h-4 mr-1.5"
-                fill="none"
-                stroke="currentColor"
-                viewBox="0 0 24 24"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth={2}
-                  d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"
-                />
-              </svg>
+            <Badge
+              variant="secondary"
+              className="px-3 py-1.5 text-sm bg-secondary/80 border border-border/30"
+            >
+              <Shield className="w-3.5 h-3.5 mr-1.5" />
               Elimination
             </Badge>
           </div>
@@ -138,39 +103,29 @@ export default function Home() {
       </header>
 
       {/* Quick Navigation Cards */}
-      <main className="mx-auto max-w-6xl px-4 sm:px-6 pb-12">
-        <div className="grid gap-4 sm:gap-6 sm:grid-cols-2">
+      <section className="mx-auto max-w-6xl px-5 sm:px-6 pb-12">
+        <div className="grid gap-3 sm:gap-4 sm:grid-cols-2">
           {/* Score Keeper Card */}
           <Link href="/scores" className="block group">
-            <Card className="card-hover glass border-primary/30 bg-linear-to-br from-primary/10 to-transparent h-full">
-              <CardHeader>
-                <div className="h-14 w-14 rounded-2xl bg-linear-to-br from-primary to-primary/70 flex items-center justify-center mb-3 shadow-lg group-hover:scale-110 transition-transform">
-                  <svg
-                    className="w-7 h-7 text-white"
-                    fill="none"
-                    stroke="currentColor"
-                    viewBox="0 0 24 24"
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth={2}
-                      d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"
-                    />
-                  </svg>
+            <Card className="card-hover glass border-primary/20 hover:border-primary/40 h-full overflow-hidden relative">
+              <div className="absolute top-0 right-0 w-32 h-32 bg-primary/5 rounded-bl-full" />
+              <CardHeader className="relative">
+                <div className="h-12 w-12 rounded-2xl bg-linear-to-br from-primary to-primary/60 flex items-center justify-center mb-3 shadow-lg shadow-primary/15 group-hover:scale-110 transition-transform duration-200">
+                  <BarChart3 className="w-6 h-6 text-white" />
                 </div>
-                <CardTitle className="text-xl text-primary group-hover:text-primary/80 transition-colors">
+                <CardTitle className="text-lg text-primary group-hover:text-primary/80 transition-colors flex items-center gap-2">
                   Score Keeper
+                  <ArrowRight className="w-4 h-4 opacity-0 group-hover:opacity-100 transition-all duration-200 -translate-x-1 group-hover:translate-x-0" />
                 </CardTitle>
-                <CardDescription className="text-base">
-                  Track scores across multiple rounds with persistent game
-                  sessions. Resume anytime!
+                <CardDescription className="text-sm leading-relaxed">
+                  Track scores across rounds with persistent game sessions.
+                  Resume anytime!
                 </CardDescription>
               </CardHeader>
-              <CardContent>
+              <CardContent className="pt-0">
                 <Badge
                   variant="outline"
-                  className="border-primary/50 text-primary"
+                  className="border-primary/30 text-primary text-xs"
                 >
                   Most Popular
                 </Badge>
@@ -180,35 +135,25 @@ export default function Home() {
 
           {/* Setup Guide Card */}
           <Link href="/setup" className="block group">
-            <Card className="card-hover glass border-emerald-500/30 bg-linear-to-br from-emerald-950/30 to-transparent h-full">
-              <CardHeader>
-                <div className="h-14 w-14 rounded-2xl bg-linear-to-br from-emerald-500 to-teal-600 flex items-center justify-center mb-3 shadow-lg group-hover:scale-110 transition-transform">
-                  <svg
-                    className="w-7 h-7 text-white"
-                    fill="none"
-                    stroke="currentColor"
-                    viewBox="0 0 24 24"
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth={2}
-                      d="M13 10V3L4 14h7v7l9-11h-7z"
-                    />
-                  </svg>
+            <Card className="card-hover glass border-emerald-500/20 hover:border-emerald-500/40 h-full overflow-hidden relative">
+              <div className="absolute top-0 right-0 w-32 h-32 bg-emerald-500/5 rounded-bl-full" />
+              <CardHeader className="relative">
+                <div className="h-12 w-12 rounded-2xl bg-linear-to-br from-emerald-500 to-teal-600 flex items-center justify-center mb-3 shadow-lg shadow-emerald-500/15 group-hover:scale-110 transition-transform duration-200">
+                  <Zap className="w-6 h-6 text-white" />
                 </div>
-                <CardTitle className="text-xl text-emerald-300 group-hover:text-emerald-200 transition-colors">
+                <CardTitle className="text-lg text-emerald-400 group-hover:text-emerald-300 transition-colors flex items-center gap-2">
                   Quick Setup
+                  <ArrowRight className="w-4 h-4 opacity-0 group-hover:opacity-100 transition-all duration-200 -translate-x-1 group-hover:translate-x-0" />
                 </CardTitle>
-                <CardDescription className="text-base">
+                <CardDescription className="text-sm leading-relaxed">
                   Visual step-by-step guide to set up your game in under a
                   minute.
                 </CardDescription>
               </CardHeader>
-              <CardContent>
+              <CardContent className="pt-0">
                 <Badge
                   variant="outline"
-                  className="border-emerald-500/50 text-emerald-300"
+                  className="border-emerald-500/30 text-emerald-400 text-xs"
                 >
                   Visual Guide
                 </Badge>
@@ -218,34 +163,24 @@ export default function Home() {
 
           {/* Card Reference Card */}
           <Link href="/cards" className="block group">
-            <Card className="card-hover glass border-accent/30 bg-linear-to-br from-accent/10 to-transparent h-full">
-              <CardHeader>
-                <div className="h-14 w-14 rounded-2xl bg-linear-to-br from-accent to-accent/70 flex items-center justify-center mb-3 shadow-lg group-hover:scale-110 transition-transform">
-                  <svg
-                    className="w-7 h-7 text-white"
-                    fill="none"
-                    stroke="currentColor"
-                    viewBox="0 0 24 24"
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth={2}
-                      d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"
-                    />
-                  </svg>
+            <Card className="card-hover glass border-accent/20 hover:border-accent/40 h-full overflow-hidden relative">
+              <div className="absolute top-0 right-0 w-32 h-32 bg-accent/5 rounded-bl-full" />
+              <CardHeader className="relative">
+                <div className="h-12 w-12 rounded-2xl bg-linear-to-br from-accent to-accent/60 flex items-center justify-center mb-3 shadow-lg shadow-accent/15 group-hover:scale-110 transition-transform duration-200">
+                  <Layers className="w-6 h-6 text-white" />
                 </div>
-                <CardTitle className="text-xl text-accent group-hover:text-accent/80 transition-colors">
+                <CardTitle className="text-lg text-accent group-hover:text-accent/80 transition-colors flex items-center gap-2">
                   Card Reference
+                  <ArrowRight className="w-4 h-4 opacity-0 group-hover:opacity-100 transition-all duration-200 -translate-x-1 group-hover:translate-x-0" />
                 </CardTitle>
-                <CardDescription className="text-base">
+                <CardDescription className="text-sm leading-relaxed">
                   Complete card values and special abilities at a glance.
                 </CardDescription>
               </CardHeader>
-              <CardContent>
+              <CardContent className="pt-0">
                 <Badge
                   variant="outline"
-                  className="border-accent/50 text-accent"
+                  className="border-accent/30 text-accent text-xs"
                 >
                   Quick Lookup
                 </Badge>
@@ -255,35 +190,24 @@ export default function Home() {
 
           {/* Full Rules Card */}
           <Link href="/rules" className="block group">
-            <Card className="card-hover glass border-blue-500/30 bg-linear-to-br from-blue-950/30 to-transparent h-full">
-              <CardHeader>
-                <div className="h-14 w-14 rounded-2xl bg-linear-to-br from-blue-500 to-indigo-600 flex items-center justify-center mb-3 shadow-lg group-hover:scale-110 transition-transform">
-                  <svg
-                    className="w-7 h-7 text-white"
-                    fill="none"
-                    stroke="currentColor"
-                    viewBox="0 0 24 24"
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth={2}
-                      d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"
-                    />
-                  </svg>
+            <Card className="card-hover glass border-blue-500/20 hover:border-blue-500/40 h-full overflow-hidden relative">
+              <div className="absolute top-0 right-0 w-32 h-32 bg-blue-500/5 rounded-bl-full" />
+              <CardHeader className="relative">
+                <div className="h-12 w-12 rounded-2xl bg-linear-to-br from-blue-500 to-indigo-600 flex items-center justify-center mb-3 shadow-lg shadow-blue-500/15 group-hover:scale-110 transition-transform duration-200">
+                  <BookOpen className="w-6 h-6 text-white" />
                 </div>
-                <CardTitle className="text-xl text-blue-300 group-hover:text-blue-200 transition-colors">
+                <CardTitle className="text-lg text-blue-400 group-hover:text-blue-300 transition-colors flex items-center gap-2">
                   Full Rules
+                  <ArrowRight className="w-4 h-4 opacity-0 group-hover:opacity-100 transition-all duration-200 -translate-x-1 group-hover:translate-x-0" />
                 </CardTitle>
-                <CardDescription className="text-base">
-                  Complete game rules, special abilities, and winning
-                  conditions.
+                <CardDescription className="text-sm leading-relaxed">
+                  Complete game rules, special abilities, and winning conditions.
                 </CardDescription>
               </CardHeader>
-              <CardContent>
+              <CardContent className="pt-0">
                 <Badge
                   variant="outline"
-                  className="border-blue-500/50 text-blue-300"
+                  className="border-blue-500/30 text-blue-400 text-xs"
                 >
                   Complete Guide
                 </Badge>
@@ -291,91 +215,59 @@ export default function Home() {
             </Card>
           </Link>
         </div>
-      </main>
+      </section>
 
-      {/* Features Section */}
-      <section className="border-t border-border/50">
-        <div className="mx-auto max-w-6xl px-4 sm:px-6 py-12 md:py-16">
+      {/* Why Play Section */}
+      <section className="border-t border-border/30">
+        <div className="mx-auto max-w-6xl px-5 sm:px-6 py-12 md:py-16">
           <div className="text-center mb-10">
-            <h2 className="text-2xl sm:text-3xl font-bold mb-3">
+            <h2 className="text-2xl sm:text-3xl font-bold mb-2">
               Why Play Jukas?
             </h2>
-            <p className="text-muted-foreground">
+            <p className="text-muted-foreground text-sm sm:text-base">
               The perfect blend of luck, memory, and strategy
             </p>
           </div>
 
-          <div className="grid gap-4 sm:gap-6 sm:grid-cols-2 lg:grid-cols-3">
-            <Card className="card-hover glass border-primary/20 bg-linear-to-br from-primary/10 to-transparent">
+          <div className="grid gap-3 sm:gap-4 sm:grid-cols-2 lg:grid-cols-3">
+            <Card className="glass border-border/20 hover:border-primary/20 transition-colors">
               <CardHeader>
-                <div className="h-12 w-12 rounded-xl bg-linear-to-br from-primary to-primary/70 flex items-center justify-center mb-3 shadow-lg">
-                  <svg
-                    className="w-6 h-6 text-white"
-                    fill="none"
-                    stroke="currentColor"
-                    viewBox="0 0 24 24"
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth={2}
-                      d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"
-                    />
-                  </svg>
+                <div className="h-11 w-11 rounded-xl bg-primary/15 flex items-center justify-center mb-2">
+                  <Users className="w-5 h-5 text-primary" />
                 </div>
-                <CardTitle className="text-primary">2–6 Players</CardTitle>
-                <CardDescription>
-                  Perfect for quick sessions or full game nights with friends
-                  and family.
+                <CardTitle className="text-base text-primary">
+                  2–6 Players
+                </CardTitle>
+                <CardDescription className="text-sm">
+                  Perfect for quick sessions or full game nights with friends and
+                  family.
                 </CardDescription>
               </CardHeader>
             </Card>
 
-            <Card className="card-hover glass border-emerald-500/20 bg-linear-to-br from-emerald-950/20 to-transparent">
+            <Card className="glass border-border/20 hover:border-emerald-500/20 transition-colors">
               <CardHeader>
-                <div className="h-12 w-12 rounded-xl bg-linear-to-br from-emerald-500 to-teal-600 flex items-center justify-center mb-3 shadow-lg">
-                  <svg
-                    className="w-6 h-6 text-white"
-                    fill="none"
-                    stroke="currentColor"
-                    viewBox="0 0 24 24"
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth={2}
-                      d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"
-                    />
-                  </svg>
+                <div className="h-11 w-11 rounded-xl bg-emerald-500/15 flex items-center justify-center mb-2">
+                  <RefreshCw className="w-5 h-5 text-emerald-400" />
                 </div>
-                <CardTitle className="text-emerald-300">
+                <CardTitle className="text-base text-emerald-400">
                   Multi-Round Format
                 </CardTitle>
-                <CardDescription>
+                <CardDescription className="text-sm">
                   Play rounds until only one survivor remains under 100 points.
                 </CardDescription>
               </CardHeader>
             </Card>
 
-            <Card className="card-hover glass border-accent/20 bg-linear-to-br from-accent/10 to-transparent sm:col-span-2 lg:col-span-1">
+            <Card className="glass border-border/20 hover:border-accent/20 transition-colors sm:col-span-2 lg:col-span-1">
               <CardHeader>
-                <div className="h-12 w-12 rounded-xl bg-linear-to-br from-accent to-accent/70 flex items-center justify-center mb-3 shadow-lg">
-                  <svg
-                    className="w-6 h-6 text-white"
-                    fill="none"
-                    stroke="currentColor"
-                    viewBox="0 0 24 24"
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth={2}
-                      d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z"
-                    />
-                  </svg>
+                <div className="h-11 w-11 rounded-xl bg-accent/15 flex items-center justify-center mb-2">
+                  <Brain className="w-5 h-5 text-accent" />
                 </div>
-                <CardTitle className="text-accent">Memory & Strategy</CardTitle>
-                <CardDescription>
+                <CardTitle className="text-base text-accent">
+                  Memory & Strategy
+                </CardTitle>
+                <CardDescription className="text-sm">
                   Remember cards, bluff opponents, and survive the longest to
                   win.
                 </CardDescription>

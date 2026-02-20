@@ -8,6 +8,7 @@ import {
   AccordionItem,
   AccordionTrigger,
 } from "@/components/ui/accordion";
+import { AlertTriangle, Eye, Shuffle, Search, Sparkles } from "lucide-react";
 
 const cardData = [
   {
@@ -17,6 +18,7 @@ const cardData = [
     valueType: "low",
     effect: "No effect. Counts as 1 in front of you.",
     hasEffect: false,
+    icon: null,
   },
   {
     name: "2–6",
@@ -25,6 +27,7 @@ const cardData = [
     valueType: "normal",
     effect: "No effect. Counts as shown.",
     hasEffect: false,
+    icon: null,
   },
   {
     name: "7–8",
@@ -35,6 +38,7 @@ const cardData = [
       "Effect ONLY when drawn from deck: look at one of your own face-down cards. You may discard the 7/8 (effect used) OR swap it into your layout (becomes just point value).",
     hasEffect: true,
     effectColor: "purple",
+    icon: Eye,
   },
   {
     name: "9–10",
@@ -45,6 +49,7 @@ const cardData = [
       "Effect ONLY when drawn from deck: blindly swap one of your face-down cards with an opponent's face-down card, then discard the 9/10. If swapped into layout, just point value.",
     hasEffect: true,
     effectColor: "orange",
+    icon: Shuffle,
   },
   {
     name: "Jack",
@@ -55,6 +60,7 @@ const cardData = [
       "Effect ONLY when drawn from deck: look at one opponent's face-down card; you may discard the Jack (effect used) OR swap it into your layout (becomes just point value).",
     hasEffect: true,
     effectColor: "cyan",
+    icon: Search,
   },
   {
     name: "Queen",
@@ -63,6 +69,7 @@ const cardData = [
     valueType: "high",
     effect: "No effect. High value - try to ditch it.",
     hasEffect: false,
+    icon: null,
   },
   {
     name: "Red King",
@@ -71,6 +78,7 @@ const cardData = [
     valueType: "bonus",
     effect: "No effect. Counts as -1 in front of you. The best card!",
     hasEffect: false,
+    icon: Sparkles,
   },
   {
     name: "Black King",
@@ -79,6 +87,7 @@ const cardData = [
     valueType: "danger",
     effect: "No effect. Counts as +13 in front of you. Avoid at all costs!",
     hasEffect: false,
+    icon: AlertTriangle,
   },
   {
     name: "Joker",
@@ -88,23 +97,24 @@ const cardData = [
     effect:
       "No effect. Worth 0 points - great for bluffing! Opponents think you have cards, but it doesn't hurt your score.",
     hasEffect: false,
+    icon: null,
   },
 ];
 
 function getValueBadgeStyle(type: string) {
   switch (type) {
     case "low":
-      return "bg-emerald-500/20 text-emerald-300 border-emerald-500/30";
+      return "bg-emerald-500/15 text-emerald-400 border-emerald-500/20";
     case "normal":
-      return "bg-muted text-muted-foreground border-border";
+      return "bg-muted/80 text-muted-foreground border-border/30";
     case "high":
-      return "bg-yellow-500/20 text-yellow-300 border-yellow-500/30";
+      return "bg-amber-500/15 text-amber-400 border-amber-500/20";
     case "bonus":
-      return "bg-green-500/20 text-green-300 border-green-500/30";
+      return "bg-emerald-500/15 text-emerald-400 border-emerald-500/20";
     case "danger":
-      return "bg-red-500/20 text-red-300 border-red-500/30";
+      return "bg-red-500/15 text-red-400 border-red-500/20";
     default:
-      return "bg-muted text-muted-foreground border-border";
+      return "bg-muted/80 text-muted-foreground border-border/30";
   }
 }
 
@@ -118,28 +128,43 @@ function getSuitDisplay(suits: string) {
   return <span className="text-muted-foreground">{suits}</span>;
 }
 
+function getEffectBadgeColor(color?: string) {
+  switch (color) {
+    case "purple":
+      return "bg-purple-500/15 border-purple-500/20 text-purple-400";
+    case "orange":
+      return "bg-orange-500/15 border-orange-500/20 text-orange-400";
+    case "cyan":
+      return "bg-cyan-500/15 border-cyan-500/20 text-cyan-400";
+    default:
+      return "bg-primary/15 border-primary/20 text-primary";
+  }
+}
+
 export default function UniqueCardsTable() {
   return (
     <div className="w-full">
-      {/* Mobile: Accordion View */}
+      {/* Mobile: Card-style Accordion View */}
       <div className="lg:hidden">
         <Accordion type="single" collapsible className="w-full">
           {cardData.map((card, index) => (
             <AccordionItem
               key={card.name}
               value={card.name}
-              className={index === 0 ? "border-t-0" : ""}
+              className={index === 0 ? "border-t-0" : "border-border/20"}
             >
-              <AccordionTrigger className="px-4 py-4 hover:no-underline hover:bg-muted/30">
-                <div className="flex items-center justify-between w-full pr-4">
-                  <div className="flex items-center gap-3">
-                    <span className="font-semibold text-foreground">
+              <AccordionTrigger className="px-4 py-3.5 hover:no-underline hover:bg-muted/20">
+                <div className="flex items-center justify-between w-full pr-3">
+                  <div className="flex items-center gap-2.5">
+                    <span className="font-semibold text-foreground text-sm">
                       {card.name}
                     </span>
                     {card.hasEffect && (
                       <Badge
                         variant="outline"
-                        className="text-xs bg-primary/10 border-primary/30 text-primary"
+                        className={`text-[10px] px-1.5 py-0 h-5 ${getEffectBadgeColor(
+                          card.effectColor
+                        )}`}
                       >
                         Effect
                       </Badge>
@@ -148,28 +173,28 @@ export default function UniqueCardsTable() {
                   <Badge
                     className={`${getValueBadgeStyle(
                       card.valueType
-                    )} font-bold`}
+                    )} font-bold text-xs`}
                   >
                     {card.value}
                   </Badge>
                 </div>
               </AccordionTrigger>
               <AccordionContent className="px-4 pb-4">
-                <Card className="bg-muted/30 border-border/50">
-                  <CardContent className="p-4 space-y-3">
+                <Card className="bg-muted/20 border-border/20">
+                  <CardContent className="p-3.5 space-y-2.5">
                     <div className="flex items-center gap-2">
-                      <span className="text-sm text-muted-foreground">
+                      <span className="text-xs text-muted-foreground">
                         Suits:
                       </span>
-                      <span className="text-lg">
+                      <span className="text-base">
                         {getSuitDisplay(card.suits)}
                       </span>
                     </div>
                     <div>
-                      <span className="text-sm text-muted-foreground block mb-1">
-                        Effect:
+                      <span className="text-xs text-muted-foreground block mb-1">
+                        Details:
                       </span>
-                      <p className="text-sm text-foreground/90 leading-relaxed">
+                      <p className="text-sm text-foreground/85 leading-relaxed">
                         {card.effect}
                       </p>
                     </div>
@@ -181,15 +206,16 @@ export default function UniqueCardsTable() {
         </Accordion>
 
         {/* Critical Note */}
-        <div className="m-4 p-4 rounded-xl bg-linear-to-r from-accent/10 to-primary/10 border border-accent/30">
-          <div className="flex items-start gap-3">
-            <span className="text-xl">⚠️</span>
+        <div className="m-4 p-3.5 rounded-xl bg-linear-to-r from-amber-500/10 to-orange-500/10 border border-amber-500/20">
+          <div className="flex items-start gap-2.5">
+            <AlertTriangle className="w-4 h-4 text-amber-400 mt-0.5 shrink-0" />
             <div>
-              <p className="font-semibold text-accent mb-1">Important</p>
-              <p className="text-sm text-muted-foreground leading-relaxed">
+              <p className="font-semibold text-amber-400 text-xs mb-0.5">
+                Important
+              </p>
+              <p className="text-xs text-muted-foreground leading-relaxed">
                 Card effects only work when drawn from deck and immediately
-                discarded. Cards in your layout are just point values-no
-                effects!
+                discarded. Cards in your layout are just point values!
               </p>
             </div>
           </div>
@@ -198,20 +224,20 @@ export default function UniqueCardsTable() {
 
       {/* Desktop: Table View */}
       <div className="hidden lg:block">
-        <div className="rounded-xl border border-border/50 overflow-hidden">
+        <div className="rounded-xl border border-border/30 overflow-hidden">
           <table className="w-full">
             <thead>
-              <tr className="bg-muted/50 border-b border-border/50">
-                <th className="px-6 py-4 text-left text-sm font-semibold text-foreground">
+              <tr className="bg-muted/40 border-b border-border/30">
+                <th className="px-5 py-3.5 text-left text-sm font-semibold text-foreground">
                   Card
                 </th>
-                <th className="px-6 py-4 text-left text-sm font-semibold text-foreground">
+                <th className="px-5 py-3.5 text-left text-sm font-semibold text-foreground">
                   Suits
                 </th>
-                <th className="px-6 py-4 text-left text-sm font-semibold text-foreground">
+                <th className="px-5 py-3.5 text-left text-sm font-semibold text-foreground">
                   Value
                 </th>
-                <th className="px-6 py-4 text-left text-sm font-semibold text-foreground">
+                <th className="px-5 py-3.5 text-left text-sm font-semibold text-foreground">
                   Effect (deck only)
                 </th>
               </tr>
@@ -220,56 +246,57 @@ export default function UniqueCardsTable() {
               {cardData.map((card, index) => (
                 <tr
                   key={card.name}
-                  className={`border-b border-border/30 transition-colors hover:bg-muted/20 ${
-                    index % 2 === 0 ? "bg-transparent" : "bg-muted/10"
+                  className={`border-b border-border/20 transition-colors hover:bg-muted/15 ${
+                    index % 2 === 0 ? "bg-transparent" : "bg-muted/5"
                   }`}
                 >
-                  <td className="px-6 py-4">
+                  <td className="px-5 py-3.5">
                     <div className="flex items-center gap-2">
-                      <span className="font-medium text-foreground">
+                      <span className="font-medium text-foreground text-sm">
                         {card.name}
                       </span>
                       {card.hasEffect && (
                         <Badge
                           variant="outline"
-                          className="text-xs bg-primary/10 border-primary/30 text-primary"
+                          className={`text-[10px] px-1.5 py-0 h-5 ${getEffectBadgeColor(
+                            card.effectColor
+                          )}`}
                         >
                           Effect
                         </Badge>
                       )}
                     </div>
                   </td>
-                  <td className="px-6 py-4 text-lg">
+                  <td className="px-5 py-3.5 text-base">
                     {getSuitDisplay(card.suits)}
                   </td>
-                  <td className="px-6 py-4">
+                  <td className="px-5 py-3.5">
                     <Badge
                       className={`${getValueBadgeStyle(
                         card.valueType
-                      )} font-bold`}
+                      )} font-bold text-xs`}
                     >
                       {card.value}
                     </Badge>
                   </td>
-                  <td className="px-6 py-4 text-sm text-muted-foreground max-w-md">
+                  <td className="px-5 py-3.5 text-sm text-muted-foreground max-w-md leading-relaxed">
                     {card.effect}
                   </td>
                 </tr>
               ))}
             </tbody>
             <tfoot>
-              <tr className="bg-linear-to-r from-accent/10 to-primary/10">
-                <td colSpan={4} className="px-6 py-4">
+              <tr className="bg-linear-to-r from-amber-500/8 to-orange-500/8">
+                <td colSpan={4} className="px-5 py-3.5">
                   <div className="flex items-center gap-2">
-                    <span className="text-accent">⚠️</span>
+                    <AlertTriangle className="w-4 h-4 text-amber-400 shrink-0" />
                     <span className="text-sm">
-                      <span className="font-semibold text-accent">
+                      <span className="font-semibold text-amber-400">
                         CRITICAL:
                       </span>
                       <span className="text-muted-foreground ml-1">
                         Effects only work when drawn from deck and immediately
-                        discarded. Cards in your layout are just point values-no
-                        effects!
+                        discarded. Cards in your layout are just point values!
                       </span>
                     </span>
                   </div>
