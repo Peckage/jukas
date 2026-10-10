@@ -23,7 +23,7 @@ pnpm install
 pnpm dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) to view the app.
+Open [http://localhost:3050](http://localhost:3050) to view the app.
 
 ## Production Deployment
 
@@ -58,9 +58,9 @@ See [docs/nginx-config.md](docs/nginx-config.md) for manual nginx configuration.
 
 ## Tech Stack
 
-- **Framework:** Next.js 15 with React 19
+- **Framework:** Next.js 16 with React 19
 - **Styling:** Tailwind CSS v4
-- **UI Components:** shadcn/ui
+- **UI Components:** shadcn/ui on a glass design system (`src/app/globals.css`)
 - **Storage:** localStorage for game persistence
 
 ## License
