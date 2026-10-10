@@ -32,7 +32,7 @@ function dangerOf(total: number, threshold: number) {
 
 function PlayerCard({
   player,
-  place,
+  seat,
   threshold,
   isLeading,
   isWinner,
@@ -44,7 +44,8 @@ function PlayerCard({
   onConfirm,
 }: {
   player: Player;
-  place: number;
+  /** The player's place at the table, as numbered on the setup screen. */
+  seat: number;
   threshold: number;
   isLeading: boolean;
   isWinner: boolean;
@@ -95,7 +96,7 @@ function PlayerCard({
           ) : isEliminated ? (
             <Skull className="size-4" aria-label="Out" />
           ) : (
-            place
+            seat
           )}
         </span>
 
@@ -250,9 +251,6 @@ export function GameBoard({
 }) {
   const alive = players.filter((p) => p.total < threshold);
   const lowest = Math.min(...alive.map((p) => p.total));
-  const standings = players
-    .map((player, index) => ({ player, index }))
-    .sort((a, b) => a.player.total - b.player.total);
 
   return (
     <div className="mx-auto w-full max-w-2xl px-3 pt-3 pb-6 sm:px-6 sm:pt-6">
@@ -330,11 +328,13 @@ export function GameBoard({
       </div>
 
       <ul className="space-y-2.5">
-        {standings.map(({ player, index }, place) => (
+        {/* Table order, never re-sorted by score: a player's card stays where
+            everyone expects it. The crown marks who is leading. */}
+        {players.map((player, index) => (
           <PlayerCard
             key={index}
             player={player}
-            place={place + 1}
+            seat={index + 1}
             threshold={threshold}
             isLeading={player.total < threshold && player.total === lowest}
             isWinner={index === winnerIndex}
