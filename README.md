@@ -1,14 +1,14 @@
 # Jukas - The Card Game 🃏
 
-A fast-paced, memory-driven elimination card game. Stay under 100 points to survive!
+A fast-paced, memory-driven elimination card game. Everyone starts with 100 lives: be the last one standing!
 
 **Live:** [jukas.nl](https://jukas.nl)
 
 ## Features
 
-- 📊 **Score Keeper** - Track scores across rounds with persistent sessions
-- 🎮 **Quick Setup Guide** - Visual step-by-step instructions
-- 🃏 **Card Reference** - Complete card values and effects
+- 📊 **Score Keeper** - Counts lives round by round, with a graph of the game at the end
+- 🎮 **Learn to Play** - An animated, step-by-step walkthrough
+- 🃏 **Card Reference** - What every card costs and what it does
 - 📖 **Full Rules** - Everything you need to know
 - 📱 **Mobile-First Design** - Works great on phones
 - 🏆 **Victory Animations** - Celebrate wins with confetti!

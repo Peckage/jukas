@@ -23,7 +23,7 @@ const instrumentSans = Instrument_Sans({
 export const metadata: Metadata = {
   title: "Jukas - The Card Game",
   description:
-    "A fast-paced, memory-driven elimination game of risk, deduction, and sabotage. Stay under 100 points to survive!",
+    "A fast-paced, memory-driven elimination game of risk, deduction, and sabotage. Everyone starts with 100 lives: be the last one standing!",
   keywords: [
     "card game",
     "memory game",
@@ -35,7 +35,7 @@ export const metadata: Metadata = {
   openGraph: {
     title: "Jukas - The Card Game",
     description:
-      "A fast-paced, memory-driven elimination game. Stay under 100 points to survive!",
+      "A fast-paced, memory-driven elimination game. Everyone starts with 100 lives: be the last one standing!",
     type: "website",
   },
   icons: {

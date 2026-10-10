@@ -1,13 +1,16 @@
+import Link from "next/link";
 import type { LucideIcon } from "lucide-react";
 import {
   AlertTriangle,
-  BarChart3,
   BookOpen,
+  ChevronRight,
   Clock,
   Eye,
   Flag,
   Gamepad2,
+  GraduationCap,
   Hand,
+  Heart,
   Layers,
   Lightbulb,
   Search,
@@ -27,8 +30,8 @@ const SECTIONS = [
   { id: "overview", label: "Overview" },
   { id: "setup", label: "Setup" },
   { id: "play", label: "Play" },
-  { id: "effects", label: "Effects" },
-  { id: "scoring", label: "Scoring" },
+  { id: "powers", label: "Powers" },
+  { id: "lives", label: "Lives" },
   { id: "winning", label: "Winning" },
   { id: "tips", label: "Tips" },
 ];
@@ -92,7 +95,7 @@ function Steps({ items }: { items: React.ReactNode[] }) {
 const FACTS = [
   { icon: Users, text: "2–6 players" },
   { icon: Clock, text: "5–10 minutes a round" },
-  { icon: Target, text: "Stay under 100 points" },
+  { icon: Heart, text: "100 lives each" },
   { icon: Layers, text: "A standard deck" },
 ];
 
@@ -119,6 +122,23 @@ export default function RulesPage() {
         title="How to play"
         description="Memory, nerve and a little sabotage."
       />
+
+      <Link
+        href="/learn"
+        className="group mb-4 flex items-center gap-3 rounded-xl border border-primary/30 bg-primary-surface p-3.5 outline-none transition-colors hover:border-primary/50 focus-visible:ring-[3px] focus-visible:ring-ring/50"
+      >
+        <IconTile icon={GraduationCap} size="sm" />
+        <span className="min-w-0 flex-1 text-sm">
+          <span className="font-semibold text-foreground">New to Jukas?</span>{" "}
+          <span className="text-muted-foreground">
+            See the whole game in nine animated steps.
+          </span>
+        </span>
+        <ChevronRight
+          aria-hidden
+          className="size-5 shrink-0 text-primary transition-transform group-hover:translate-x-0.5"
+        />
+      </Link>
 
       {/* Jump to a section. Sticks under the top edge on a phone. */}
       <nav
@@ -157,10 +177,10 @@ export default function RulesPage() {
               <h3 className="mb-2.5 text-sm font-semibold">Key ideas</h3>
               <Bullets
                 items={[
-                  "Several rounds, scores add up",
+                  "Several rounds; your cards cost lives",
                   "Remember what you have seen",
-                  "Cards have points, some have effects",
-                  "Effects only work from the deck",
+                  "Every card costs lives, some have powers",
+                  "Powers only work from the deck",
                   "Swapping at the right time wins",
                 ]}
               />
@@ -194,7 +214,7 @@ export default function RulesPage() {
                   "Draw the top card from the deck.",
                   "Look at it: now you know what it is.",
                   <>
-                    Then either <strong className="text-foreground">use its effect</strong>{" "}
+                    Then either <strong className="text-foreground">use its power</strong>{" "}
                     (if it has one) and discard it, <strong className="text-foreground">or swap it</strong>{" "}
                     into your layout in place of one of your face-down cards.
                   </>,
@@ -240,15 +260,15 @@ export default function RulesPage() {
           </div>
         </Section>
 
-        <Section id="effects" icon={Sparkles} title="Card effects">
+        <Section id="powers" icon={Sparkles} title="Card powers">
           <div className="space-y-3">
             <Callout
               tone="destructive"
               icon={AlertTriangle}
               title="Only straight from the deck"
             >
-              An effect works only when you draw the card from the deck and
-              play it at once. In your layout, a card is just its points.
+              A power works only when you draw the card from the deck and
+              play it at once. In your grid, a card only costs its lives.
             </Callout>
             <div className="grid gap-3 sm:grid-cols-3">
               <Callout tone="peek" icon={Eye} title="7 and 8 · Peek">
@@ -264,17 +284,23 @@ export default function RulesPage() {
           </div>
         </Section>
 
-        <Section id="scoring" icon={BarChart3} title="Scoring">
+        <Section id="lives" icon={Heart} title="Lives">
+          <p className="mb-4 text-sm leading-relaxed text-muted-foreground">
+            Everyone starts with{" "}
+            <strong className="text-foreground">100 lives</strong>. When a
+            round ends, each card in front of you costs its points in lives.
+            At 0 you are out.
+          </p>
           <div className="grid gap-5 sm:grid-cols-2">
             <div>
-              <h3 className="mb-2.5 text-sm font-semibold">Card values</h3>
+              <h3 className="mb-2.5 text-sm font-semibold">What a card costs</h3>
               <dl className="divide-y divide-border overflow-hidden rounded-lg border border-border text-sm glass-control">
                 {[
-                  ["Ace", "1"],
-                  ["2 – 10", "Face value"],
-                  ["Jack", "11"],
-                  ["Queen", "12"],
-                  ["Joker", "0"],
+                  ["Ace", "1 life"],
+                  ["2 – 10", "Its number"],
+                  ["Jack", "11 lives"],
+                  ["Queen", "12 lives"],
+                  ["Joker", "Nothing"],
                 ].map(([card, value]) => (
                   <div key={card} className="flex justify-between px-3 py-2.5">
                     <dt>{card}</dt>
@@ -290,17 +316,17 @@ export default function RulesPage() {
                   <dt>
                     <span className="text-suit-red">♥ ♦</span> Red King
                   </dt>
-                  <dd className="font-display font-bold text-success">−1</dd>
+                  <dd className="font-display font-bold text-success">+1 life</dd>
                 </div>
                 <div className="flex justify-between rounded-lg border border-destructive/35 bg-destructive-surface px-3 py-2.5">
                   <dt>
                     <span className="text-muted-foreground">♠ ♣</span> Black King
                   </dt>
-                  <dd className="font-display font-bold text-destructive">+13</dd>
+                  <dd className="font-display font-bold text-destructive">−13 lives</dd>
                 </div>
               </dl>
               <p className="mt-3 text-xs text-muted-foreground">
-                Red Kings are your best friend. Black Kings are deadly.
+                A red King gives you a life back. A black King is deadly.
               </p>
             </div>
           </div>
@@ -311,17 +337,17 @@ export default function RulesPage() {
             <Callout tone="warning" icon={Flag} title="Calling “Jukas!”">
               <Steps
                 items={[
-                  "Call “Jukas!” when you think you have the lowest score.",
-                  "Everyone reveals their cards and adds up their round score.",
-                  "Add each round score to that player’s total.",
-                  "Anyone on 100 or more is out.",
-                  "Play new rounds until one player is left.",
+                  "Call “Jukas!” when you think you hold the least.",
+                  "Everyone turns their cards over and adds them up.",
+                  "Each player loses that many lives.",
+                  "Anyone at 0 lives is out.",
+                  "Play new rounds until one player has lives left.",
                 ]}
               />
             </Callout>
             <Callout tone="success" icon={Trophy} title="Winning">
-              The <strong className="text-foreground">last player under 100
-              points</strong> wins the game.
+              The <strong className="text-foreground">last player with lives
+              left</strong> wins the game.
             </Callout>
           </div>
         </Section>
