@@ -149,6 +149,22 @@
   --paper-ink: oklch(0.22 0.02 262);
   --paper-red: oklch(0.55 0.21 25);
 
+  /* One colour per player in the lives chart, by seat. The order is the
+     colour-blind-safe one: every neighbouring pair stays apart under
+     protanopia, deuteranopia and tritanopia, and each clears 3:1 on the card
+     surface (checked with the dataviz palette validator). Never cycled: a
+     ninth player is drawn in the muted ink. Plain properties, not theme
+     colours: the chart reads them with var(), and Tailwind only emits a
+     theme colour that some class uses. */
+  --series-1: #3987e5;
+  --series-2: #d95926;
+  --series-3: #199e70;
+  --series-4: #c98500;
+  --series-5: #d55181;
+  --series-6: #008300;
+  --series-7: #9085e9;
+  --series-8: #e66767;
+
   /* Outlines are meant to be seen: translucent ink, so an edge reads the
      same on the page, on glass and on a card. */
   --border: oklch(1 0 0 / 14%);

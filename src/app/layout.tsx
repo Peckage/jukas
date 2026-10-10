@@ -50,7 +50,7 @@ export const viewport: Viewport = {
   // the tab bar pad themselves with the safe-area insets.
   viewportFit: "cover",
   // The page background, so the browser chrome blends into it.
-  themeColor: "#14161f",
+  themeColor: "#0a0d13",
   colorScheme: "dark",
 };
 

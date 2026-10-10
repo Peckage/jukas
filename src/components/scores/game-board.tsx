@@ -1,6 +1,7 @@
 "use client";
 
 import { ArrowRight, Check, ChevronLeft, ChevronRight, Crown, Minus, Skull } from "lucide-react";
+import { formatLifeChange, livesLeft } from "@/components/scores/lives";
 import type { Player } from "@/components/scores/storage";
 import {
   AlertDialog,
@@ -55,6 +56,7 @@ function PlayerCard({
   onType: (value: number) => void;
 }) {
   const isEliminated = player.total >= threshold;
+  const lives = isEliminated ? 0 : livesLeft(player.total, threshold);
   const hasPending = pending !== undefined;
   // What the total becomes when the round is saved: the draft replaces
   // whatever this round already held.
@@ -119,7 +121,9 @@ function PlayerCard({
           </div>
           <p className="truncate font-mono text-2xs text-muted-foreground">
             {player.rounds.length > 0
-              ? Array.from(player.rounds, (score) => score || 0).join(" · ")
+              ? Array.from(player.rounds, (score) =>
+                  formatLifeChange(score || 0)
+                ).join(" · ")
               : "No rounds yet"}
           </p>
         </div>
@@ -135,10 +139,10 @@ function PlayerCard({
                   : "text-foreground"
             )}
           >
-            {player.total}
+            {lives}
           </span>
-          <span className="ml-0.5 text-xs text-muted-foreground tabular-nums">
-            /{threshold}
+          <span className="ml-1 text-xs text-muted-foreground">
+            {lives === 1 ? "life" : "lives"}
           </span>
           {change !== 0 && (
             <span
@@ -149,8 +153,8 @@ function PlayerCard({
                   : "text-primary"
               )}
             >
-              {change > 0 ? "+" : "−"}
-              {Math.abs(change)} → {player.total + change}
+              {formatLifeChange(change)} →{" "}
+              {Math.max(0, livesLeft(player.total + change, threshold))}
             </span>
           )}
         </p>
@@ -159,8 +163,8 @@ function PlayerCard({
       {!isEliminated && (
         <>
           <Progress
-            value={Math.min((player.total / threshold) * 100, 100)}
-            aria-label={`${player.name}: ${player.total} of ${threshold}`}
+            value={Math.min((lives / threshold) * 100, 100)}
+            aria-label={`${player.name}: ${lives} of ${threshold} lives left`}
             className="mt-3 h-1.5"
             indicatorClassName={dangerOf(player.total, threshold)}
           />
@@ -406,12 +410,13 @@ export function GameBoard({
 
       <p className="mt-4 flex flex-wrap justify-center gap-x-4 gap-y-1 text-xs text-muted-foreground">
         <span>
-          Out at <span className="font-medium text-destructive">{threshold}</span>
+          Start with {threshold} lives, out at{" "}
+          <span className="font-medium text-destructive">0</span>
         </span>
         <span>
-          <span className="text-suit-red">♥ ♦</span> K = −1
+          <span className="text-suit-red">♥ ♦</span> K +1 life
         </span>
-        <span>♠ ♣ K = +13</span>
+        <span>♠ ♣ K −13</span>
       </p>
     </div>
   );
