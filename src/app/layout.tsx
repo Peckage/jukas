@@ -3,7 +3,6 @@ import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import Link from "next/link";
 import MobileNav from "@/components/mobile-nav";
-import { TooltipProvider } from "@/components/ui/tooltip";
 import { JukasLogoMark } from "@/components/jukas-logo";
 import {
   Zap,
@@ -64,7 +63,6 @@ export default function RootLayout({
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased min-h-screen bg-background flex flex-col`}
       >
-        <TooltipProvider>
           {/* Animated background */}
           <div className="pointer-events-none fixed inset-0 -z-10">
             <div className="absolute inset-0 bg-linear-to-br from-background via-background to-background" />
@@ -150,7 +148,6 @@ export default function RootLayout({
 
           {/* Mobile Navigation */}
           <MobileNav />
-        </TooltipProvider>
       </body>
     </html>
   );
