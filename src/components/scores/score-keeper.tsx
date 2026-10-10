@@ -100,30 +100,58 @@ export default function ScoreKeeper() {
     setJustEliminated(new Set());
   };
 
+  /** The furthest round anyone has a score in; 0 before the first save. */
+  const roundsPlayed = Math.max(0, ...players.map((p) => p.rounds.length));
+  // From the last saved round onwards, saving moves the game on; before it,
+  // saving corrects that round. You can look back, never skip ahead.
+  const isLatestRound = currentRound >= roundsPlayed;
+  const canGoForward = currentRound <= roundsPlayed;
+
+  /** Moving between rounds drops what was typed and not saved. */
+  const goToRound = (round: number) => {
+    setPendingScores({});
+    setCurrentRound(round);
+  };
+
   /**
-   * Records a player's score for the current round. A new player object, never
-   * an edit of the old one: the old totals are what tells us who just went out.
+   * Saves the round: every player still in gets what was typed, else what
+   * the round already held, else 0. New player objects, never edits of the
+   * old ones: the old totals are what tells us who just went out. On the
+   * latest round it then moves on to an empty next one; on a past round it
+   * is a correction and stays.
    */
-  const addRoundScore = (playerIndex: number, score: number) => {
+  const submitRound = () => {
     const next = players.map((player, index) => {
-      if (index !== playerIndex) return player;
+      if (player.total >= threshold) return player;
       const rounds = [...player.rounds];
-      rounds[currentRound - 1] = score;
+      rounds[currentRound - 1] =
+        pendingScores[index] ?? player.rounds[currentRound - 1] ?? 0;
       return { ...player, rounds, total: totalOf(rounds) };
     });
     setPlayers(next);
+    setPendingScores({});
 
-    if (
-      players[playerIndex].total < threshold &&
-      next[playerIndex].total >= threshold
-    ) {
-      setJustEliminated(new Set([playerIndex]));
+    const wentOut = new Set(
+      next.flatMap((player, index) =>
+        players[index].total < threshold && player.total >= threshold
+          ? [index]
+          : []
+      )
+    );
+    if (wentOut.size > 0) {
+      setJustEliminated(wentOut);
       setTimeout(() => setJustEliminated(new Set()), 1500);
     }
 
     const aliveBefore = players.filter((p) => p.total < threshold).length;
     const aliveAfter = next.filter((p) => p.total < threshold).length;
     if (aliveBefore > 1 && aliveAfter === 1) setShowVictory(true);
+
+    if (isLatestRound && aliveAfter > 1) {
+      setCurrentRound(currentRound + 1);
+      // The next round starts at the first player.
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    }
   };
 
   const displayScore = (playerIndex: number) =>
@@ -133,16 +161,6 @@ export default function ScoreKeeper() {
 
   const setPending = (playerIndex: number, value: number) => {
     setPendingScores((prev) => ({ ...prev, [playerIndex]: value }));
-  };
-
-  const confirmScore = (playerIndex: number) => {
-    if (pendingScores[playerIndex] === undefined) return;
-    addRoundScore(playerIndex, pendingScores[playerIndex]);
-    setPendingScores((prev) => {
-      const next = { ...prev };
-      delete next[playerIndex];
-      return next;
-    });
   };
 
   const endGame = (saveToHistory: boolean) => {
@@ -205,11 +223,13 @@ export default function ScoreKeeper() {
         winnerIndex={winnerIndex}
         justEliminated={justEliminated}
         pendingScores={pendingScores}
-        onPreviousRound={() => setCurrentRound(Math.max(1, currentRound - 1))}
-        onNextRound={() => setCurrentRound(currentRound + 1)}
+        isLatestRound={isLatestRound}
+        canGoForward={canGoForward}
+        onPreviousRound={() => goToRound(Math.max(1, currentRound - 1))}
+        onNextRound={() => goToRound(currentRound + 1)}
         onStep={(index, delta) => setPending(index, displayScore(index) + delta)}
         onType={setPending}
-        onConfirm={confirmScore}
+        onSubmitRound={submitRound}
         onEnd={endGame}
       />
     </>
