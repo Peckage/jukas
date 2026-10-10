@@ -1,3 +1,7 @@
+import { AlertTriangle, Layers, TrendingDown, TrendingUp } from "lucide-react";
+import { CardList } from "@/components/card-list";
+import { Callout } from "@/components/callout";
+import { PageHeader } from "@/components/page-header";
 import {
   Card,
   CardContent,
@@ -5,89 +9,99 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import { Badge } from "@/components/ui/badge";
-import { Layers, TrendingDown, TrendingUp } from "lucide-react";
-import UniqueCardsTable from "@/components/card-matrix-unique";
+import { cn } from "@/lib/utils";
+
+const BEST = [
+  { card: "Red King", suits: "♥ ♦", value: "−1" },
+  { card: "Joker", value: "0" },
+  { card: "Ace", value: "1" },
+];
+
+const WORST = [
+  { card: "Black King", suits: "♠ ♣", value: "+13" },
+  { card: "Queen", value: "12" },
+  { card: "Jack", value: "11" },
+];
+
+function Extremes({
+  title,
+  icon: Icon,
+  rows,
+  good,
+}: {
+  title: string;
+  icon: typeof TrendingDown;
+  rows: { card: string; suits?: string; value: string }[];
+  good: boolean;
+}) {
+  const tone = good ? "text-success" : "text-destructive";
+  return (
+    <Card className="gap-3 py-4">
+      <CardHeader className="px-4">
+        <CardTitle className={cn("flex items-center gap-1.5 text-sm", tone)}>
+          <Icon className="size-4" aria-hidden />
+          {title}
+        </CardTitle>
+      </CardHeader>
+      <CardContent className="px-4">
+        <dl className="space-y-1.5 text-sm">
+          {rows.map((row) => (
+            <div key={row.card} className="flex items-baseline justify-between gap-2">
+              <dt className="truncate text-muted-foreground">
+                {row.card}
+                {row.suits && (
+                  <span
+                    className={cn(
+                      "ml-1.5 hidden text-xs min-[400px]:inline",
+                      good && "text-suit-red"
+                    )}
+                  >
+                    {row.suits}
+                  </span>
+                )}
+              </dt>
+              <dd className={cn("font-display font-bold tabular-nums", tone)}>
+                {row.value}
+              </dd>
+            </div>
+          ))}
+        </dl>
+      </CardContent>
+    </Card>
+  );
+}
 
 export default function CardsPage() {
   return (
-    <div className="pb-24 md:pb-0">
-      <div className="mx-auto max-w-4xl px-5 sm:px-6 py-8 md:py-12">
-        {/* Page Header */}
-        <div className="text-center mb-8">
-          <div className="inline-flex items-center justify-center w-12 h-12 rounded-2xl bg-accent/15 mb-4">
-            <Layers className="w-6 h-6 text-accent" />
-          </div>
-          <h1 className="text-2xl sm:text-3xl font-bold mb-2">
-            Card Reference
-          </h1>
-          <p className="text-sm text-muted-foreground">
-            All card values and effects at a glance
-          </p>
-        </div>
+    <div className="mx-auto w-full max-w-3xl px-4 py-6 sm:px-6 sm:py-10">
+      <PageHeader
+        icon={Layers}
+        title="Card reference"
+        description="Every value and effect at a glance."
+      />
 
-        {/* Quick Scoring Summary */}
-        <div className="grid grid-cols-2 gap-3 mb-6">
-          <Card className="glass border-emerald-500/20">
-            <CardHeader className="p-4 pb-2">
-              <CardTitle className="text-sm text-emerald-400 flex items-center gap-1.5">
-                <TrendingDown className="w-4 h-4" />
-                Best Cards
-              </CardTitle>
-            </CardHeader>
-            <CardContent className="p-4 pt-1 space-y-2">
-              <div className="flex justify-between text-sm">
-                <span className="text-red-400">♥ ♦ K</span>
-                <span className="font-bold text-emerald-400">-1</span>
-              </div>
-              <div className="flex justify-between text-sm">
-                <span className="text-muted-foreground">Ace</span>
-                <span className="font-semibold text-emerald-400">1</span>
-              </div>
-              <div className="flex justify-between text-sm">
-                <span className="text-muted-foreground">2s</span>
-                <span className="font-semibold text-emerald-400">2</span>
-              </div>
-            </CardContent>
-          </Card>
-
-          <Card className="glass border-red-500/20">
-            <CardHeader className="p-4 pb-2">
-              <CardTitle className="text-sm text-red-400 flex items-center gap-1.5">
-                <TrendingUp className="w-4 h-4" />
-                Worst Cards
-              </CardTitle>
-            </CardHeader>
-            <CardContent className="p-4 pt-1 space-y-2">
-              <div className="flex justify-between text-sm">
-                <span className="text-muted-foreground">♠ ♣ K</span>
-                <span className="font-bold text-red-400">+13</span>
-              </div>
-              <div className="flex justify-between text-sm">
-                <span className="text-muted-foreground">Queen</span>
-                <span className="font-semibold text-red-400">12</span>
-              </div>
-              <div className="flex justify-between text-sm">
-                <span className="text-muted-foreground">Jack</span>
-                <span className="font-semibold text-red-400">11</span>
-              </div>
-            </CardContent>
-          </Card>
-        </div>
-
-        {/* Card Table */}
-        <Card className="glass border-border/30 shadow-xl">
-          <CardHeader className="border-b border-border/30 py-4 px-5">
-            <CardTitle className="text-base">Card Values & Effects</CardTitle>
-            <CardDescription className="text-xs">
-              Effects only work when drawn from deck and immediately used
-            </CardDescription>
-          </CardHeader>
-          <CardContent className="p-0 sm:p-5">
-            <UniqueCardsTable />
-          </CardContent>
-        </Card>
+      <div className="mb-4 grid grid-cols-2 gap-3 sm:gap-4">
+        <Extremes title="Best cards" icon={TrendingDown} rows={BEST} good />
+        <Extremes title="Worst cards" icon={TrendingUp} rows={WORST} good={false} />
       </div>
+
+      <Callout
+        tone="warning"
+        icon={AlertTriangle}
+        title="Effects only work from the deck"
+        className="mb-4"
+      >
+        A card’s effect counts only when you draw it from the deck and play it
+        straight away. In your layout, every card is just its points.
+      </Callout>
+
+      <Card className="gap-0 py-0">
+        <CardHeader className="border-b border-border py-4 [.border-b]:pb-4">
+          <CardTitle>Values and effects</CardTitle>
+          <CardDescription>Suits only matter for Kings.</CardDescription>
+        </CardHeader>
+        <CardList />
+      </Card>
     </div>
   );
 }

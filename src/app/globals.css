@@ -1,298 +1,387 @@
 @import "tailwindcss";
 @import "tw-animate-css";
 
+/* Jukas has one theme, a night table: `dark` is on <html> permanently. */
 @custom-variant dark (&:is(.dark *));
 
+/* ─── Tailwind theme mapping ────────────────────────────────────── */
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
   --font-sans: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);
-  --color-sidebar-ring: var(--sidebar-ring);
-  --color-sidebar-border: var(--sidebar-border);
-  --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
-  --color-sidebar-accent: var(--sidebar-accent);
-  --color-sidebar-primary-foreground: var(--sidebar-primary-foreground);
-  --color-sidebar-primary: var(--sidebar-primary);
-  --color-sidebar-foreground: var(--sidebar-foreground);
-  --color-sidebar: var(--sidebar);
-  --color-chart-5: var(--chart-5);
-  --color-chart-4: var(--chart-4);
-  --color-chart-3: var(--chart-3);
-  --color-chart-2: var(--chart-2);
-  --color-chart-1: var(--chart-1);
-  --color-ring: var(--ring);
-  --color-input: var(--input);
-  --color-border: var(--border);
-  --color-destructive: var(--destructive);
-  --color-accent-foreground: var(--accent-foreground);
-  --color-accent: var(--accent);
-  --color-muted-foreground: var(--muted-foreground);
-  --color-muted: var(--muted);
-  --color-secondary-foreground: var(--secondary-foreground);
-  --color-secondary: var(--secondary);
-  --color-primary-foreground: var(--primary-foreground);
-  --color-primary: var(--primary);
-  --color-popover-foreground: var(--popover-foreground);
-  --color-popover: var(--popover);
-  --color-card-foreground: var(--card-foreground);
+  /* Headlines, page titles and the big score numbers. Body stays Geist. */
+  --font-display: var(--font-instrument-sans), var(--font-geist-sans);
+
+  /* The two steps below `text-xs`, so a chip or a meta line names a size
+     instead of reaching for `text-[10px]`. */
+  --text-2xs: 0.6875rem;
+  --text-2xs--line-height: 1rem;
+  --text-3xs: 0.625rem;
+  --text-3xs--line-height: 0.875rem;
+
   --color-card: var(--card);
-  --radius-sm: calc(var(--radius) - 4px);
-  --radius-md: calc(var(--radius) - 2px);
-  --radius-lg: var(--radius);
-  --radius-xl: calc(var(--radius) + 4px);
-  --radius-2xl: calc(var(--radius) + 8px);
+  --color-card-foreground: var(--card-foreground);
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  /* The edge of a filled button: its own colour, a step darker. */
+  --color-primary-edge: color-mix(in oklch, var(--primary), black 22%);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-destructive: var(--destructive);
+  --color-destructive-foreground: var(--destructive-foreground);
+  --color-destructive-edge: color-mix(in oklch, var(--destructive), black 22%);
+  --color-success: var(--success);
+  --color-success-foreground: var(--success-foreground);
+  --color-warning: var(--warning);
+  --color-warning-foreground: var(--warning-foreground);
+  --color-border: var(--border);
+  --color-border-strong: var(--border-strong);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
+  --color-raised: var(--raised);
+
+  /* The three card effects, one hue each, everywhere an effect is named. */
+  --color-peek: var(--peek);
+  --color-swap: var(--swap);
+  --color-look: var(--look);
+  /* Hearts and diamonds. */
+  --color-suit-red: var(--suit-red);
+  /* A playing card's face: paper and the two inks printed on it. */
+  --color-paper: var(--paper);
+  --color-paper-ink: var(--paper-ink);
+  --color-paper-red: var(--paper-red);
+
+  /* Status and effect callouts are solid, never glass: the hue mixed into
+     the card, so the page behind cannot soften what a warning looks like. */
+  --color-destructive-surface: color-mix(in oklch, var(--destructive) 12%, var(--card));
+  --color-warning-surface: color-mix(in oklch, var(--warning) 11%, var(--card));
+  --color-success-surface: color-mix(in oklch, var(--success) 11%, var(--card));
+  --color-primary-surface: color-mix(in oklch, var(--primary) 12%, var(--card));
+  --color-peek-surface: color-mix(in oklch, var(--peek) 12%, var(--card));
+  --color-swap-surface: color-mix(in oklch, var(--swap) 12%, var(--card));
+  --color-look-surface: color-mix(in oklch, var(--look) 12%, var(--card));
+
+  /* Nested radii from one base: controls 10px, cards 12px, sections 16px. */
+  --radius-xs: calc(var(--radius) - 4px);
+  --radius-sm: calc(var(--radius) - 2px);
+  --radius-md: var(--radius);
+  --radius-lg: calc(var(--radius) + 2px);
+  --radius-xl: calc(var(--radius) + 2px);
+  --radius-2xl: calc(var(--radius) + 6px);
   --radius-3xl: calc(var(--radius) + 12px);
-  --radius-4xl: calc(var(--radius) + 16px);
+
+  /* Every raised surface: a light top edge and a soft drop. */
+  --shadow-card:
+    inset 0 1px 0 var(--card-highlight), 0 1px 2px oklch(0 0 0 / 0.2),
+    0 12px 32px -14px var(--glass-shadow);
+  /* A surface that floats over the page: dialogs, the header, the tab bar. */
+  --shadow-overlay:
+    inset 0 1px 0 var(--card-highlight), 0 2px 6px oklch(0 0 0 / 0.25),
+    0 24px 56px -16px var(--glass-shadow);
+  /* The primary action: a lit top edge and a soft glow in its own colour. */
+  --shadow-primary:
+    inset 0 1px 0 oklch(1 0 0 / 0.28), 0 1px 2px oklch(0 0 0 / 0.3),
+    0 6px 16px -6px color-mix(in oklch, var(--primary) 70%, transparent);
+  /* The selected item in a set (nav row, tab, segment): lifted off the glass
+     with its own outline. */
+  --shadow-raised:
+    inset 0 1px 0 var(--card-highlight), 0 0 0 1px var(--border), 0 1px 2px oklch(0 0 0 / 0.25);
+  /* A pressable control: a light top edge and a hairline drop. */
+  --shadow-control: inset 0 1px 0 var(--card-highlight), 0 1px 2px oklch(0 0 0 / 0.2);
 }
 
-/* Modern dark theme - refined and professional */
+/* ═══════════════════════════════════════════════════════════════════
+   THEME
+   ───────────────────────────────────────────────────────────────────
+   A cool night table. Four surface planes a clear step apart:
+   page < card < popover, with glass tiers (below) laid over the ambient
+   light. Blue is the one action colour. Green, amber and red are for
+   verdicts (a good card, a close call, out); violet, orange and cyan
+   name the three card effects.
+   ═══════════════════════════════════════════════════════════════════ */
 :root {
-  --radius: 0.75rem;
-  --background: oklch(0.08 0.005 260);
+  color-scheme: dark;
+  --radius: 0.625rem;
+
+  --background: oklch(0.16 0.014 262);
   --foreground: oklch(0.96 0.005 260);
-  --card: oklch(0.115 0.008 260);
+
+  --card: oklch(0.205 0.014 262);
   --card-foreground: oklch(0.96 0.005 260);
-  --popover: oklch(0.10 0.006 260);
+
+  --popover: oklch(0.245 0.014 262);
   --popover-foreground: oklch(0.96 0.005 260);
-  --primary: oklch(0.65 0.2 255);
-  --primary-foreground: oklch(0.99 0 0);
-  --secondary: oklch(0.17 0.01 260);
-  --secondary-foreground: oklch(0.92 0.008 260);
-  --muted: oklch(0.15 0.006 260);
-  --muted-foreground: oklch(0.58 0.012 260);
-  --accent: oklch(0.62 0.18 165);
-  --accent-foreground: oklch(0.99 0 0);
-  --destructive: oklch(0.58 0.22 25);
-  --border: oklch(0.20 0.008 260);
-  --input: oklch(0.15 0.006 260);
-  --ring: oklch(0.65 0.2 255);
-  --chart-1: oklch(0.65 0.2 255);
-  --chart-2: oklch(0.62 0.18 165);
-  --chart-3: oklch(0.72 0.16 80);
-  --chart-4: oklch(0.62 0.2 300);
-  --chart-5: oklch(0.58 0.22 25);
-  --sidebar: oklch(0.10 0.006 260);
-  --sidebar-foreground: oklch(0.96 0.005 260);
-  --sidebar-primary: oklch(0.65 0.2 255);
-  --sidebar-primary-foreground: oklch(0.99 0 0);
-  --sidebar-accent: oklch(0.17 0.01 260);
-  --sidebar-accent-foreground: oklch(0.92 0.008 260);
-  --sidebar-border: oklch(0.20 0.008 260);
-  --sidebar-ring: oklch(0.65 0.2 255);
+
+  --primary: oklch(0.7 0.14 252);
+  --primary-foreground: oklch(0.14 0.02 262);
+
+  --secondary: oklch(0.26 0.014 262);
+  --secondary-foreground: oklch(0.95 0.005 260);
+
+  --muted: oklch(0.24 0.012 262);
+  --muted-foreground: oklch(0.72 0.016 260);
+
+  /* shadcn's accent: the quiet hover surface, not a brand colour. */
+  --accent: oklch(1 0 0 / 7%);
+  --accent-foreground: oklch(0.97 0.005 260);
+
+  --destructive: oklch(0.66 0.2 25);
+  --destructive-foreground: oklch(0.99 0 0);
+
+  --success: oklch(0.74 0.16 152);
+  --success-foreground: oklch(0.14 0 0);
+
+  --warning: oklch(0.8 0.15 78);
+  --warning-foreground: oklch(0.14 0 0);
+
+  --peek: oklch(0.74 0.14 300);
+  --swap: oklch(0.76 0.15 55);
+  --look: oklch(0.78 0.11 205);
+  --suit-red: oklch(0.7 0.19 22);
+  --paper: oklch(0.97 0.006 85);
+  --paper-ink: oklch(0.22 0.02 262);
+  --paper-red: oklch(0.55 0.21 25);
+
+  /* Outlines are meant to be seen: translucent ink, so an edge reads the
+     same on the page, on glass and on a card. */
+  --border: oklch(1 0 0 / 14%);
+  --border-strong: oklch(1 0 0 / 24%);
+  --input: oklch(1 0 0 / 22%);
+  --ring: oklch(0.7 0.14 252 / 70%);
+
+  /* The fill behind the selected item in a set. */
+  --raised: oklch(1 0 0 / 10%);
+  /* The hairline of light along the top of every glass surface and control. */
+  --card-highlight: oklch(1 0 0 / 9%);
+
+  /* Glass (see GLASS below): the fill of each tier, the control fill, the
+     ambient light behind the page and the tint of a glass surface's shadow.
+     The light is the action blue, a teal, and the logo's orange. */
+  --glass-chrome: oklch(0.22 0.016 262 / 58%);
+  --glass-panel: oklch(0.205 0.014 262 / 68%);
+  --glass-overlay: oklch(0.245 0.014 262 / 82%);
+  --glass-control: oklch(1 0 0 / 6%);
+  --ambient-a: oklch(0.44 0.13 255 / 55%);
+  --ambient-b: oklch(0.44 0.09 190 / 34%);
+  --ambient-c: oklch(0.5 0.13 50 / 24%);
+  --glass-shadow: oklch(0 0 0 / 60%);
 }
 
+/* ═══════════════════════════════════════════════════════════════════
+   GLASS
+   ───────────────────────────────────────────────────────────────────
+   Three tiers, one per job, each a utility below:
+
+     glass-chrome   the header, the phone tab bar, the game bar. The most
+                    see-through; blurs what scrolls under it.
+     glass-panel    sections and cards. Translucent but no backdrop blur:
+                    behind a panel is only the still ambient light, so a
+                    blur would cost a compositing layer per card and look
+                    the same. Scores stay sharp.
+     glass-overlay  dialogs and the victory card. Floats: stronger blur.
+
+   Plus glass-control for the fill of outline buttons and inputs.
+
+   Callouts and verdicts (`bg-*-surface`) are never glass.
+
+   The OS "reduce transparency" setting swaps every tier for the solid
+   surface and turns the blur off. The ambient light stays.
+   ═══════════════════════════════════════════════════════════════════ */
+:root {
+  --glass-filter: blur(22px) saturate(170%);
+  --glass-filter-overlay: blur(28px) saturate(180%);
+}
+
+@media (prefers-reduced-transparency: reduce) {
+  :root:root {
+    --glass-chrome: var(--card);
+    --glass-panel: var(--card);
+    --glass-overlay: var(--popover);
+    --glass-control: var(--card);
+    --glass-filter: none;
+    --glass-filter-overlay: none;
+  }
+}
+
+/* NOTE: declare only the standard `backdrop-filter`. LightningCSS adds the
+   `-webkit-` prefix itself, and a hand-written prefix makes it drop the
+   standard declaration, which breaks Firefox. */
+@utility glass-chrome {
+  background-color: var(--glass-chrome);
+  backdrop-filter: var(--glass-filter);
+}
+
+@utility glass-panel {
+  background-color: var(--glass-panel);
+}
+
+@utility glass-overlay {
+  background-color: var(--glass-overlay);
+  backdrop-filter: var(--glass-filter-overlay);
+}
+
+@utility glass-control {
+  background-color: var(--glass-control);
+}
+
+/* The back of a face-down playing card: the action blue, cross-hatched. */
+@utility card-back {
+  background-color: color-mix(in oklch, var(--primary) 30%, var(--card));
+  background-image:
+    repeating-linear-gradient(45deg, color-mix(in oklch, var(--primary) 30%, transparent) 0 2px, transparent 2px 7px),
+    repeating-linear-gradient(-45deg, color-mix(in oklch, var(--primary) 30%, transparent) 0 2px, transparent 2px 7px);
+}
+
+/* A press you can feel on a touch screen. */
+@utility press {
+  transition-property: scale, background-color, border-color, color, box-shadow, opacity;
+  transition-duration: 150ms;
+  &:active:not(:disabled) {
+    scale: 0.96;
+  }
+}
+
+/* ─── Base ──────────────────────────────────────────────────────── */
 @layer base {
   * {
     @apply border-border outline-ring/50;
   }
+
+  html {
+    scroll-behavior: smooth;
+    -webkit-tap-highlight-color: transparent;
+    /* `clip` (not `hidden`): `hidden` makes a scroll container and breaks
+       every sticky descendant. */
+    overflow-x: clip;
+  }
+
   body {
     @apply bg-background text-foreground;
+    /* Keeps the ambient light (`body::before`, z-index -1) above the body's
+       own background and below everything else. */
+    isolation: isolate;
+    overflow-x: clip;
+    font-feature-settings: "ss01";
+  }
+
+  /* iOS Safari zooms the page when a focused field's text is under 16px. */
+  @media (max-width: 767px) {
+    input:not([type="checkbox"]):not([type="radio"]),
+    textarea,
+    select {
+      font-size: 16px !important;
+    }
+  }
+
+  button:not(:disabled),
+  [role="button"]:not(:disabled) {
+    cursor: pointer;
   }
 }
 
-/* Custom scrollbar - minimal and sleek */
-::-webkit-scrollbar {
-  width: 4px;
-  height: 4px;
-}
-::-webkit-scrollbar-track {
-  background: transparent;
-}
-::-webkit-scrollbar-thumb {
-  background: oklch(0.30 0.015 260);
-  border-radius: 4px;
-}
-::-webkit-scrollbar-thumb:hover {
-  background: oklch(0.40 0.015 260);
-}
-
-/* Smooth scrolling & touch */
-html {
-  scroll-behavior: smooth;
-  -webkit-tap-highlight-color: transparent;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
+/* The ambient light behind every page: three soft pools sized to the
+   window and fixed to it, so it never scrolls and never repaints. A
+   pseudo-element rather than `background-attachment: fixed`, which iOS
+   ignores. An opaque full-width band would hide it: use glass instead. */
+body::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+  background:
+    radial-gradient(max(36rem, 70vw) max(28rem, 60vh) at 0% 0%, var(--ambient-a), transparent 70%),
+    radial-gradient(max(32rem, 60vw) max(30rem, 70vh) at 100% 40%, var(--ambient-b), transparent 70%),
+    radial-gradient(max(36rem, 70vw) max(26rem, 55vh) at 30% 100%, var(--ambient-c), transparent 70%);
 }
 
-/* Better touch targets for mobile */
-@media (max-width: 768px) {
-  button, a, input, select, textarea {
-    min-height: 44px;
-  }
+/* ─── Scrollbar ─────────────────────────────────────────────────── */
+* {
+  scrollbar-width: thin;
+  scrollbar-color: var(--border-strong) transparent;
 }
 
-/* ===== Utility Classes ===== */
-
-/* Glass morphism - refined */
-.glass {
-  background: oklch(0.13 0.012 260 / 0.75);
-  backdrop-filter: blur(16px) saturate(1.2);
-  -webkit-backdrop-filter: blur(16px) saturate(1.2);
-}
-.glass-strong {
-  background: oklch(0.11 0.01 260 / 0.9);
-  backdrop-filter: blur(24px) saturate(1.3);
-  -webkit-backdrop-filter: blur(24px) saturate(1.3);
-}
-
-/* Card hover micro-interaction */
-.card-hover {
-  transition: transform 0.2s cubic-bezier(0.34, 1.56, 0.64, 1),
-              box-shadow 0.2s ease,
-              border-color 0.2s ease;
-}
-.card-hover:hover {
-  transform: translateY(-3px);
-  box-shadow: 0 12px 40px oklch(0 0 0 / 0.35), 0 4px 12px oklch(0 0 0 / 0.2);
-}
-.card-hover:active {
-  transform: translateY(-1px) scale(0.99);
-}
-
-/* Press effect for mobile buttons */
-.press-effect {
-  transition: transform 0.1s ease;
-}
-.press-effect:active {
-  transform: scale(0.96);
-}
-
-/* Glow effects */
-.glow-primary {
-  box-shadow: 0 0 40px oklch(0.65 0.2 255 / 0.25), 0 0 80px oklch(0.65 0.2 255 / 0.1);
-}
-.glow-emerald {
-  box-shadow: 0 0 40px oklch(0.62 0.18 165 / 0.25), 0 0 80px oklch(0.62 0.18 165 / 0.1);
-}
-.glow-amber {
-  box-shadow: 0 0 40px oklch(0.72 0.16 80 / 0.25), 0 0 80px oklch(0.72 0.16 80 / 0.1);
-}
-
-/* Safe area padding for mobile notch/gesture bar */
-@supports (padding: env(safe-area-inset-bottom)) {
-  .safe-bottom { padding-bottom: env(safe-area-inset-bottom); }
-  .safe-top { padding-top: env(safe-area-inset-top); }
-}
-
-/* Animated mesh gradient background */
-.mesh-gradient {
-  background-size: 400% 400%;
-  animation: mesh-shift 20s ease infinite;
-}
-@keyframes mesh-shift {
-  0%, 100% { background-position: 0% 50%; }
-  25% { background-position: 100% 0%; }
-  50% { background-position: 100% 100%; }
-  75% { background-position: 0% 100%; }
-}
-
-/* ===== Game Animations ===== */
-
-@keyframes elimination-shake {
-  0%, 100% { transform: translateX(0); }
-  10%, 30%, 50%, 70%, 90% { transform: translateX(-6px); }
-  20%, 40%, 60%, 80% { transform: translateX(6px); }
-}
-@keyframes elimination-fade {
-  0% { opacity: 1; transform: scale(1); filter: saturate(1); }
-  50% { opacity: 0.8; transform: scale(1.01); filter: saturate(1.5); }
-  100% { opacity: 0.6; transform: scale(0.99); filter: saturate(0.3); }
-}
-.animate-eliminated {
-  animation: elimination-shake 0.5s ease-in-out, elimination-fade 0.6s ease-out 0.5s forwards;
-}
-
-@keyframes flash-red {
-  0%, 100% { background-color: transparent; }
-  50% { background-color: oklch(0.5 0.25 25 / 0.25); }
-}
-.animate-flash-red { animation: flash-red 0.25s ease-out 3; }
-
-@keyframes winner-pulse {
-  0%, 100% { transform: scale(1); box-shadow: 0 0 0 0 oklch(0.75 0.18 85 / 0.6); }
-  50% { transform: scale(1.01); box-shadow: 0 0 30px 8px oklch(0.75 0.18 85 / 0.3); }
-}
-@keyframes winner-glow {
-  0%, 100% { filter: brightness(1) drop-shadow(0 0 8px oklch(0.75 0.18 85 / 0.4)); }
-  50% { filter: brightness(1.05) drop-shadow(0 0 24px oklch(0.75 0.18 85 / 0.7)); }
-}
-.animate-winner {
-  animation: winner-pulse 1.5s ease-in-out infinite, winner-glow 2s ease-in-out infinite;
-}
-
-@keyframes crown-bounce {
-  0%, 100% { transform: translateY(0) rotate(-3deg); }
-  25% { transform: translateY(-6px) rotate(3deg); }
-  50% { transform: translateY(-3px) rotate(-2deg); }
-  75% { transform: translateY(-5px) rotate(2deg); }
-}
-.animate-crown { animation: crown-bounce 1s ease-in-out infinite; display: inline-block; }
-
-@keyframes confetti-fall {
-  0% { transform: translateY(-100vh) rotate(0deg); opacity: 1; }
-  100% { transform: translateY(100vh) rotate(720deg); opacity: 0; }
-}
-.confetti-particle {
-  position: fixed; width: 10px; height: 10px;
-  animation: confetti-fall linear forwards;
-  pointer-events: none; z-index: 9999;
-}
-
-@keyframes victory-entrance {
-  0% { opacity: 0; transform: scale(0.85) translateY(16px); }
-  100% { opacity: 1; transform: scale(1) translateY(0); }
-}
-.animate-victory-entrance {
-  animation: victory-entrance 0.4s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
-}
-
-@keyframes trophy-spin {
-  0% { transform: rotateY(0deg); }
-  100% { transform: rotateY(360deg); }
-}
-.animate-trophy { animation: trophy-spin 3s ease-in-out infinite; display: inline-block; }
-
-@keyframes sparkle {
-  0%, 100% { opacity: 0; transform: scale(0); }
-  50% { opacity: 1; transform: scale(1); }
-}
-.animate-sparkle { animation: sparkle 1.5s ease-in-out infinite; }
-
-@keyframes score-pop {
-  0% { transform: scale(1); }
-  50% { transform: scale(1.25); color: oklch(0.6 0.22 25); }
-  100% { transform: scale(1); }
-}
-.animate-score-pop { animation: score-pop 0.35s ease-out; }
-
+/* ─── Motion ────────────────────────────────────────────────────── */
 @keyframes slide-up {
-  0% { opacity: 0; transform: translateY(12px); }
-  100% { opacity: 1; transform: translateY(0); }
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
 }
-.animate-slide-up { animation: slide-up 0.25s ease-out forwards; }
-
-@keyframes fade-in {
-  0% { opacity: 0; }
-  100% { opacity: 1; }
-}
-.animate-fade-in { animation: fade-in 0.3s ease-out forwards; }
+.animate-slide-up { animation: slide-up 0.25s ease-out both; }
 
 @keyframes float {
   0%, 100% { transform: translateY(0); }
   50% { transform: translateY(-6px); }
 }
-.animate-float { animation: float 3s ease-in-out infinite; }
+.animate-float { animation: float 3.5s ease-in-out infinite; }
 
-@keyframes shimmer {
-  0% { transform: translateX(-100%); }
-  100% { transform: translateX(100%); }
+/* A player crossing the threshold: a shake, then a red flash. */
+@keyframes elimination-shake {
+  0%, 100% { transform: translateX(0); }
+  10%, 30%, 50%, 70%, 90% { transform: translateX(-6px); }
+  20%, 40%, 60%, 80% { transform: translateX(6px); }
 }
-.shimmer-effect {
-  position: relative; overflow: hidden;
+@keyframes flash-red {
+  0%, 100% { box-shadow: var(--shadow-card); }
+  50% { box-shadow: var(--shadow-card), 0 0 0 2px var(--destructive), 0 0 32px -4px var(--destructive); }
 }
-.shimmer-effect::after {
-  content: ''; position: absolute; inset: 0;
-  background: linear-gradient(90deg, transparent, oklch(1 0 0 / 0.08), transparent);
-  animation: shimmer 2s ease-in-out infinite;
+.animate-eliminated {
+  animation: elimination-shake 0.5s ease-in-out, flash-red 0.3s ease-out 0.5s 3;
+}
+
+@keyframes winner-glow {
+  0%, 100% { box-shadow: var(--shadow-card), 0 0 0 1px var(--warning); }
+  50% { box-shadow: var(--shadow-card), 0 0 0 1px var(--warning), 0 0 36px -6px var(--warning); }
+}
+.animate-winner { animation: winner-glow 2s ease-in-out infinite; }
+
+@keyframes crown-bounce {
+  0%, 100% { transform: translateY(0) rotate(-3deg); }
+  25% { transform: translateY(-4px) rotate(3deg); }
+  50% { transform: translateY(-2px) rotate(-2deg); }
+  75% { transform: translateY(-3px) rotate(2deg); }
+}
+.animate-crown { animation: crown-bounce 1s ease-in-out infinite; display: inline-block; }
+
+@keyframes confetti-fall {
+  0% { transform: translateY(-10vh) rotate(0deg); opacity: 1; }
+  100% { transform: translateY(110vh) rotate(720deg); opacity: 0; }
+}
+.confetti-particle {
+  position: fixed;
+  top: 0;
+  animation: confetti-fall linear forwards;
+  pointer-events: none;
+}
+
+@keyframes victory-entrance {
+  from { opacity: 0; transform: scale(0.9) translateY(16px); }
+  to { opacity: 1; transform: scale(1) translateY(0); }
+}
+.animate-victory-entrance {
+  animation: victory-entrance 0.4s cubic-bezier(0.34, 1.56, 0.64, 1) both;
+}
+
+@keyframes trophy-spin {
+  from { transform: rotateY(0deg); }
+  to { transform: rotateY(360deg); }
+}
+.animate-trophy { animation: trophy-spin 3s ease-in-out infinite; display: inline-block; }
+
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+  .confetti-particle { display: none; }
 }

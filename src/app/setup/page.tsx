@@ -1,383 +1,206 @@
+import { ArrowDown, ArrowRight, Brain, LayoutGrid, Target, Zap } from "lucide-react";
+import { Callout } from "@/components/callout";
+import { PageHeader } from "@/components/page-header";
+import { PlayingCard } from "@/components/playing-card";
 import { Card, CardContent } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 
+const STEPS = [
+  {
+    title: "Deal 4 cards",
+    description: "Each player gets 4 cards face down, in a 2×2 grid.",
+  },
+  {
+    title: "Make the piles",
+    description: "The rest is the draw pile. Flip its top card to start the discard pile.",
+  },
+  {
+    title: "Peek at 2",
+    description: "Each player looks at any 2 of their 4 cards, then puts them back.",
+  },
+];
+
+function FaceDownGrid() {
+  return (
+    <div className="grid grid-cols-2 gap-2 rounded-xl border border-border p-3 glass-control">
+      {[0, 1, 2, 3].map((slot) => (
+        <PlayingCard key={slot} faceDown size="sm" />
+      ))}
+    </div>
+  );
+}
+
+function FlowStep({
+  label,
+  children,
+}: {
+  label: string;
+  children: React.ReactNode;
+}) {
+  return (
+    <div className="flex flex-col items-center gap-2">
+      {children}
+      <span className="text-center text-xs text-muted-foreground">{label}</span>
+    </div>
+  );
+}
+
+function FlowArrow() {
+  return (
+    <ArrowRight
+      aria-hidden
+      className="mb-6 size-4 shrink-0 text-muted-foreground"
+    />
+  );
+}
+
 export default function SetupPage() {
   return (
-    <div className="pb-24 md:pb-0">
-      <div className="mx-auto max-w-4xl px-4 sm:px-6 py-8 md:py-12">
-        {/* Page Header */}
-        <div className="text-center mb-8">
-          <h1 className="text-2xl sm:text-3xl font-bold mb-2 flex items-center justify-center gap-2">
-            <span>⚡</span>
-            Quick Setup Guide
-          </h1>
-          <p className="text-sm text-muted-foreground">
-            Get your game started in under a minute
-          </p>
-        </div>
+    <div className="mx-auto w-full max-w-3xl px-4 py-6 sm:px-6 sm:py-10">
+      <PageHeader
+        icon={Zap}
+        title="Quick setup"
+        description="Get a game going in under a minute."
+      />
 
-        {/* Tabs */}
-        <Tabs defaultValue="setup" className="w-full">
-          <TabsList className="grid w-full grid-cols-3 mb-6 h-auto p-1 bg-muted/50">
-            <TabsTrigger
-              value="setup"
-              className="py-2.5 text-xs sm:text-sm data-[state=active]:bg-primary data-[state=active]:text-primary-foreground"
-            >
-              <span className="hidden sm:inline">Initial </span>Setup
-            </TabsTrigger>
-            <TabsTrigger
-              value="layout"
-              className="py-2.5 text-xs sm:text-sm data-[state=active]:bg-primary data-[state=active]:text-primary-foreground"
-            >
-              <span className="hidden sm:inline">Card </span>Layout
-            </TabsTrigger>
-            <TabsTrigger
-              value="turn"
-              className="py-2.5 text-xs sm:text-sm data-[state=active]:bg-primary data-[state=active]:text-primary-foreground"
-            >
-              <span className="hidden sm:inline">Turn </span>Example
-            </TabsTrigger>
-          </TabsList>
+      <Tabs defaultValue="setup" className="gap-4">
+        <TabsList className="w-full">
+          <TabsTrigger value="setup">Setup</TabsTrigger>
+          <TabsTrigger value="layout">Layout</TabsTrigger>
+          <TabsTrigger value="turn">A turn</TabsTrigger>
+        </TabsList>
 
-          {/* Setup Tab */}
-          <TabsContent value="setup" className="mt-0">
-            <Card className="glass border-border/50">
-              <CardContent className="p-6 sm:p-8">
-                <div className="grid gap-6 md:grid-cols-3">
-                  {/* Step 1 */}
-                  <div className="flex flex-col items-center text-center">
-                    <div className="relative mb-4">
-                      <div className="h-16 w-16 sm:h-20 sm:w-20 rounded-2xl bg-linear-to-br from-orange-500 to-red-600 flex items-center justify-center text-white text-2xl sm:text-3xl font-bold shadow-lg glow-orange">
-                        1
-                      </div>
-                    </div>
-                    <h4 className="font-semibold text-lg mb-2">Deal 4 Cards</h4>
-                    <p className="text-sm text-muted-foreground leading-relaxed">
-                      Each player gets 4 cards face-down arranged in a 2×2 grid
-                    </p>
-                  </div>
-
-                  {/* Step 2 */}
-                  <div className="flex flex-col items-center text-center">
-                    <div className="relative mb-4">
-                      <div className="h-16 w-16 sm:h-20 sm:w-20 rounded-2xl bg-linear-to-br from-emerald-500 to-teal-600 flex items-center justify-center text-white text-2xl sm:text-3xl font-bold shadow-lg glow-emerald">
-                        2
-                      </div>
-                    </div>
-                    <h4 className="font-semibold text-lg mb-2">Create Piles</h4>
-                    <p className="text-sm text-muted-foreground leading-relaxed">
-                      Remaining cards = draw pile, flip top card for discard
-                    </p>
-                  </div>
-
-                  {/* Step 3 */}
-                  <div className="flex flex-col items-center text-center md:col-span-1 col-span-full">
-                    <div className="relative mb-4">
-                      <div className="h-16 w-16 sm:h-20 sm:w-20 rounded-2xl bg-linear-to-br from-amber-500 to-orange-600 flex items-center justify-center text-white text-2xl sm:text-3xl font-bold shadow-lg">
-                        3
-                      </div>
-                    </div>
-                    <h4 className="font-semibold text-lg mb-2">Peek at 2</h4>
-                    <p className="text-sm text-muted-foreground leading-relaxed">
-                      Each player looks at any 2 of their 4 cards, then puts
-                      them back
-                    </p>
-                  </div>
-                </div>
-
-                {/* Tip Card */}
-                <div className="mt-8 p-4 sm:p-5 rounded-xl bg-linear-to-r from-amber-500/10 to-orange-500/10 border border-amber-500/30">
-                  <div className="flex items-start gap-3">
-                    <span className="text-2xl shrink-0">💡</span>
+        <TabsContent value="setup">
+          <Card>
+            <CardContent className="space-y-6">
+              <ol className="grid gap-5 sm:grid-cols-3">
+                {STEPS.map((step, index) => (
+                  <li
+                    key={step.title}
+                    className="flex items-start gap-4 sm:flex-col sm:items-center sm:text-center"
+                  >
+                    <span className="flex size-11 shrink-0 items-center justify-center rounded-xl border border-primary-edge bg-primary font-display text-lg font-bold text-primary-foreground shadow-primary sm:size-14 sm:text-2xl">
+                      {index + 1}
+                    </span>
                     <div>
-                      <h5 className="font-semibold text-amber-300 mb-1">
-                        Remember Your Cards!
-                      </h5>
-                      <p className="text-sm text-muted-foreground leading-relaxed">
-                        The key to Jukas is remembering which cards you peeked
-                        at initially. This memory will guide your strategy
-                        throughout the game.
+                      <h2 className="font-display font-semibold sm:text-lg">
+                        {step.title}
+                      </h2>
+                      <p className="mt-1 text-sm leading-relaxed text-muted-foreground">
+                        {step.description}
                       </p>
                     </div>
-                  </div>
-                </div>
-              </CardContent>
-            </Card>
-          </TabsContent>
+                  </li>
+                ))}
+              </ol>
 
-          {/* Layout Tab */}
-          <TabsContent value="layout" className="mt-0">
-            <Card className="glass border-border/50">
-              <CardContent className="p-6 sm:p-8">
-                <div className="grid gap-8 md:grid-cols-3 items-start">
-                  {/* Your Cards */}
-                  <div className="flex flex-col items-center text-center">
-                    <h4 className="font-semibold mb-4">
-                      Your Cards (2×2 Grid)
-                    </h4>
-                    <div className="p-4 rounded-xl bg-muted/30 border border-border/50">
-                      <div className="grid grid-cols-2 gap-2">
-                        {[1, 2, 3, 4].map((i) => (
-                          <div
-                            key={i}
-                            className="w-11 h-14 sm:w-14 sm:h-18 rounded-lg bg-linear-to-br from-blue-600 to-blue-700 border-2 border-blue-400 flex items-center justify-center shadow-md"
-                          >
-                            <span className="text-white font-bold text-lg">
-                              ?
-                            </span>
-                          </div>
-                        ))}
-                      </div>
+              <Callout tone="warning" icon={Brain} title="Remember your cards">
+                The whole game turns on remembering the two cards you peeked
+                at. That memory guides every move you make.
+              </Callout>
+            </CardContent>
+          </Card>
+        </TabsContent>
+
+        <TabsContent value="layout">
+          <Card>
+            <CardContent className="space-y-6">
+              <div className="grid grid-cols-2 items-start gap-6 sm:grid-cols-3">
+                <figure className="flex flex-col items-center gap-3">
+                  <figcaption className="text-sm font-semibold">
+                    Your cards
+                  </figcaption>
+                  <FaceDownGrid />
+                </figure>
+
+                <figure className="order-last col-span-2 flex flex-col items-center gap-3 sm:order-none sm:col-span-1">
+                  <figcaption className="text-sm font-semibold">
+                    The piles
+                  </figcaption>
+                  <div className="flex items-center gap-4 sm:flex-col sm:gap-2">
+                    <div className="flex flex-col items-center gap-1.5">
+                      <PlayingCard faceDown />
+                      <span className="text-xs text-muted-foreground">Draw</span>
                     </div>
-                    <p className="text-xs text-muted-foreground mt-3">
-                      Face-down cards
-                    </p>
-                  </div>
-
-                  {/* Center Piles */}
-                  <div className="flex flex-col items-center text-center">
-                    <div className="space-y-6">
-                      <div>
-                        <h4 className="font-semibold mb-3">Draw Pile</h4>
-                        <div className="w-14 h-18 sm:w-16 sm:h-20 mx-auto rounded-lg bg-linear-to-br from-blue-700 to-blue-800 border-2 border-blue-500 flex items-center justify-center shadow-lg">
-                          <span className="text-white font-bold text-xl">
-                            ?
-                          </span>
-                        </div>
-                      </div>
-
-                      <div className="flex justify-center">
-                        <svg
-                          className="w-6 h-6 text-muted-foreground"
-                          fill="none"
-                          stroke="currentColor"
-                          viewBox="0 0 24 24"
-                        >
-                          <path
-                            strokeLinecap="round"
-                            strokeLinejoin="round"
-                            strokeWidth={2}
-                            d="M19 14l-7 7m0 0l-7-7m7 7V3"
-                          />
-                        </svg>
-                      </div>
-
-                      <div>
-                        <h4 className="font-semibold mb-3">Discard Pile</h4>
-                        <div className="w-14 h-18 sm:w-16 sm:h-20 mx-auto rounded-lg bg-white border-2 border-gray-300 flex items-center justify-center shadow-lg">
-                          <span className="text-red-500 font-bold text-lg">
-                            K♥
-                          </span>
-                        </div>
-                        <p className="text-xs text-muted-foreground mt-2">
-                          Face-up
-                        </p>
-                      </div>
-                    </div>
-                  </div>
-
-                  {/* Opponent Cards */}
-                  <div className="flex flex-col items-center text-center">
-                    <h4 className="font-semibold mb-4">Opponent Cards</h4>
-                    <div className="p-4 rounded-xl bg-muted/30 border border-border/50">
-                      <div className="grid grid-cols-2 gap-2">
-                        {[1, 2, 3, 4].map((i) => (
-                          <div
-                            key={i}
-                            className="w-11 h-14 sm:w-14 sm:h-18 rounded-lg bg-linear-to-br from-gray-600 to-gray-700 border-2 border-gray-400 flex items-center justify-center shadow-md"
-                          >
-                            <span className="text-white font-bold text-lg">
-                              ?
-                            </span>
-                          </div>
-                        ))}
-                      </div>
-                    </div>
-                    <p className="text-xs text-muted-foreground mt-3">
-                      Also face-down
-                    </p>
-                  </div>
-                </div>
-
-                {/* Layout Tip */}
-                <div className="mt-8 p-4 sm:p-5 rounded-xl bg-linear-to-r from-emerald-500/10 to-teal-500/10 border border-emerald-500/30">
-                  <div className="flex items-start gap-3">
-                    <span className="text-2xl shrink-0">📐</span>
-                    <div>
-                      <h5 className="font-semibold text-emerald-300 mb-1">
-                        Layout Tip
-                      </h5>
-                      <p className="text-sm text-muted-foreground leading-relaxed">
-                        Keep your cards arranged consistently in the same 2×2
-                        pattern throughout the game. This helps with memory and
-                        prevents confusion.
-                      </p>
-                    </div>
-                  </div>
-                </div>
-              </CardContent>
-            </Card>
-          </TabsContent>
-
-          {/* Turn Example Tab */}
-          <TabsContent value="turn" className="mt-0">
-            <Card className="glass border-border/50">
-              <CardContent className="p-6 sm:p-8 space-y-8">
-                {/* Option A */}
-                <div className="p-4 sm:p-6 rounded-xl bg-muted/30 border border-border/50">
-                  <h4 className="font-semibold text-lg mb-5">
-                    Option A: Draw from Deck
-                  </h4>
-                  <div className="flex flex-wrap items-center justify-center gap-3 sm:gap-4">
-                    <div className="flex flex-col items-center">
-                      <div className="w-11 h-14 sm:w-14 sm:h-18 rounded-lg bg-linear-to-br from-blue-700 to-blue-800 border-2 border-blue-500 flex items-center justify-center shadow-md mb-2">
-                        <span className="text-white font-bold">?</span>
-                      </div>
+                    <ArrowDown
+                      aria-hidden
+                      className="size-4 -rotate-90 text-muted-foreground sm:rotate-0"
+                    />
+                    <div className="flex flex-col items-center gap-1.5">
+                      <PlayingCard rank="K" suit="hearts" />
                       <span className="text-xs text-muted-foreground">
-                        1. Draw
-                      </span>
-                    </div>
-
-                    <svg
-                      className="w-5 h-5 text-muted-foreground shrink-0"
-                      fill="none"
-                      stroke="currentColor"
-                      viewBox="0 0 24 24"
-                    >
-                      <path
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        strokeWidth={2}
-                        d="M9 5l7 7-7 7"
-                      />
-                    </svg>
-
-                    <div className="flex flex-col items-center">
-                      <div className="w-11 h-14 sm:w-14 sm:h-18 rounded-lg bg-white border-2 border-gray-300 flex items-center justify-center shadow-md mb-2">
-                        <span className="text-red-500 font-bold text-sm">
-                          7♥
-                        </span>
-                      </div>
-                      <span className="text-xs text-muted-foreground text-center">
-                        2. Look & Use
-                      </span>
-                    </div>
-
-                    <svg
-                      className="w-5 h-5 text-muted-foreground shrink-0"
-                      fill="none"
-                      stroke="currentColor"
-                      viewBox="0 0 24 24"
-                    >
-                      <path
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        strokeWidth={2}
-                        d="M9 5l7 7-7 7"
-                      />
-                    </svg>
-
-                    <div className="flex flex-col items-center">
-                      <div className="w-11 h-14 sm:w-14 sm:h-18 rounded-lg bg-gray-300 border-2 border-gray-400 flex items-center justify-center shadow-md mb-2">
-                        <span className="text-gray-600 font-bold text-sm">
-                          7♥
-                        </span>
-                      </div>
-                      <span className="text-xs text-muted-foreground">
-                        3. Discard
+                        Discard, face up
                       </span>
                     </div>
                   </div>
+                </figure>
+
+                <figure className="flex flex-col items-center gap-3">
+                  <figcaption className="text-sm font-semibold">
+                    Opponent
+                  </figcaption>
+                  <FaceDownGrid />
+                </figure>
+              </div>
+
+              <Callout tone="success" icon={LayoutGrid} title="Keep your grid">
+                Keep your four cards in the same 2×2 pattern all game. It helps
+                you remember them and stops mix-ups.
+              </Callout>
+            </CardContent>
+          </Card>
+        </TabsContent>
+
+        <TabsContent value="turn">
+          <Card>
+            <CardContent className="space-y-4">
+              <section className="rounded-xl border border-border p-4 glass-control sm:p-5">
+                <h2 className="mb-4 font-display font-semibold">
+                  Option A · Draw from the deck
+                </h2>
+                <div className="flex items-start justify-center gap-3 sm:gap-5">
+                  <FlowStep label="1. Draw">
+                    <PlayingCard faceDown />
+                  </FlowStep>
+                  <FlowArrow />
+                  <FlowStep label="2. Look & use">
+                    <PlayingCard rank="7" suit="hearts" />
+                  </FlowStep>
+                  <FlowArrow />
+                  <FlowStep label="3. Discard">
+                    <PlayingCard rank="7" suit="hearts" dimmed />
+                  </FlowStep>
                 </div>
+              </section>
 
-                {/* Option B */}
-                <div className="p-4 sm:p-6 rounded-xl bg-muted/30 border border-border/50">
-                  <h4 className="font-semibold text-lg mb-5">
-                    Option B: Take from Discard
-                  </h4>
-                  <div className="flex flex-wrap items-center justify-center gap-3 sm:gap-4">
-                    <div className="flex flex-col items-center">
-                      <div className="w-11 h-14 sm:w-14 sm:h-18 rounded-lg bg-gray-300 border-2 border-gray-400 flex items-center justify-center shadow-md mb-2">
-                        <span className="text-red-500 font-bold text-sm">
-                          K♥
-                        </span>
-                      </div>
-                      <span className="text-xs text-muted-foreground text-center">
-                        1. Take Card
-                      </span>
-                    </div>
-
-                    <svg
-                      className="w-5 h-5 text-muted-foreground shrink-0"
-                      fill="none"
-                      stroke="currentColor"
-                      viewBox="0 0 24 24"
-                    >
-                      <path
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        strokeWidth={2}
-                        d="M9 5l7 7-7 7"
-                      />
-                    </svg>
-
-                    <div className="flex flex-col items-center">
-                      <div className="w-11 h-14 sm:w-14 sm:h-18 rounded-lg bg-linear-to-br from-blue-600 to-blue-700 border-2 border-blue-400 flex items-center justify-center shadow-md mb-2">
-                        <span className="text-white font-bold">?</span>
-                      </div>
-                      <span className="text-xs text-muted-foreground text-center">
-                        2. Swap
-                      </span>
-                    </div>
-
-                    <svg
-                      className="w-5 h-5 text-muted-foreground shrink-0"
-                      fill="none"
-                      stroke="currentColor"
-                      viewBox="0 0 24 24"
-                    >
-                      <path
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        strokeWidth={2}
-                        d="M9 5l7 7-7 7"
-                      />
-                    </svg>
-
-                    <div className="flex flex-col items-center">
-                      <div className="w-11 h-14 sm:w-14 sm:h-18 rounded-lg bg-gray-300 border-2 border-gray-400 flex items-center justify-center shadow-md mb-2">
-                        <span className="text-gray-800 font-bold text-sm">
-                          Q♠
-                        </span>
-                      </div>
-                      <span className="text-xs text-muted-foreground">
-                        3. Discard
-                      </span>
-                    </div>
-                  </div>
+              <section className="rounded-xl border border-border p-4 glass-control sm:p-5">
+                <h2 className="mb-4 font-display font-semibold">
+                  Option B · Take the discard
+                </h2>
+                <div className="flex items-start justify-center gap-3 sm:gap-5">
+                  <FlowStep label="1. Take it">
+                    <PlayingCard rank="K" suit="hearts" />
+                  </FlowStep>
+                  <FlowArrow />
+                  <FlowStep label="2. Swap">
+                    <PlayingCard faceDown />
+                  </FlowStep>
+                  <FlowArrow />
+                  <FlowStep label="3. Discard">
+                    <PlayingCard rank="Q" suit="spades" dimmed />
+                  </FlowStep>
                 </div>
+              </section>
 
-                {/* Strategy Tip */}
-                <div className="p-4 sm:p-5 rounded-xl bg-linear-to-r from-emerald-500/10 to-teal-500/10 border border-emerald-500/30">
-                  <div className="flex items-start gap-3">
-                    <span className="text-2xl shrink-0">🎯</span>
-                    <div>
-                      <h5 className="font-semibold text-emerald-300 mb-1">
-                        Strategy Tip
-                      </h5>
-                      <p className="text-sm text-muted-foreground leading-relaxed">
-                        Taking the Red King (K♥ = -1 point) from discard is
-                        usually better than drawing unknown cards, especially if
-                        you can swap it with a high-value card you remember.
-                      </p>
-                    </div>
-                  </div>
-                </div>
-              </CardContent>
-            </Card>
-          </TabsContent>
-        </Tabs>
-      </div>
+              <Callout tone="primary" icon={Target} title="Strategy tip">
+                Taking a red King (−1 point) from the discard pile usually
+                beats drawing blind, above all when you can swap it for a high
+                card you remember.
+              </Callout>
+            </CardContent>
+          </Card>
+        </TabsContent>
+      </Tabs>
     </div>
   );
 }
