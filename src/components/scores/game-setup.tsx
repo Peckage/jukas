@@ -4,6 +4,7 @@ import { useState } from "react";
 import {
   BarChart3,
   ChevronDown,
+  ChevronRight,
   History,
   Play,
   Plus,
@@ -14,7 +15,12 @@ import {
 } from "lucide-react";
 import { PageHeader } from "@/components/page-header";
 import { Segmented } from "@/components/scores/segmented";
-import type { GameSession, GameSettings } from "@/components/scores/storage";
+import { livesLeft } from "@/components/scores/lives";
+import {
+  DEFAULT_SETTINGS,
+  type GameSession,
+  type GameSettings,
+} from "@/components/scores/storage";
 import {
   Accordion,
   AccordionContent,
@@ -62,35 +68,55 @@ function formatDate(date: string) {
   });
 }
 
-function HistoryGame({ game }: { game: GameSession }) {
+function HistoryGame({
+  game,
+  onOpen,
+}: {
+  game: GameSession;
+  onOpen: () => void;
+}) {
+  const threshold =
+    game.settings?.eliminationThreshold ?? DEFAULT_SETTINGS.eliminationThreshold;
+  const rounds = Math.max(0, ...game.players.map((p) => p.rounds.length));
   const standings = [...game.players].sort((a, b) => a.total - b.total);
   return (
-    <li className="rounded-xl border border-border p-3.5 glass-control">
-      <div className="mb-2.5 flex items-center justify-between gap-2">
-        <span className="text-xs text-muted-foreground">
-          {formatDate(game.date)}
-        </span>
-        <span className="text-2xs text-muted-foreground tabular-nums">
-          {game.players.length} players · {game.currentRound} rounds
-        </span>
-      </div>
-      <ol className="grid grid-cols-2 gap-x-4 gap-y-1">
-        {standings.map((player, place) => (
-          <li
-            key={place}
-            className={cn(
-              "flex items-center justify-between gap-2 text-sm",
-              place === 0 ? "font-medium text-warning" : "text-muted-foreground"
-            )}
-          >
-            <span className="flex min-w-0 items-center gap-1.5">
-              {place === 0 && <Trophy className="size-3.5 shrink-0" aria-hidden />}
-              <span className="truncate">{player.name}</span>
-            </span>
-            <span className="tabular-nums">{player.total}</span>
-          </li>
-        ))}
-      </ol>
+    <li>
+      <button
+        type="button"
+        onClick={onOpen}
+        className="press w-full rounded-xl border border-border p-3.5 text-left glass-control outline-none hover:border-border-strong focus-visible:ring-[3px] focus-visible:ring-ring/50"
+      >
+        <div className="mb-2.5 flex items-center justify-between gap-2">
+          <span className="text-xs text-muted-foreground">
+            {formatDate(game.date)}
+          </span>
+          <span className="flex items-center gap-1 text-2xs text-muted-foreground tabular-nums">
+            {game.players.length} players · {rounds} rounds
+            <ChevronRight className="size-3.5" aria-hidden />
+          </span>
+        </div>
+        <ol className="grid grid-cols-2 gap-x-4 gap-y-1">
+          {standings.map((player, place) => (
+            <li
+              key={place}
+              className={cn(
+                "flex items-center justify-between gap-2 text-sm",
+                place === 0 ? "font-medium text-warning" : "text-muted-foreground"
+              )}
+            >
+              <span className="flex min-w-0 items-center gap-1.5">
+                {place === 0 && <Trophy className="size-3.5 shrink-0" aria-hidden />}
+                <span className="truncate">{player.name}</span>
+              </span>
+              <span className="tabular-nums">
+                {player.total >= threshold
+                  ? "Out"
+                  : livesLeft(player.total, threshold)}
+              </span>
+            </li>
+          ))}
+        </ol>
+      </button>
     </li>
   );
 }
@@ -105,6 +131,7 @@ export function GameSetup({
   onChangeSettings,
   onStart,
   onClearHistory,
+  onOpenGame,
 }: {
   playerNames: string[];
   settings: GameSettings;
@@ -115,6 +142,7 @@ export function GameSetup({
   onChangeSettings: (settings: GameSettings) => void;
   onStart: () => void;
   onClearHistory: () => void;
+  onOpenGame: (game: GameSession) => void;
 }) {
   const [showSettings, setShowSettings] = useState(false);
   const atMax =
@@ -209,7 +237,7 @@ export function GameSetup({
                   Game settings
                 </span>
                 <span className="flex items-center gap-2 text-xs text-muted-foreground">
-                  Out at {settings.eliminationThreshold}
+                  {settings.eliminationThreshold} lives
                   <ChevronDown
                     aria-hidden
                     className={cn(
@@ -224,7 +252,7 @@ export function GameSetup({
                 <div className="animate-slide-up space-y-4 border-t border-border p-3.5">
                   <div className="space-y-2">
                     <Label htmlFor="threshold" className="text-xs text-muted-foreground">
-                      Out at (points)
+                      Starting lives
                     </Label>
                     <Input
                       id="threshold"
@@ -243,7 +271,7 @@ export function GameSetup({
                       min={10}
                     />
                     <Segmented
-                      label="Common thresholds"
+                      label="Common starting lives"
                       options={THRESHOLDS.map((value) => ({
                         value,
                         label: String(value),
@@ -297,7 +325,11 @@ export function GameSetup({
                 <AccordionContent className="px-5 pb-5">
                   <ul className="max-h-80 space-y-2 overflow-y-auto">
                     {history.map((game) => (
-                      <HistoryGame key={game.id} game={game} />
+                      <HistoryGame
+                        key={game.id}
+                        game={game}
+                        onOpen={() => onOpenGame(game)}
+                      />
                     ))}
                   </ul>
                   <div className="mt-3 flex justify-end">

@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
+import { livesLeft } from "@/components/scores/lives";
 import type { Player } from "@/components/scores/storage";
 
 const CONFETTI_COLORS = [
@@ -53,10 +54,14 @@ function Confetti() {
 export function VictoryScreen({
   winner,
   threshold,
+  onShowSummary,
   onClose,
 }: {
   winner: Player;
   threshold: number;
+  /** Saves and ends the game, and opens its summary. */
+  onShowSummary: () => void;
+  /** Back to the board, to correct a round before ending. */
   onClose: () => void;
 }) {
   return (
@@ -81,13 +86,21 @@ export function VictoryScreen({
           {winner.name} wins!
         </h2>
         <p className="mt-4 inline-flex h-9 items-center rounded-full border border-warning/30 bg-warning-surface px-4 font-display text-sm font-semibold text-warning tabular-nums">
-          Final score {winner.total}
+          {livesLeft(winner.total, threshold)} lives left
         </p>
         <p className="mt-3 text-sm text-muted-foreground">
-          The last one under {threshold} points.
+          The last one standing.
         </p>
-        <Button autoFocus size="lg" className="mt-7 w-full" onClick={onClose}>
-          Continue
+        <Button
+          autoFocus
+          size="lg"
+          className="mt-7 w-full"
+          onClick={onShowSummary}
+        >
+          See how it went
+        </Button>
+        <Button variant="ghost" className="mt-2 w-full" onClick={onClose}>
+          Back to the board
         </Button>
       </div>
     </div>

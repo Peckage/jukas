@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react";
 import { GameBoard } from "@/components/scores/game-board";
 import { GameSetup } from "@/components/scores/game-setup";
+import { GameSummary } from "@/components/scores/game-summary";
 import {
   ACTIVE_GAME_KEY,
   type GameSession,
@@ -35,6 +36,8 @@ export default function ScoreKeeper() {
   const [settings, setSettings] = useState<GameSettings>(saved.settings);
   const [justEliminated, setJustEliminated] = useState<Set<number>>(new Set());
   const [showVictory, setShowVictory] = useState(false);
+  /** A finished game on screen: the one just ended, or one from the history. */
+  const [summary, setSummary] = useState<GameSession | null>(null);
   const [pendingScores, setPendingScores] = useState<Record<number, number>>(
     {}
   );
@@ -163,19 +166,19 @@ export default function ScoreKeeper() {
     setPendingScores((prev) => ({ ...prev, [playerIndex]: value }));
   };
 
+  /** Ends the game; a saved game with a round played opens its summary. */
   const endGame = (saveToHistory: boolean) => {
     if (saveToHistory) {
-      saveGameHistory([
-        {
-          id: Date.now().toString(),
-          date: new Date().toISOString(),
-          players: [...players],
-          completed: true,
-          currentRound,
-          settings,
-        },
-        ...gameHistory,
-      ]);
+      const session: GameSession = {
+        id: Date.now().toString(),
+        date: new Date().toISOString(),
+        players: [...players],
+        completed: true,
+        currentRound,
+        settings,
+      };
+      saveGameHistory([session, ...gameHistory]);
+      if (players.some((p) => p.rounds.length > 0)) setSummary(session);
     }
     localStorage.removeItem(ACTIVE_GAME_KEY);
     setGameActive(false);
@@ -184,6 +187,10 @@ export default function ScoreKeeper() {
     setShowVictory(false);
     setJustEliminated(new Set());
   };
+
+  if (summary) {
+    return <GameSummary game={summary} onDone={() => setSummary(null)} />;
+  }
 
   if (!gameActive) {
     return (
@@ -197,6 +204,7 @@ export default function ScoreKeeper() {
         onChangeSettings={setSettings}
         onStart={startNewGame}
         onClearHistory={() => saveGameHistory([])}
+        onOpenGame={setSummary}
       />
     );
   }
@@ -213,6 +221,7 @@ export default function ScoreKeeper() {
         <VictoryScreen
           winner={players[winnerIndex]}
           threshold={threshold}
+          onShowSummary={() => endGame(true)}
           onClose={() => setShowVictory(false)}
         />
       )}
