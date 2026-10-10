@@ -12,15 +12,15 @@ import {
 import { cn } from "@/lib/utils";
 
 const BEST = [
-  { card: "Red King", suits: "♥ ♦", value: "−1" },
+  { card: "Red King", suits: "♥ ♦", value: "+1" },
   { card: "Joker", value: "0" },
-  { card: "Ace", value: "1" },
+  { card: "Ace", value: "−1" },
 ];
 
 const WORST = [
-  { card: "Black King", suits: "♠ ♣", value: "+13" },
-  { card: "Queen", value: "12" },
-  { card: "Jack", value: "11" },
+  { card: "Black King", suits: "♠ ♣", value: "−13" },
+  { card: "Queen", value: "−12" },
+  { card: "Jack", value: "−11" },
 ];
 
 function Extremes({
@@ -77,28 +77,31 @@ export default function CardsPage() {
       <PageHeader
         icon={Layers}
         title="Card reference"
-        description="Every value and effect at a glance."
+        description="What every card costs, and what it does."
       />
 
       <div className="mb-4 grid grid-cols-2 gap-3 sm:gap-4">
-        <Extremes title="Best cards" icon={TrendingDown} rows={BEST} good />
-        <Extremes title="Worst cards" icon={TrendingUp} rows={WORST} good={false} />
+        <Extremes title="Best cards" icon={TrendingUp} rows={BEST} good />
+        <Extremes title="Worst cards" icon={TrendingDown} rows={WORST} good={false} />
       </div>
 
       <Callout
         tone="warning"
         icon={AlertTriangle}
-        title="Effects only work from the deck"
+        title="Powers only work from the deck"
         className="mb-4"
       >
-        A card’s effect counts only when you draw it from the deck and play it
-        straight away. In your layout, every card is just its points.
+        A card’s power works only when you draw it from the deck and play it
+        straight away. In your grid, a card only costs its lives.
       </Callout>
 
       <Card className="gap-0 py-0">
         <CardHeader className="border-b border-border py-4 [.border-b]:pb-4">
-          <CardTitle>Values and effects</CardTitle>
-          <CardDescription>Suits only matter for Kings.</CardDescription>
+          <CardTitle>Lives and powers</CardTitle>
+          <CardDescription>
+            What each card costs when the round ends. Suits only matter for
+            Kings.
+          </CardDescription>
         </CardHeader>
         <CardList />
       </Card>

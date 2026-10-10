@@ -6,12 +6,12 @@ import {
   Brain,
   ChevronRight,
   Clock,
+  GraduationCap,
+  Heart,
   Layers,
   Play,
   RefreshCw,
-  Skull,
   Users,
-  Zap,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { IconTile } from "@/components/icon-tile";
@@ -20,7 +20,7 @@ import { JukasLogo } from "@/components/jukas-logo";
 const FACTS = [
   { icon: Users, label: "2–6 players" },
   { icon: Clock, label: "5–10 min a round" },
-  { icon: Skull, label: "Out at 100" },
+  { icon: Heart, label: "100 lives each" },
 ];
 
 const TOOLS: {
@@ -33,19 +33,19 @@ const TOOLS: {
     href: "/scores",
     icon: BarChart3,
     title: "Score keeper",
-    description: "Track every round. The game is saved, so you can pick it up later.",
+    description: "Counts everyone’s lives round by round, with a graph of the game at the end.",
   },
   {
-    href: "/setup",
-    icon: Zap,
-    title: "Quick setup",
-    description: "Deal, lay out and play your first turn in under a minute.",
+    href: "/learn",
+    icon: GraduationCap,
+    title: "Learn to play",
+    description: "The whole game in nine animated steps.",
   },
   {
     href: "/cards",
     icon: Layers,
     title: "Card reference",
-    description: "What every card is worth and what it does, at a glance.",
+    description: "What every card costs and what it does, at a glance.",
   },
   {
     href: "/rules",
@@ -64,7 +64,7 @@ const REASONS = [
   {
     icon: RefreshCw,
     title: "Round after round",
-    description: "Scores add up until one survivor is left under 100.",
+    description: "Lives run down every round until one player is left.",
   },
   {
     icon: Brain,
@@ -90,7 +90,8 @@ export default function Home() {
         </h1>
         <p className="mt-4 max-w-md text-base leading-relaxed text-muted-foreground sm:text-lg">
           A fast, memory-driven elimination game of risk, deduction and
-          sabotage. Stay under 100 points to survive.
+          sabotage. Everyone starts with 100 lives, and the cards you hold
+          cost them. Be the last one standing.
         </p>
 
         <div className="mt-8 flex w-full max-w-sm flex-col gap-3 sm:w-auto sm:max-w-none sm:flex-row">
@@ -101,9 +102,9 @@ export default function Home() {
             </Link>
           </Button>
           <Button asChild size="lg" variant="outline">
-            <Link href="/setup">
-              <Zap />
-              Quick setup
+            <Link href="/learn">
+              <GraduationCap />
+              Learn to play
             </Link>
           </Button>
         </div>
