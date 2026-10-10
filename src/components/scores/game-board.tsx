@@ -1,6 +1,6 @@
 "use client";
 
-import { Check, ChevronLeft, ChevronRight, Crown, Minus, Skull } from "lucide-react";
+import { ArrowRight, Check, ChevronLeft, ChevronRight, Crown, Minus, Skull } from "lucide-react";
 import type { Player } from "@/components/scores/storage";
 import {
   AlertDialog,
@@ -41,7 +41,6 @@ function PlayerCard({
   roundScore,
   onStep,
   onType,
-  onConfirm,
 }: {
   player: Player;
   /** The player's place at the table, as numbered on the setup screen. */
@@ -54,10 +53,12 @@ function PlayerCard({
   roundScore: number | undefined;
   onStep: (delta: number) => void;
   onType: (value: number) => void;
-  onConfirm: () => void;
 }) {
   const isEliminated = player.total >= threshold;
   const hasPending = pending !== undefined;
+  // What the total becomes when the round is saved: the draft replaces
+  // whatever this round already held.
+  const change = hasPending ? pending - (roundScore ?? 0) : 0;
 
   return (
     <li
@@ -118,7 +119,7 @@ function PlayerCard({
           </div>
           <p className="truncate font-mono text-2xs text-muted-foreground">
             {player.rounds.length > 0
-              ? Array.from(player.rounds, (score) => score || 0).join(" → ")
+              ? Array.from(player.rounds, (score) => score || 0).join(" · ")
               : "No rounds yet"}
           </p>
         </div>
@@ -139,6 +140,19 @@ function PlayerCard({
           <span className="ml-0.5 text-xs text-muted-foreground tabular-nums">
             /{threshold}
           </span>
+          {change !== 0 && (
+            <span
+              className={cn(
+                "mt-1 block text-xs font-semibold tabular-nums",
+                player.total + change >= threshold
+                  ? "text-destructive"
+                  : "text-primary"
+              )}
+            >
+              {change > 0 ? "+" : "−"}
+              {Math.abs(change)} → {player.total + change}
+            </span>
+          )}
         </p>
       </div>
 
@@ -202,19 +216,6 @@ function PlayerCard({
               </button>
             ))}
 
-            <button
-              type="button"
-              onClick={onConfirm}
-              disabled={!hasPending}
-              aria-label="Save score"
-              className={cn(
-                buttonVariants({ variant: hasPending ? "default" : "outline" }),
-                STEP,
-                "w-11 shrink-0 px-0 disabled:opacity-35"
-              )}
-            >
-              <Check className="size-5" />
-            </button>
           </div>
         </>
       )}
@@ -229,11 +230,13 @@ export function GameBoard({
   winnerIndex,
   justEliminated,
   pendingScores,
+  isLatestRound,
+  canGoForward,
   onPreviousRound,
   onNextRound,
   onStep,
   onType,
-  onConfirm,
+  onSubmitRound,
   onEnd,
 }: {
   players: Player[];
@@ -242,15 +245,27 @@ export function GameBoard({
   winnerIndex: number;
   justEliminated: Set<number>;
   pendingScores: Record<number, number>;
+  /** False on a past round: saving it corrects it and stays there. */
+  isLatestRound: boolean;
+  canGoForward: boolean;
   onPreviousRound: () => void;
   onNextRound: () => void;
   onStep: (playerIndex: number, delta: number) => void;
   onType: (playerIndex: number, value: number) => void;
-  onConfirm: (playerIndex: number) => void;
+  onSubmitRound: () => void;
   onEnd: (save: boolean) => void;
 }) {
   const alive = players.filter((p) => p.total < threshold);
   const lowest = Math.min(...alive.map((p) => p.total));
+  // Before the first saved round everyone ties at 0: nobody leads yet.
+  const started = players.some((p) => p.rounds.length > 0);
+  const scored = players.filter(
+    (p, index) =>
+      p.total < threshold &&
+      (pendingScores[index] !== undefined ||
+        p.rounds[currentRound - 1] != null)
+  ).length;
+  const gameOver = players.length > 1 && alive.length <= 1;
 
   return (
     <div className="mx-auto w-full max-w-2xl px-3 pt-3 pb-6 sm:px-6 sm:pt-6">
@@ -263,7 +278,7 @@ export function GameBoard({
               size="icon-lg"
               onClick={onPreviousRound}
               disabled={currentRound === 1}
-              aria-label="Previous round"
+              aria-label="View previous round"
             >
               <ChevronLeft className="size-5" />
             </Button>
@@ -271,7 +286,11 @@ export function GameBoard({
               <span className="block text-3xs font-semibold tracking-wider text-muted-foreground uppercase">
                 Round
               </span>
-              <span className="font-display text-lg font-bold tabular-nums">
+              {/* Keyed by the round, so each new round slides in. */}
+              <span
+                key={currentRound}
+                className="animate-slide-up inline-block font-display text-lg font-bold tabular-nums"
+              >
                 {currentRound}
               </span>
             </p>
@@ -279,7 +298,8 @@ export function GameBoard({
               variant="ghost"
               size="icon-lg"
               onClick={onNextRound}
-              aria-label="Next round"
+              disabled={!canGoForward}
+              aria-label="View next round"
             >
               <ChevronRight className="size-5" />
             </Button>
@@ -336,17 +356,53 @@ export function GameBoard({
             player={player}
             seat={index + 1}
             threshold={threshold}
-            isLeading={player.total < threshold && player.total === lowest}
+            isLeading={
+              started && player.total < threshold && player.total === lowest
+            }
             isWinner={index === winnerIndex}
             isJustEliminated={justEliminated.has(index)}
             pending={pendingScores[index]}
             roundScore={player.rounds[currentRound - 1]}
             onStep={(delta) => onStep(index, delta)}
             onType={(value) => onType(index, value)}
-            onConfirm={() => onConfirm(index)}
           />
         ))}
       </ul>
+
+      {!gameOver && (
+        // Sticks above the phone tab bar (and the bottom edge on a desktop)
+        // while the list is longer than the screen.
+        <div className="sticky bottom-[calc(4.25rem+env(safe-area-inset-bottom,0px))] z-30 mt-3 md:bottom-4">
+          <div className="flex items-center gap-3 rounded-2xl border border-border p-2 pl-4 shadow-overlay glass-chrome">
+            <p className="min-w-0 flex-1 text-xs leading-tight text-muted-foreground">
+              <span className="font-semibold text-foreground tabular-nums">
+                {scored} of {alive.length}
+              </span>{" "}
+              scored
+              <span className="block truncate">
+                {scored < alive.length
+                  ? "Blanks count as 0"
+                  : isLatestRound
+                    ? "Ready for the next round"
+                    : `Correcting round ${currentRound}`}
+              </span>
+            </p>
+            <Button size="lg" onClick={onSubmitRound} className="shrink-0">
+              {isLatestRound ? (
+                <>
+                  Next round
+                  <ArrowRight />
+                </>
+              ) : (
+                <>
+                  <Check />
+                  Save round {currentRound}
+                </>
+              )}
+            </Button>
+          </div>
+        </div>
+      )}
 
       <p className="mt-4 flex flex-wrap justify-center gap-x-4 gap-y-1 text-xs text-muted-foreground">
         <span>
